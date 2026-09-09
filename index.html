@@ -4440,6 +4440,17 @@ function currentItem(){
   return state.current >= 0 ? state.files[state.current] : null;
 }
 
+// Start loading the lightweight AI engine in the background so that
+// the first "AI Remove Background" click is faster.
+function warmAIEngine(){
+  if(state.aiModule || state.aiWarmStarted) return;
+  state.aiWarmStarted=true;
+  loadAIEngine().catch(err=>{
+    state.aiWarmStarted=false;
+    console.warn("AI warm-up failed; it will retry on demand.",err);
+  });
+}
+
 async function loadAIEngine(){
   if(state.aiModule) return state.aiModule;
   setAIStatus("Loading AI engine… first run may take longer while the model is cached.");
@@ -4475,8 +4486,10 @@ async function runAIBackgroundRemoval(){
     setProgress(20);
     const resultBlob=await removeBackground(item.file,{
       debug:false,
-      model:"isnet_fp16",
-      output:{type:"foreground",format:"image/png"},
+      // Fast/Light model: much quicker than the FP16 model while
+      // keeping the existing AI background-removal workflow intact.
+      model:"isnet_quint8",
+      output:{type:"foreground",format:"image/png",quality:0.9},
       progress:(key,current,total)=>{
         if(total) setProgress(Math.min(90,20+Math.round(current/total*70)));
       }
@@ -4577,6 +4590,9 @@ function chooseBackgroundImage(file){
 }
 
 function bindAIControls(){
+  // Warm the lightweight model once the AI controls are available.
+  // This does not block image upload or any other editor function.
+  setTimeout(warmAIEngine,250);
   if(window.__resizeAiControlsBound) return;
   window.__resizeAiControlsBound=true;
   $("aiRemoveBtn").addEventListener("click",runAIBackgroundRemoval);
