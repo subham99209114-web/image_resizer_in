@@ -4460,6 +4460,37 @@ async function loadAIEngine(){
   throw lastError || new Error("Unable to load AI engine.");
 }
 
+/* Fast AI input: inference is performed on a smaller copy for large images.
+   The editor/render pipeline scales the transparent result back to the
+   selected output size, so there is no expensive second full-resolution
+   PNG encode/decode step. */
+async function createFastAIInput(file,maxDim){
+  const img=await fileToImage(file);
+  const width=img.naturalWidth||img.width;
+  const height=img.naturalHeight||img.height;
+  const scale=Math.min(1,maxDim/Math.max(width,height));
+  if(scale>=1) return file;
+  const w=Math.max(1,Math.round(width*scale));
+  const h=Math.max(1,Math.round(height*scale));
+  const canvas=document.createElement("canvas");
+  canvas.width=w; canvas.height=h;
+  const ctx=canvas.getContext("2d",{alpha:true});
+  ctx.imageSmoothingEnabled=true;
+  ctx.imageSmoothingQuality="medium";
+  ctx.drawImage(img,0,0,w,h);
+  return await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("Could not create AI working image.")),"image/jpeg",0.88));
+}
+
+function fileToImage(file){
+  return new Promise((resolve,reject)=>{
+    const url=URL.createObjectURL(file);
+    const img=new Image();
+    img.onload=()=>{URL.revokeObjectURL(url);resolve(img);};
+    img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error("Could not decode image."));};
+    img.src=url;
+  });
+}
+
 async function runAIBackgroundRemoval(){
   const item=currentItem();
   if(!item){toast("Please upload an image first.");return;}
@@ -4472,29 +4503,24 @@ async function runAIBackgroundRemoval(){
     const br=item.settings.backgroundRemoval || (item.settings.backgroundRemoval=defaultSettings().backgroundRemoval);
     br.subjectMode=$("aiSubjectMode").value;
     const removeBackground=await loadAIEngine();
-    setProgress(15);
+    setProgress(18);
 
-    // Speed optimization: use a smaller AI working copy for large images.
-    // The final transparent result is restored to the original dimensions.
-    const MAX_AI_DIM=1280;
-    const source=await createFastAIInput(item.file,MAX_AI_DIM);
-    setProgress(25);
-    const resultBlob=await removeBackground(source.blob,{
+    /* 1024px keeps inference much faster on large phone/camera photos. */
+    const source=await createFastAIInput(item.file,1024);
+    setProgress(28);
+
+    const resultBlob=await removeBackground(source,{
       debug:false,
       model:"isnet_quint8",
       proxyToWorker:true,
       output:{type:"foreground",format:"image/png"},
       progress:(key,current,total)=>{
-        if(total) setProgress(Math.min(88,25+Math.round(current/total*63)));
+        if(total) setProgress(Math.min(92,28+Math.round(current/total*64)));
       }
     });
 
-    const finalBlob=source.scaled
-      ? await restoreCutoutSize(resultBlob,source.width,source.height)
-      : resultBlob;
-
     if(item.cutoutUrl) URL.revokeObjectURL(item.cutoutUrl);
-    item.cutoutUrl=URL.createObjectURL(finalBlob);
+    item.cutoutUrl=URL.createObjectURL(resultBlob);
     const cutout=new Image();
     await new Promise((resolve,reject)=>{cutout.onload=resolve;cutout.onerror=reject;cutout.src=item.cutoutUrl;});
     item.cutoutImage=cutout;
@@ -4515,54 +4541,6 @@ async function runAIBackgroundRemoval(){
   }
 }
 
-async function createFastAIInput(file,maxDim){
-  const img=await fileToImage(file);
-  const width=img.naturalWidth||img.width;
-  const height=img.naturalHeight||img.height;
-  const scale=Math.min(1,maxDim/Math.max(width,height));
-  if(scale>=1) return {blob:file,width,height,scaled:false};
-  const w=Math.max(1,Math.round(width*scale));
-  const h=Math.max(1,Math.round(height*scale));
-  const canvas=document.createElement("canvas");
-  canvas.width=w; canvas.height=h;
-  const ctx=canvas.getContext("2d",{alpha:true});
-  ctx.imageSmoothingEnabled=true;
-  ctx.imageSmoothingQuality="high";
-  ctx.drawImage(img,0,0,w,h);
-  const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("Could not create AI working image.")),"image/jpeg",0.92));
-  return {blob,width,height,scaled:true};
-}
-
-async function restoreCutoutSize(blob,width,height){
-  const img=await blobToImage(blob);
-  const canvas=document.createElement("canvas");
-  canvas.width=width; canvas.height=height;
-  const ctx=canvas.getContext("2d",{alpha:true});
-  ctx.imageSmoothingEnabled=true;
-  ctx.imageSmoothingQuality="high";
-  ctx.drawImage(img,0,0,width,height);
-  return await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("Could not restore cutout size.")),"image/png"));
-}
-
-function fileToImage(file){
-  return new Promise((resolve,reject)=>{
-    const url=URL.createObjectURL(file);
-    const img=new Image();
-    img.onload=()=>{URL.revokeObjectURL(url);resolve(img);};
-    img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error("Could not decode image."));};
-    img.src=url;
-  });
-}
-
-function blobToImage(blob){
-  return new Promise((resolve,reject)=>{
-    const url=URL.createObjectURL(blob);
-    const img=new Image();
-    img.onload=()=>{URL.revokeObjectURL(url);resolve(img);};
-    img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error("Could not decode AI result."));};
-    img.src=url;
-  });
-}
 function updateBackgroundSetting(key,value){
   const item=currentItem(); if(!item)return;
   if(!item.settings.backgroundRemoval) item.settings.backgroundRemoval=defaultSettings().backgroundRemoval;
