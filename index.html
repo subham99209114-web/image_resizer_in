@@ -4440,17 +4440,6 @@ function currentItem(){
   return state.current >= 0 ? state.files[state.current] : null;
 }
 
-// Start loading the lightweight AI engine in the background so that
-// the first "AI Remove Background" click is faster.
-function warmAIEngine(){
-  if(state.aiModule || state.aiWarmStarted) return;
-  state.aiWarmStarted=true;
-  loadAIEngine().catch(err=>{
-    state.aiWarmStarted=false;
-    console.warn("AI warm-up failed; it will retry on demand.",err);
-  });
-}
-
 async function loadAIEngine(){
   if(state.aiModule) return state.aiModule;
   setAIStatus("Loading AI engine… first run may take longer while the model is cached.");
@@ -4483,19 +4472,29 @@ async function runAIBackgroundRemoval(){
     const br=item.settings.backgroundRemoval || (item.settings.backgroundRemoval=defaultSettings().backgroundRemoval);
     br.subjectMode=$("aiSubjectMode").value;
     const removeBackground=await loadAIEngine();
-    setProgress(20);
-    const resultBlob=await removeBackground(item.file,{
+    setProgress(15);
+
+    // Speed optimization: use a smaller AI working copy for large images.
+    // The final transparent result is restored to the original dimensions.
+    const MAX_AI_DIM=1280;
+    const source=await createFastAIInput(item.file,MAX_AI_DIM);
+    setProgress(25);
+    const resultBlob=await removeBackground(source.blob,{
       debug:false,
-      // Fast/Light model: much quicker than the FP16 model while
-      // keeping the existing AI background-removal workflow intact.
       model:"isnet_quint8",
-      output:{type:"foreground",format:"image/png",quality:0.9},
+      proxyToWorker:true,
+      output:{type:"foreground",format:"image/png"},
       progress:(key,current,total)=>{
-        if(total) setProgress(Math.min(90,20+Math.round(current/total*70)));
+        if(total) setProgress(Math.min(88,25+Math.round(current/total*63)));
       }
     });
+
+    const finalBlob=source.scaled
+      ? await restoreCutoutSize(resultBlob,source.width,source.height)
+      : resultBlob;
+
     if(item.cutoutUrl) URL.revokeObjectURL(item.cutoutUrl);
-    item.cutoutUrl=URL.createObjectURL(resultBlob);
+    item.cutoutUrl=URL.createObjectURL(finalBlob);
     const cutout=new Image();
     await new Promise((resolve,reject)=>{cutout.onload=resolve;cutout.onerror=reject;cutout.src=item.cutoutUrl;});
     item.cutoutImage=cutout;
@@ -4516,6 +4515,54 @@ async function runAIBackgroundRemoval(){
   }
 }
 
+async function createFastAIInput(file,maxDim){
+  const img=await fileToImage(file);
+  const width=img.naturalWidth||img.width;
+  const height=img.naturalHeight||img.height;
+  const scale=Math.min(1,maxDim/Math.max(width,height));
+  if(scale>=1) return {blob:file,width,height,scaled:false};
+  const w=Math.max(1,Math.round(width*scale));
+  const h=Math.max(1,Math.round(height*scale));
+  const canvas=document.createElement("canvas");
+  canvas.width=w; canvas.height=h;
+  const ctx=canvas.getContext("2d",{alpha:true});
+  ctx.imageSmoothingEnabled=true;
+  ctx.imageSmoothingQuality="high";
+  ctx.drawImage(img,0,0,w,h);
+  const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("Could not create AI working image.")),"image/jpeg",0.92));
+  return {blob,width,height,scaled:true};
+}
+
+async function restoreCutoutSize(blob,width,height){
+  const img=await blobToImage(blob);
+  const canvas=document.createElement("canvas");
+  canvas.width=width; canvas.height=height;
+  const ctx=canvas.getContext("2d",{alpha:true});
+  ctx.imageSmoothingEnabled=true;
+  ctx.imageSmoothingQuality="high";
+  ctx.drawImage(img,0,0,width,height);
+  return await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("Could not restore cutout size.")),"image/png"));
+}
+
+function fileToImage(file){
+  return new Promise((resolve,reject)=>{
+    const url=URL.createObjectURL(file);
+    const img=new Image();
+    img.onload=()=>{URL.revokeObjectURL(url);resolve(img);};
+    img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error("Could not decode image."));};
+    img.src=url;
+  });
+}
+
+function blobToImage(blob){
+  return new Promise((resolve,reject)=>{
+    const url=URL.createObjectURL(blob);
+    const img=new Image();
+    img.onload=()=>{URL.revokeObjectURL(url);resolve(img);};
+    img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error("Could not decode AI result."));};
+    img.src=url;
+  });
+}
 function updateBackgroundSetting(key,value){
   const item=currentItem(); if(!item)return;
   if(!item.settings.backgroundRemoval) item.settings.backgroundRemoval=defaultSettings().backgroundRemoval;
@@ -4590,9 +4637,6 @@ function chooseBackgroundImage(file){
 }
 
 function bindAIControls(){
-  // Warm the lightweight model once the AI controls are available.
-  // This does not block image upload or any other editor function.
-  setTimeout(warmAIEngine,250);
   if(window.__resizeAiControlsBound) return;
   window.__resizeAiControlsBound=true;
   $("aiRemoveBtn").addEventListener("click",runAIBackgroundRemoval);
