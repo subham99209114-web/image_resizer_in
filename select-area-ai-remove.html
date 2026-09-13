@@ -3,7 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Freehand Area Select + AI Background Removal</title>
+
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HLGYRL9K9R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-HLGYRL9K9R');
+</script>
+<meta name="description" content="Remove background from images online with Remove Background ARnc. Free AI background remover with freehand, rectangle, circle, ellipse and triangle selection, transparent background and image export.">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="author" content="ARnc">
+<meta name="application-name" content="Remove Background ARnc">
+<meta name="apple-mobile-web-app-title" content="Remove Background ARnc">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Remove Background ARnc – Free AI Background Remover">
+<meta property="og:description" content="Free online AI background remover with selectable areas and transparent image export.">
+<meta property="og:site_name" content="Remove Background ARnc">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Remove Background ARnc – Free AI Background Remover">
+<meta name="twitter:description" content="Remove image backgrounds online with AI using Remove Background ARnc.">
+<link rel="alternate" hreflang="en" href="">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"#website",
+      "name":"Remove Background ARnc",
+      "alternateName":["Remove Background ARnc","ARnc Background Remover"],
+      "url":""
+    },
+    {
+      "@type":"WebApplication",
+      "@id":"#webapp",
+      "name":"Remove Background ARnc",
+      "alternateName":"ARnc AI Background Remover",
+      "applicationCategory":"MultimediaApplication",
+      "operatingSystem":"Web Browser",
+      "browserRequirements":"Requires JavaScript",
+      "description":"Free online AI background remover for images with selectable areas and transparent background export.",
+      "url":""
+    }
+  ]
+}
+</script>
+<title>Remove Background ARnc – Free AI Background Remover Online</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#17202a}
@@ -172,9 +219,118 @@ canvas{max-width:100%;max-height:100%;width:auto;height:auto}
  .workspace{min-height:clamp(220px,62vh,430px)}
 }
 
+
+/* ===== Selection Shape Chooser — added without changing the existing theme ===== */
+.shapeTools{margin:12px 0;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(255,255,255,.045);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.shapeTitle{font-weight:800;margin-right:2px}
+.shapeChoice{padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:inherit;cursor:pointer;font-weight:650}
+.shapeChoice.active{outline:2px solid currentColor}
+.cropBtn{background:#16a34a;color:#fff}.cropBtn:hover{filter:brightness(.96)}
+@media(max-width:700px){.shapeTools{width:100%;padding:11px;margin:10px 0}.shapeTitle{width:100%}.shapeChoice{flex:1 1 calc(50% - 8px);text-align:center;padding:9px 7px}}
+@media(max-width:430px){.shapeChoice{flex-basis:100%}}
+
+/* ===== Added: Video-style Crop Studio + Theme control ===== */
+#themeControl{position:fixed;right:max(10px,env(safe-area-inset-right));top:max(10px,env(safe-area-inset-top));z-index:1001}
+#themeBtn{border:0;border-radius:10px;padding:9px 14px;font-weight:800;cursor:pointer;background:#fff;color:#17202a;box-shadow:0 5px 18px rgba(0,0,0,.16);white-space:nowrap}
+#themeMenu{display:none;position:absolute;right:0;top:46px;min-width:150px;background:#fff;color:#17202a;border:1px solid #e4e7ec;border-radius:12px;padding:6px;box-shadow:0 14px 35px rgba(0,0,0,.18)}
+#themeMenu.show{display:block}
+.themeItem{display:block;width:100%;border:0;background:transparent;color:inherit;text-align:left;padding:10px 11px;border-radius:8px;cursor:pointer;font-weight:700}
+.themeItem:hover{background:#f2f4f7}
+body.theme-dark{background:#111827;color:#f3f4f6}
+body.theme-dark .card{background:#1f2937;color:#f3f4f6}
+body.theme-dark .sub,body.theme-dark .status{color:#cbd5e1}
+body.theme-dark .status,body.theme-dark .box,body.theme-dark .secondary{background:#273449;color:#e5e7eb;border-color:#3b475a}
+body.theme-dark .themeItem{color:#17202a}
+body.theme-dark #themeBtn{background:#1f2937;color:#f3f4f6}
+body.theme-dark #themeMenu{background:#fff}
+body.theme-dark .workspace{border-color:#475569}
+
+#cropStudio{position:fixed;inset:0;z-index:2000;display:none;background:#1d1d1f;color:#fff}
+#cropStudio.open{display:flex;flex-direction:column}
+.cropTop{height:64px;display:flex;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.08);flex:0 0 auto}
+.cropTopGroup{display:flex;align-items:center;gap:7px}
+.cropTop button{border:1px solid rgba(255,255,255,.10);background:#242426;color:#fff;border-radius:8px;padding:9px 12px;cursor:pointer;font-weight:700}
+.cropTop button:hover{background:#303034}
+.cropTop .cropPrimary{background:#4fc3f7;color:#111;border-color:#4fc3f7}
+.cropTitle{font-weight:800;margin-right:auto;font-size:15px}
+.cropViewport{position:relative;flex:1;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:22px 20px 105px;background:#1d1d1f}
+#cropStage{position:relative;display:inline-block;transform-origin:center center;user-select:none;touch-action:none;line-height:0}
+#cropPreview{display:block;max-width:min(88vw,1100px);max-height:calc(100vh - 210px);width:auto;height:auto;user-select:none;-webkit-user-drag:none}
+#cropRect{position:absolute;left:8%;top:8%;width:84%;height:84%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.55),0 0 0 9999px rgba(0,0,0,.30);cursor:move;touch-action:none}
+.cropGrid{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to right,transparent 33.2%,rgba(255,255,255,.45) 33.2%,rgba(255,255,255,.45) 33.6%,transparent 33.6%,transparent 66.4%,rgba(255,255,255,.45) 66.4%,rgba(255,255,255,.45) 66.8%,transparent 66.8%),linear-gradient(to bottom,transparent 33.2%,rgba(255,255,255,.45) 33.2%,rgba(255,255,255,.45) 33.6%,transparent 33.6%,transparent 66.4%,rgba(255,255,255,.45) 66.4%,rgba(255,255,255,.45) 66.8%,transparent 66.8%)}
+.cropHandle{position:absolute;width:15px;height:15px;background:#fff;border:2px solid #222;z-index:3;touch-action:none}
+.cropHandle.nw{left:-8px;top:-8px;cursor:nwse-resize}.cropHandle.n{left:50%;top:-8px;transform:translateX(-50%);cursor:ns-resize}.cropHandle.ne{right:-8px;top:-8px;cursor:nesw-resize}
+.cropHandle.e{right:-8px;top:50%;transform:translateY(-50%);cursor:ew-resize}.cropHandle.se{right:-8px;bottom:-8px;cursor:nwse-resize}.cropHandle.s{left:50%;bottom:-8px;transform:translateX(-50%);cursor:ns-resize}
+.cropHandle.sw{left:-8px;bottom:-8px;cursor:nesw-resize}.cropHandle.w{left:-8px;top:50%;transform:translateY(-50%);cursor:ew-resize}
+.cropSize{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);background:rgba(0,0,0,.72);padding:6px 10px;border-radius:8px;font:700 13px Arial;line-height:1;white-space:nowrap;z-index:4}
+.cropBottom{position:absolute;left:0;right:0;bottom:0;height:88px;display:flex;align-items:center;justify-content:center;gap:12px;background:rgba(25,25,27,.96);border-top:1px solid rgba(255,255,255,.08);z-index:10}
+.cropZoom{display:flex;align-items:center;gap:6px}
+.cropZoom button{border:0;background:#2b2b2e;color:#fff;width:38px;height:38px;border-radius:8px;font-size:20px;cursor:pointer}
+#cropZoomValue{min-width:52px;text-align:center;font-weight:700}
+#cropAngle{width:min(420px,38vw);accent-color:#fff}
+#cropAngleValue{width:48px;text-align:center;font-weight:800}
+@media(max-width:700px){#themeBtn{padding:8px 10px;font-size:12px}.cropTop{height:58px;padding:7px 8px}.cropTop button{padding:8px 9px}.cropTitle{display:none}.cropViewport{padding:12px 8px 108px}.cropBottom{height:96px;gap:7px;flex-wrap:wrap;padding:8px}.cropBottom #cropAngle{width:34vw}.cropTopGroup{gap:5px}}
+
 </style>
+
+<script>
+(function(){
+  var u = location.href.split('#')[0];
+  document.querySelectorAll('link[rel="alternate"][hreflang="en"]').forEach(function(el){el.href=u;});
+  document.querySelectorAll('script[type="application/ld+json"]').forEach(function(el){
+    try{
+      var j=JSON.parse(el.textContent);
+      if(j && j["@graph"]) j["@graph"].forEach(function(x){if(x.url==="")x.url=u;});
+      el.textContent=JSON.stringify(j);
+    }catch(e){}
+  });
+})();
+</script>
 </head>
 <body>
+
+<div id="themeControl">
+  <button id="themeBtn" type="button">🎨 Theme</button>
+  <div id="themeMenu">
+    <button class="themeItem" data-theme="original" type="button">Original Theme</button>
+    <button class="themeItem" data-theme="light" type="button">☀️ Light</button>
+    <button class="themeItem" data-theme="dark" type="button">🌙 Dark</button>
+  </div>
+</div>
+
+<div id="cropStudio" aria-hidden="true">
+  <div class="cropTop">
+    <div class="cropTopGroup">
+      <button id="cropClose" type="button">← Back</button>
+      <button id="cropReset" type="button">Reset</button>
+      <button id="cropUndo" type="button">↶</button>
+      <button id="cropRedo" type="button">↷</button>
+    </div>
+    <div class="cropTitle">✂️ Crop</div>
+    <div class="cropTopGroup">
+      <button id="cropSave" class="cropPrimary" type="button">Save Crop</button>
+      <button id="cropCancel" type="button">Cancel</button>
+    </div>
+  </div>
+  <div class="cropViewport" id="cropViewport">
+    <div id="cropStage">
+      <img id="cropPreview" alt="Crop preview">
+      <div id="cropRect">
+        <div class="cropGrid"></div>
+        <div class="cropHandle nw" data-handle="nw"></div><div class="cropHandle n" data-handle="n"></div><div class="cropHandle ne" data-handle="ne"></div>
+        <div class="cropHandle e" data-handle="e"></div><div class="cropHandle se" data-handle="se"></div><div class="cropHandle s" data-handle="s"></div>
+        <div class="cropHandle sw" data-handle="sw"></div><div class="cropHandle w" data-handle="w"></div>
+        <div id="cropSize" class="cropSize">0 × 0</div>
+      </div>
+    </div>
+  </div>
+  <div class="cropBottom">
+    <div class="cropZoom"><button id="cropZoomOut" type="button">−</button><span id="cropZoomValue">100%</span><button id="cropZoomIn" type="button">+</button></div>
+    <button id="cropZoomReset" type="button">1:1</button>
+    <span>↻</span><input id="cropAngle" type="range" min="-45" max="45" step="1" value="0"><span id="cropAngleValue">0°</span>
+  </div>
+</div>
+
 <button id="siteBackBtn" type="button" aria-label="Go back">← Back</button>
 
 <div class="wrap">
@@ -187,9 +343,19 @@ AI removes background both inside and outside your drawn selection.
 
 <div class="toolbar">
 <label class="upload" for="file">Upload Image</label>
-<input id="file" type="file" accept="image/jpeg,image/png,image/webp,image/bmp">
+
+ <div class="shapeTools" id="shapeTools">
+   <span class="shapeTitle">Shape</span>
+   <button type="button" class="shapeChoice active" data-shape="freehand">✏️ Freehand</button>
+   <button type="button" class="shapeChoice" data-shape="rectangle">1. ▭ Rectangle</button>
+   <button type="button" class="shapeChoice" data-shape="circle">2. ○ Circle</button>
+   <button type="button" class="shapeChoice" data-shape="ellipse">3. ⬭ Ellipse</button>
+   <button type="button" class="shapeChoice" data-shape="triangle">4. △ Triangle</button>
+ </div>
+<input id="file" type="file" accept="image/*,.jpg,.jpeg,.png,.webp,.bmp,.gif,.tif,.tiff,.avif,.heic,.heif,.jfif,.ico">
 
 <button id="remove" disabled>Remove Background</button>
+<button id="crop" class="cropBtn" disabled>✂️ Crop</button>
 <button id="clear" class="secondary" disabled>Clear Selection</button>
 <button id="undo" class="secondary" disabled>Undo</button>
 <button id="reset" class="secondary" disabled>Reset</button>
@@ -273,14 +439,15 @@ AI removes background both inside and outside your drawn selection.
 </div>
 
 <div class="info">
-<div class="box"><b>1. Upload</b><br>Choose JPG, PNG or WEBP.</div>
+<div class="box"><b>1. Upload</b><br>Choose JPG, JPEG, PNG, WEBP, BMP, GIF, TIFF, AVIF, HEIC/HEIF and other browser-supported image files.</div>
 <div class="box"><b>2. Freehand select</b><br>Press and drag around the subject. Release to close the selection.</div>
 <div class="box"><b>3. AI remove</b><br>The AI keeps the foreground inside your drawn area and makes the rest transparent.</div>
 </div>
 </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/dist/ort.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.18.0/dist/ort.webgpu.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 <script>
 // ===== Working website Back button =====
 (function(){
@@ -314,6 +481,7 @@ const file=document.getElementById('file');
 const canvas=document.getElementById('canvas');
 const ctx=canvas.getContext('2d',{willReadFrequently:true});
 const removeBtn=document.getElementById('remove');
+const cropBtn=document.getElementById('crop');
 const clearBtn=document.getElementById('clear');
 const undoBtn=document.getElementById('undo');
 const resetBtn=document.getElementById('reset');
@@ -336,6 +504,22 @@ let selecting=false;
 let scale=1;
 let history=[];
 let backgroundRemovalDone=false;
+  let selectedShape="freehand";
+  let shapeStart=null;
+  let shapeCurrent=null;
+
+document.querySelectorAll(".shapeChoice").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".shapeChoice").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedShape=btn.dataset.shape;
+    points=[];
+    shapeStart=null;
+    shapeCurrent=null;
+    if(work)redraw();
+    status("Shape selected: "+btn.textContent.trim()+". Draw on the image.");
+  });
+});
 
 const MODEL_URL =
 "https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx";
@@ -408,35 +592,81 @@ function redraw(){
   }
 }
 
-function drawFreehand(){
- redraw();
+function traceShapePath(c, shape, a, b){
+  const x1=a.x, y1=a.y, x2=b.x, y2=b.y;
+  const left=Math.min(x1,x2), top=Math.min(y1,y2);
+  const right=Math.max(x1,x2), bottom=Math.max(y1,y2);
+  const w=right-left, h=bottom-top;
+  c.beginPath();
 
- if(points.length<2)return;
-
- ctx.save();
-
- ctx.beginPath();
- ctx.moveTo(points[0].x,points[0].y);
-
- for(let i=1;i<points.length;i++){
-   ctx.lineTo(points[i].x,points[i].y);
- }
-
- if(!selecting){
-   ctx.closePath();
- }
-
- ctx.fillStyle="rgba(23,105,224,.15)";
- ctx.fill();
-
- ctx.strokeStyle="#1769e0";
- ctx.lineWidth=Math.max(2,2/scale);
- ctx.setLineDash([7/scale,5/scale]);
- ctx.stroke();
-
- ctx.restore();
+  if(shape==="rectangle"){
+    c.rect(left,top,w,h);
+  }else if(shape==="circle"){
+    const size=Math.min(w,h);
+    const cx=x1+(x2-x1)/2, cy=y1+(y2-y1)/2;
+    c.arc(cx,cy,size/2,0,Math.PI*2);
+  }else if(shape==="ellipse"){
+    c.ellipse(left+w/2,top+h/2,Math.max(1,w/2),Math.max(1,h/2),0,0,Math.PI*2);
+  }else if(shape==="triangle"){
+    c.moveTo(left+w/2,top);
+    c.lineTo(right,bottom);
+    c.lineTo(left,bottom);
+    c.closePath();
+  }
 }
 
+function drawSelectionPreview(){
+  redraw();
+  ctx.save();
+  ctx.fillStyle="rgba(23,105,224,.15)";
+  ctx.strokeStyle="#1769e0";
+  ctx.lineWidth=Math.max(2,2/scale);
+  ctx.setLineDash([7/scale,5/scale]);
+
+  if(selectedShape==="freehand"){
+    if(points.length<2){ctx.restore();return;}
+    ctx.beginPath();
+    ctx.moveTo(points[0].x,points[0].y);
+    for(let i=1;i<points.length;i++)ctx.lineTo(points[i].x,points[i].y);
+    if(!selecting)ctx.closePath();
+  }else if(shapeStart && shapeCurrent){
+    traceShapePath(ctx,selectedShape,shapeStart,shapeCurrent);
+  }else{
+    ctx.restore();return;
+  }
+  ctx.fill();
+  ctx.stroke();
+  ctx.restore();
+}
+
+function getSelectionPolygon(){
+  if(selectedShape==="freehand") return points.slice();
+  if(!shapeStart || !shapeCurrent) return [];
+
+  const a=shapeStart,b=shapeCurrent;
+  const left=Math.min(a.x,b.x), top=Math.min(a.y,b.y);
+  const right=Math.max(a.x,b.x), bottom=Math.max(a.y,b.y);
+  const w=right-left,h=bottom-top;
+
+  if(selectedShape==="rectangle"){
+    return [{x:left,y:top},{x:right,y:top},{x:right,y:bottom},{x:left,y:bottom}];
+  }
+  if(selectedShape==="triangle"){
+    return [{x:left+w/2,y:top},{x:right,y:bottom},{x:left,y:bottom}];
+  }
+  // Ellipse/circle are approximated with enough points for accurate masking.
+  const rx=selectedShape==="circle"?Math.min(w,h)/2:w/2;
+  const ry=selectedShape==="circle"?Math.min(w,h)/2:h/2;
+  const cx=a.x+(b.x-a.x)/2, cy=a.y+(b.y-a.y)/2;
+  const poly=[];
+  for(let i=0;i<96;i++){
+    const t=i/96*Math.PI*2;
+    poly.push({x:cx+rx*Math.cos(t),y:cy+ry*Math.sin(t)});
+  }
+  return poly;
+}
+
+function drawFreehand(){ drawSelectionPreview(); }
 
 function makeProcessingStars(){
   stars.innerHTML="";
@@ -531,113 +761,348 @@ function showSlowReveal(){
   requestAnimationFrame(move);
 }
 
-file.addEventListener("change",()=>{
- const f=file.files[0];
- if(!f)return;
+async function decodeImageFile(f){
+  const type=(f.type||"").toLowerCase();
+  const name=(f.name||"").toLowerCase();
 
- const reader=new FileReader();
+  // Native browser decoder first.
+  const nativeUrl=URL.createObjectURL(f);
+  try{
+    const img=await new Promise((resolve,reject)=>{
+      const im=new Image();
+      im.onload=()=>resolve(im);
+      im.onerror=()=>reject(new Error("native-decode-failed"));
+      im.src=nativeUrl;
+    });
+    URL.revokeObjectURL(nativeUrl);
+    return img;
+  }catch(e){
+    URL.revokeObjectURL(nativeUrl);
+  }
 
- reader.onload=e=>{
-   const img=new Image();
+  // HEIC/HEIF fallback for browsers (especially mobile) that cannot decode it natively.
+  const isHEIC=/\.(heic|heif)$/i.test(name) ||
+               type==="image/heic" || type==="image/heif" ||
+               type==="image/heic-sequence" || type==="image/heif-sequence";
+  if(isHEIC && typeof heic2any==="function"){
+    const converted=await heic2any({blob:f,toType:"image/png",quality:1});
+    const blob=Array.isArray(converted)?converted[0]:converted;
+    const url=URL.createObjectURL(blob);
+    try{
+      const img=await new Promise((resolve,reject)=>{
+        const im=new Image();
+        im.onload=()=>resolve(im);
+        im.onerror=()=>reject(new Error("converted-decode-failed"));
+        im.src=url;
+      });
+      URL.revokeObjectURL(url);
+      return img;
+    }catch(e){
+      URL.revokeObjectURL(url);
+    }
+  }
 
-   img.onload=()=>{
-     hideProcessing();
-     revealLayer.style.display='none';
-     canvas.width=img.naturalWidth;
-     canvas.height=img.naturalHeight;
+  // Last fallback: create a bitmap when the browser exposes it.
+  if(typeof createImageBitmap==="function"){
+    try{
+      const bitmap=await createImageBitmap(f);
+      const c=document.createElement("canvas");
+      c.width=bitmap.width;c.height=bitmap.height;
+      c.getContext("2d").drawImage(bitmap,0,0);
+      bitmap.close?.();
+      const im=new Image();
+      im.src=c.toDataURL("image/png");
+      await new Promise((resolve,reject)=>{im.onload=resolve;im.onerror=reject});
+      return im;
+    }catch(e){}
+  }
 
-     ctx.clearRect(0,0,canvas.width,canvas.height);
-     ctx.drawImage(img,0,0);
+  throw new Error("unsupported-image");
+}
 
-     original=ctx.getImageData(
-       0,0,canvas.width,canvas.height
-     );
+file.addEventListener("change",async()=>{
+  const f=file.files[0];
+  if(!f)return;
 
-     work=new ImageData(
-       new Uint8ClampedArray(original.data),
-       canvas.width,
-       canvas.height
-     );
+  status("Reading image…");
+  try{
+    const img=await decodeImageFile(f);
+    hideProcessing();
+    revealLayer.style.display='none';
+    canvas.width=img.naturalWidth||img.width;
+    canvas.height=img.naturalHeight||img.height;
 
-     points=[];
-     history=[];
-     backgroundRemovalDone=false;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(img,0,0);
 
-     removeBtn.disabled=false;
-     clearBtn.disabled=false;
-     resetBtn.disabled=false;
-     downloadBtn.disabled=false;
-     undoBtn.disabled=true;
+    original=ctx.getImageData(0,0,canvas.width,canvas.height);
+    work=new ImageData(new Uint8ClampedArray(original.data),canvas.width,canvas.height);
 
-     fitCanvas();
+    points=[];
+    shapeStart=null;
+    shapeCurrent=null;
+    history=[];
+    backgroundRemovalDone=false;
 
-     status(
-       "Image loaded. Draw freely around the Person, Animal or Object."
-     );
-   };
+    removeBtn.disabled=false;
+    cropBtn.disabled=false;
+    clearBtn.disabled=false;
+    resetBtn.disabled=false;
+    downloadBtn.disabled=false;
+    undoBtn.disabled=true;
 
-   img.src=e.target.result;
- };
-
- reader.readAsDataURL(f);
+    fitCanvas();
+    status("Image loaded. Choose a shape and select the Person, Animal or Object.");
+    preloadAIModel();
+  }catch(error){
+    console.error(error);
+    status("❌ This image format could not be decoded by this browser. HEIC/HEIF conversion also failed.");
+  }finally{
+    file.value="";
+  }
 });
 
 canvas.addEventListener("pointerdown",e=>{
- if(!work)return;
+  if(!work)return;
+  selecting=true;
+  canvas.setPointerCapture(e.pointerId);
+  const p=getPoint(e);
 
- selecting=true;
- points=[getPoint(e)];
-
- canvas.setPointerCapture(e.pointerId);
-
- drawFreehand();
+  if(selectedShape==="freehand"){
+    points=[p];
+  }else{
+    shapeStart=p;
+    shapeCurrent=p;
+  }
+  drawSelectionPreview();
 });
 
 canvas.addEventListener("pointermove",e=>{
- if(!selecting)return;
+  if(!selecting)return;
+  const p=getPoint(e);
 
- const p=getPoint(e);
- const last=points[points.length-1];
-
- /*
- Avoid thousands of almost identical points.
- */
- const dx=p.x-last.x;
- const dy=p.y-last.y;
-
- if((dx*dx+dy*dy)>4){
-   points.push(p);
-   drawFreehand();
- }
+  if(selectedShape==="freehand"){
+    const last=points[points.length-1];
+    const dx=p.x-last.x, dy=p.y-last.y;
+    if((dx*dx+dy*dy)>4){
+      points.push(p);
+      drawSelectionPreview();
+    }
+  }else{
+    shapeCurrent=p;
+    drawSelectionPreview();
+  }
 });
 
-canvas.addEventListener("pointerup",()=>{
- if(!selecting)return;
+canvas.addEventListener("pointerup",e=>{
+  if(!selecting)return;
+  selecting=false;
+  try{canvas.releasePointerCapture(e.pointerId)}catch(_){}
 
- selecting=false;
+  const poly=getSelectionPolygon();
+  if(poly.length<3){
+    points=[];shapeStart=null;shapeCurrent=null;
+    redraw();
+    status("Please draw a larger selection.");
+    return;
+  }
 
- if(points.length<3){
-   points=[];
-   redraw();
-
-   status("Please draw a larger freehand selection.");
-   return;
- }
-
- /*
- Close the polygon automatically.
- */
- drawFreehand();
-
- status(
-   "Freehand area selected. Click Remove Background."
- );
+  if(selectedShape!=="freehand") points=poly;
+  drawSelectionPreview();
+  status((selectedShape.charAt(0).toUpperCase()+selectedShape.slice(1))+" area selected. Click Remove Background.");
 });
+
+
+/* ===== Video-style Crop Studio ===== */
+const cropStudio=document.getElementById('cropStudio');
+const cropViewport=document.getElementById('cropViewport');
+const cropStage=document.getElementById('cropStage');
+const cropPreview=document.getElementById('cropPreview');
+const cropRect=document.getElementById('cropRect');
+const cropSize=document.getElementById('cropSize');
+const cropAngle=document.getElementById('cropAngle');
+const cropAngleValue=document.getElementById('cropAngleValue');
+const cropZoomValue=document.getElementById('cropZoomValue');
+let cropState={x:0,y:0,w:0,h:0,angle:0,zoom:1};
+let cropBase={x:0,y:0,w:0,h:0};
+let cropDrag=null;
+let cropHistory=[],cropHistoryIndex=-1;
+
+function cropSnapshot(){return JSON.stringify(cropState)}
+function cropPushHistory(){
+  const snap=cropSnapshot();
+  if(cropHistoryIndex>=0 && cropHistory[cropHistoryIndex]===snap)return;
+  cropHistory=cropHistory.slice(0,cropHistoryIndex+1); cropHistory.push(snap); cropHistoryIndex++;
+  document.getElementById('cropUndo').disabled=cropHistoryIndex<=0;
+  document.getElementById('cropRedo').disabled=cropHistoryIndex>=cropHistory.length-1;
+}
+function cropRestoreSnap(snap){cropState=JSON.parse(snap); cropAngle.value=cropState.angle; cropAngleValue.textContent=cropState.angle+'°'; cropApplyZoom(); cropRenderRect()}
+function cropImageURL(){
+  if(!work)return '';
+  const c=document.createElement('canvas'); c.width=work.width;c.height=work.height;
+  c.getContext('2d').putImageData(work,0,0); return c.toDataURL('image/png');
+}
+function cropOpen(){
+  if(!work){status('First upload an image.');return;}
+
+  /*
+   * If the user has already selected an area with one of the five shape
+   * tools, Crop uses that exact selection. This makes Crop work with:
+   * Freehand, Rectangle, Circle, Ellipse and Triangle.
+   *
+   * If there is no selection, the Video-style Crop Studio opens normally.
+   */
+  const poly=getSelectionPolygon();
+  if(poly.length>=3){
+    cropShapeSelection();
+    return;
+  }
+
+  cropStudio.classList.add('open'); cropStudio.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+  cropPreview.onload=()=>cropInit(); cropPreview.src=cropImageURL();
+  if(cropPreview.complete) cropInit();
+}
+
+function cropShapeSelection(){
+  const poly=getSelectionPolygon();
+  if(!work || poly.length<3){
+    status('First select an area with a shape tool.');
+    return;
+  }
+
+  let minX=work.width, minY=work.height, maxX=0, maxY=0;
+  for(const p of poly){
+    minX=Math.min(minX,p.x); minY=Math.min(minY,p.y);
+    maxX=Math.max(maxX,p.x); maxY=Math.max(maxY,p.y);
+  }
+
+  minX=Math.max(0,Math.floor(minX));
+  minY=Math.max(0,Math.floor(minY));
+  maxX=Math.min(work.width,Math.ceil(maxX));
+  maxY=Math.min(work.height,Math.ceil(maxY));
+
+  const w=Math.max(1,maxX-minX), h=Math.max(1,maxY-minY);
+  const out=document.createElement('canvas');
+  out.width=w; out.height=h;
+  const oc=out.getContext('2d');
+
+  const src=document.createElement('canvas');
+  src.width=work.width; src.height=work.height;
+  src.getContext('2d').putImageData(work,0,0);
+  oc.drawImage(src,minX,minY,w,h,0,0,w,h);
+
+  /* Keep only the selected shape; outside it becomes transparent. */
+  oc.save();
+  oc.globalCompositeOperation='destination-in';
+  oc.beginPath();
+  oc.moveTo(poly[0].x-minX,poly[0].y-minY);
+  for(let i=1;i<poly.length;i++)oc.lineTo(poly[i].x-minX,poly[i].y-minY);
+  oc.closePath();
+  oc.fill();
+  oc.restore();
+
+  const cropped=oc.getImageData(0,0,w,h);
+  history.push({
+    type:'crop',
+    imageData:new ImageData(new Uint8ClampedArray(work.data),work.width,work.height)
+  });
+  undoBtn.disabled=false;
+
+  canvas.width=w;
+  canvas.height=h;
+  work=cropped;
+  points=[];
+  shapeStart=null;
+  shapeCurrent=null;
+  backgroundRemovalDone=false;
+
+  fitCanvas();
+  redraw();
+
+  const shapeName=selectedShape.charAt(0).toUpperCase()+selectedShape.slice(1);
+  status(shapeName+' crop saved successfully. Outside the selected shape is transparent.');
+}
+function cropInit(){
+  if(!cropPreview.naturalWidth)return;
+  cropState={x:.08,y:.08,w:.84,h:.84,angle:0,zoom:1};
+  cropBase={x:cropState.x,y:cropState.y,w:cropState.w,h:cropState.h};
+  cropHistory=[cropSnapshot()];cropHistoryIndex=0;
+  cropAngle.value=0;cropAngleValue.textContent='0°';cropApplyZoom();cropRenderRect();
+}
+function cropCloseStudio(){cropStudio.classList.remove('open');cropStudio.setAttribute('aria-hidden','true');document.body.style.overflow='';cropDrag=null}
+function cropApplyZoom(){
+  const z=cropState.zoom||1; cropStage.style.transform='scale('+z+') rotate(0deg)';
+  cropZoomValue.textContent=Math.round(z*100)+'%';
+  requestAnimationFrame(cropRenderRect);
+}
+function cropRenderRect(){
+  if(!cropPreview.clientWidth||!cropPreview.clientHeight)return;
+  const iw=cropPreview.clientWidth,ih=cropPreview.clientHeight;
+  cropRect.style.left=(cropState.x*iw)+'px';cropRect.style.top=(cropState.y*ih)+'px';cropRect.style.width=(cropState.w*iw)+'px';cropRect.style.height=(cropState.h*ih)+'px';
+  const rw=Math.max(1,Math.round(cropState.w*cropPreview.naturalWidth));
+  const rh=Math.max(1,Math.round(cropState.h*cropPreview.naturalHeight));
+  cropSize.textContent=rw+' × '+rh;
+}
+function cropPointerPos(e){const r=cropPreview.getBoundingClientRect();return {x:(e.clientX-r.left)/r.width,y:(e.clientY-r.top)/r.height}}
+function cropBegin(e,handle){
+  e.preventDefault();e.stopPropagation();
+  const p=cropPointerPos(e); cropDrag={handle,startX:p.x,startY:p.y,state:{...cropState}};
+  try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){ }
+}
+function cropMove(e){
+  if(!cropDrag)return; e.preventDefault();
+  const p=cropPointerPos(e),d={x:p.x-cropDrag.startX,y:p.y-cropDrag.startY},s=cropDrag.state;
+  let x=s.x,y=s.y,w=s.w,h=s.h,hd=cropDrag.handle,min=.025;
+  if(hd.includes('w')){x=Math.max(0,Math.min(s.x+s.w-min,s.x+d.x));w=s.x+s.w-x}
+  if(hd.includes('e')){w=Math.max(min,Math.min(1-s.x,s.w+d.x))}
+  if(hd.includes('n')){y=Math.max(0,Math.min(s.y+s.h-min,s.y+d.y));h=s.y+s.h-y}
+  if(hd.includes('s')){h=Math.max(min,Math.min(1-s.y,s.h+d.y))}
+  if(hd==='move'){x=Math.max(0,Math.min(1-w,s.x+d.x));y=Math.max(0,Math.min(1-h,s.y+d.y))}
+  cropState={...s,x,y,w,h};cropRenderRect();
+}
+function cropEnd(e){if(!cropDrag)return;cropDrag=null;cropPushHistory()}
+function cropSave(){
+  if(!work||!cropPreview.naturalWidth)return;
+  const nw=work.width,nh=work.height,angle=cropState.angle*Math.PI/180;
+  const src=document.createElement('canvas');src.width=nw;src.height=nh;src.getContext('2d').putImageData(work,0,0);
+  let rotated=src;
+  if(Math.abs(angle)>0.0001){
+    const rw=Math.ceil(Math.abs(nw*Math.cos(angle))+Math.abs(nh*Math.sin(angle)));
+    const rh=Math.ceil(Math.abs(nw*Math.sin(angle))+Math.abs(nh*Math.cos(angle)));
+    rotated=document.createElement('canvas');rotated.width=rw;rotated.height=rh;
+    const rc=rotated.getContext('2d');rc.translate(rw/2,rh/2);rc.rotate(angle);rc.drawImage(src,-nw/2,-nh/2);
+  }
+  const x=Math.max(0,Math.round(cropState.x*rotated.width));
+  const y=Math.max(0,Math.round(cropState.y*rotated.height));
+  const w=Math.min(rotated.width-x,Math.max(1,Math.round(cropState.w*rotated.width)));
+  const h=Math.min(rotated.height-y,Math.max(1,Math.round(cropState.h*rotated.height)));
+  const out=document.createElement('canvas');out.width=w;out.height=h;out.getContext('2d').drawImage(rotated,x,y,w,h,0,0,w,h);
+  const cropped=out.getContext('2d').getImageData(0,0,w,h);
+  history.push({type:'crop',imageData:new ImageData(new Uint8ClampedArray(work.data),work.width,work.height)});undoBtn.disabled=false;
+  canvas.width=w;canvas.height=h;work=cropped;points=[];shapeStart=null;shapeCurrent=null;backgroundRemovalDone=false;
+  fitCanvas();redraw();cropCloseStudio();status('Crop saved successfully. You can crop again or remove the background.');
+}
+
+cropBtn.addEventListener('click',cropOpen);
+document.getElementById('cropClose').addEventListener('click',cropCloseStudio);
+document.getElementById('cropCancel').addEventListener('click',cropCloseStudio);
+document.getElementById('cropSave').addEventListener('click',cropSave);
+document.getElementById('cropReset').addEventListener('click',()=>{cropState={...cropState,x:cropBase.x,y:cropBase.y,w:cropBase.w,h:cropBase.h,angle:0};cropAngle.value=0;cropAngleValue.textContent='0°';cropApplyZoom();cropRenderRect();cropPushHistory()});
+document.getElementById('cropUndo').addEventListener('click',()=>{if(cropHistoryIndex>0){cropHistoryIndex--;cropRestoreSnap(cropHistory[cropHistoryIndex]);document.getElementById('cropRedo').disabled=false;document.getElementById('cropUndo').disabled=cropHistoryIndex<=0}});
+document.getElementById('cropRedo').addEventListener('click',()=>{if(cropHistoryIndex<cropHistory.length-1){cropHistoryIndex++;cropRestoreSnap(cropHistory[cropHistoryIndex]);document.getElementById('cropRedo').disabled=cropHistoryIndex>=cropHistory.length-1;document.getElementById('cropUndo').disabled=false}});
+document.getElementById('cropZoomIn').addEventListener('click',()=>{cropState.zoom=Math.min(3,+(cropState.zoom+.1).toFixed(2));cropApplyZoom()});
+document.getElementById('cropZoomOut').addEventListener('click',()=>{cropState.zoom=Math.max(.5,+(cropState.zoom-.1).toFixed(2));cropApplyZoom()});
+document.getElementById('cropZoomReset').addEventListener('click',()=>{cropState.zoom=1;cropApplyZoom()});
+cropAngle.addEventListener('input',()=>{cropState.angle=+cropAngle.value;cropAngleValue.textContent=cropState.angle+'°'});
+cropAngle.addEventListener('change',cropPushHistory);
+cropRect.addEventListener('pointerdown',e=>cropBegin(e,'move'));
+document.querySelectorAll('#cropRect .cropHandle').forEach(h=>h.addEventListener('pointerdown',e=>cropBegin(e,h.dataset.handle)));
+window.addEventListener('pointermove',cropMove,{passive:false});window.addEventListener('pointerup',cropEnd,{passive:false});window.addEventListener('resize',()=>{if(cropStudio.classList.contains('open'))cropRenderRect()});
 
 clearBtn.addEventListener("click",()=>{
  points=[];
  redraw();
- status("Freehand selection cleared.");
+ status("Selection cleared.");
 });
 
 resetBtn.addEventListener("click",()=>{
@@ -662,14 +1127,23 @@ resetBtn.addEventListener("click",()=>{
 
 undoBtn.addEventListener("click",()=>{
  if(!history.length)return;
+ const entry=history.pop();
 
- work=history.pop();
-
- redraw();
-
+ if(entry && entry.type==="crop"){
+   const restored=entry.imageData;
+   canvas.width=restored.width;
+   canvas.height=restored.height;
+   work=new ImageData(new Uint8ClampedArray(restored.data),restored.width,restored.height);
+   backgroundRemovalDone=false;
+   points=[]; shapeStart=null; shapeCurrent=null;
+   fitCanvas(); redraw();
+   status("Crop undone. Previous image restored.");
+ }else{
+   work=entry && entry.imageData ? entry.imageData : entry;
+   redraw();
+   status("Last background removal undone.");
+ }
  undoBtn.disabled=history.length===0;
-
- status("Last background removal undone.");
 });
 
 /*
@@ -724,14 +1198,31 @@ async function getSession(){
    return sessionPromise;
  }
 
- sessionPromise =
-   ort.InferenceSession.create(
-     MODEL_URL,
-     {
-       executionProviders:["wasm"],
-       graphOptimizationLevel:"all"
-     }
-   );
+ /* Prefer GPU acceleration when WebGPU is available.
+    WASM remains the automatic fallback for unsupported browsers/devices. */
+ if(navigator.gpu){
+   try{
+     sessionPromise=await ort.InferenceSession.create(
+       MODEL_URL,
+       {
+         executionProviders:["webgpu","wasm"],
+         graphOptimizationLevel:"all"
+       }
+     );
+     return sessionPromise;
+   }catch(gpuError){
+     console.warn("WebGPU unavailable; falling back to WASM.",gpuError);
+     sessionPromise=null;
+   }
+ }
+
+ sessionPromise=ort.InferenceSession.create(
+   MODEL_URL,
+   {
+     executionProviders:["wasm"],
+     graphOptimizationLevel:"all"
+   }
+ );
 
  return sessionPromise;
 }
@@ -861,6 +1352,29 @@ function makeMask(output,width,height){
 
 /*
 ===========================================================
+FAST SELECTION MASK
+===========================================================
+Rasterize the user's selection once instead of running the
+point-in-polygon calculation for every pixel of a large image.
+===========================================================
+*/
+function buildSelectionMask(poly,minX,minY,maxX,maxY){
+  const w=Math.max(1,maxX-minX+1);
+  const h=Math.max(1,maxY-minY+1);
+  const c=document.createElement("canvas");
+  c.width=w;c.height=h;
+  const cctx=c.getContext("2d");
+  cctx.beginPath();
+  cctx.moveTo(poly[0].x-minX,poly[0].y-minY);
+  for(let i=1;i<poly.length;i++)cctx.lineTo(poly[i].x-minX,poly[i].y-minY);
+  cctx.closePath();
+  cctx.fillStyle="#fff";
+  cctx.fill();
+  return {data:cctx.getImageData(0,0,w,h).data,w};
+}
+
+/*
+===========================================================
 REMOVE BACKGROUND
 ===========================================================
 */
@@ -882,7 +1396,7 @@ removeBtn.addEventListener("click",async()=>{
    work.height
  );
 
- history.push(snapshot);
+ history.push({type:"background",imageData:snapshot});
  undoBtn.disabled=false;
 
  /*
@@ -968,35 +1482,21 @@ removeBtn.addEventListener("click",async()=>{
        AI FOREGROUND MASK
    */
 
-   for(let y=0;y<canvas.height;y++){
+   /* Fast post-processing: only scan the selected bounding box. */
+   const sel=buildSelectionMask(points,minX,minY,maxX,maxY);
+   const bw=sel.w;
 
-     for(let x=0;x<canvas.width;x++){
+   /* Outside the selection is immediately transparent. */
+   for(let i=3;i<data.length;i+=4)data[i]=0;
 
-       const i=
-         (y*canvas.width+x)*4;
-
-       let alpha=0;
-
-       if(
-         x>=minX &&
-         x<=maxX &&
-         y>=minY &&
-         y<=maxY &&
-         pointInsidePolygon(x,y,points)
-       ){
-
-         const m=
-           mask[y*canvas.width+x];
-
-         /*
-         Soft AI edge.
-         */
-         if(m>=12){
-           alpha=m;
-         }
-       }
-
-       data[i+3]=alpha;
+   for(let y=minY;y<=maxY;y++){
+     const sy=y-minY;
+     for(let x=minX;x<=maxX;x++){
+       const sx=x-minX;
+       const i=(y*canvas.width+x)*4;
+       const selected=sel.data[(sy*bw+sx)*4+3];
+       const m=mask[y*canvas.width+x];
+       data[i+3]=(selected && m>=12) ? m : 0;
      }
    }
 
@@ -1015,7 +1515,7 @@ removeBtn.addEventListener("click",async()=>{
    showSlowReveal();
 
    status(
-     "Background removed — revealing the result from left to right..."
+     "Background removed successfully."
    );
 
  }
@@ -1362,6 +1862,19 @@ async function multiDownload(ev){
 if(downloadButton){
   downloadButton.onclick=multiDownload;
 }
+
+
+/* ===== Theme control ===== */
+const themeBtn=document.getElementById('themeBtn'),themeMenu=document.getElementById('themeMenu');
+themeBtn.addEventListener('click',e=>{e.stopPropagation();themeMenu.classList.toggle('show')});
+document.querySelectorAll('.themeItem').forEach(item=>item.addEventListener('click',()=>{
+  const t=item.dataset.theme;document.body.classList.toggle('theme-dark',t==='dark');
+  if(t==='original'||t==='light')document.body.classList.remove('theme-dark');
+  themeMenu.classList.remove('show');
+  try{localStorage.setItem('resizeToolTheme',t)}catch(_){ }
+}));
+document.addEventListener('click',()=>themeMenu.classList.remove('show'));
+try{if(localStorage.getItem('resizeToolTheme')==='dark')document.body.classList.add('theme-dark')}catch(_){ }
 
 </script>
 </body>
