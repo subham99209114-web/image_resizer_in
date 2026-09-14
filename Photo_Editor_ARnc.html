@@ -49,59 +49,31 @@ button,input,select{font:inherit}.app{height:100%;display:flex;flex-direction:co
 .lightTheme{--bg:#f0f0f0;--bar:#fff;--panel:#fafafa;--panel2:#eee;--line:#d4d4d4;--text:#161616;--muted:#666}
 .lightTheme .top,.lightTheme .sidebar,.lightTheme .bottom{background:#fff;color:#222}.lightTheme .sidebtn{color:#555}.lightTheme .stage{background-color:#ddd}
 .tabs{display:flex;border-bottom:1px solid #414141}.tab{flex:1;background:transparent;color:#aaa;border:0;padding:10px;cursor:pointer}.tab.active{color:#fff;border-bottom:2px solid #3caeff}
-@media(max-width:900px){
- .right{width:290px}
- .sidebar{width:62px}
- #view{max-width:94%;max-height:82%}
-}
+@media(max-width:900px){.right{width:290px}.sidebar{width:62px}}
 @media(max-width:650px){
- html,body{overflow:hidden}
- .top{height:46px;padding:0 5px;gap:3px;overflow-x:auto;flex-shrink:0}
- .topbtn{height:32px;min-width:32px;padding:0 7px}
- .brand{display:none}
- .main{position:relative;min-height:0;overflow:hidden}
- .sidebar{width:52px;min-width:52px;padding:5px 3px;gap:3px;z-index:6;overflow-y:auto}
- .sidebtn{height:52px;font-size:9px;flex-shrink:0}
- .sidebtn .ico{font-size:18px}
- .stage{min-width:0;flex:1;height:auto;overflow:auto;display:flex;align-items:center;justify-content:center;padding:8px}
- #view{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
- .empty{max-width:calc(100% - 16px);padding:20px 14px;z-index:2}
- .empty h2{font-size:15px}
- .empty p{font-size:11px}
- .filepick{padding:8px 12px}
- .right{
-   width:calc(100% - 52px);
-   position:absolute;
-   right:0;
-   top:0;
-   bottom:0;
-   z-index:5;
-   display:none;
-   max-height:none;
- }
- .right.open{display:flex}
- .panelBody{padding:10px;overflow-y:auto;-webkit-overflow-scrolling:touch}
- .panelHead{height:44px;min-height:44px}
- .bottom{height:32px;flex-shrink:0;padding:0 6px}
- .status{margin-left:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
- .zoom{gap:3px;flex-shrink:0}
- .zoom button{width:24px}
-}
-@media(max-width:650px) and (orientation:landscape){
- .top{height:40px}
- .main{height:calc(100vh - 72px)}
- .sidebar{width:52px;min-width:52px}
- .sidebtn{height:43px}
- .sidebtn .ico{font-size:16px}
- .right{width:310px}
- .stage{padding:4px}
- #view{max-width:100%;max-height:100%}
- .bottom{height:32px}
-}
-@media(max-width:650px) and (orientation:portrait){
- .main{height:calc(100vh - 78px)}
- .stage{padding:6px}
- #view{max-width:100%;max-height:100%}
+html,body{overflow:hidden}
+.top{height:50px;padding:0 6px;gap:3px;overflow-x:auto;overflow-y:hidden;white-space:nowrap}
+.topbtn{flex:0 0 auto;padding:0 7px;font-size:12px}
+.brand{display:block;font-size:13px;margin-right:2px}
+.top .sep{display:none}
+.main{position:relative;min-height:0}
+.sidebar{width:55px;min-width:55px;height:auto;padding:6px 4px;gap:3px;overflow-y:auto;overflow-x:hidden;z-index:8}
+.sidebtn{height:55px;min-height:55px;font-size:10px;padding:2px 0}
+.sidebtn .ico{font-size:19px}
+.stage{min-width:0;min-height:0;align-items:center;justify-content:center;padding:6px}
+#view{max-width:100%;max-height:100%;width:auto;height:auto}
+.empty{max-width:calc(100% - 16px);padding:22px 14px;z-index:2}
+.empty h2{font-size:16px}.empty p{font-size:12px}
+.right{width:calc(100% - 55px);max-width:none;position:absolute;left:55px;right:auto;top:auto;bottom:34px;height:min(48vh,430px);max-height:calc(100% - 20px);z-index:10;display:none;border-left:1px solid #414141;border-top:1px solid #414141;box-shadow:0 -8px 24px rgba(0,0,0,.45)}
+.right.open{display:flex}
+.panelHead{height:44px;min-height:44px;padding:0 10px;font-size:14px}
+.panelBody{padding:10px;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.section{padding-bottom:10px;margin-bottom:10px}.control{margin:8px 0}
+.grid2{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:repeat(3,1fr)}
+.action,.select,.textin,.numin{min-height:36px}
+.bottom{height:34px;min-height:34px;padding:0 6px;font-size:11px}
+.status{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:7px}
+#dimensions{display:none}
 }
 .bgProcessing{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.92);color:#fff;font-weight:600;letter-spacing:.3px}.bgProcessing .stars{width:80%;max-width:700px;text-align:center;font-size:22px;line-height:3;animation:starShine 1s ease-in-out infinite}.bgProcessing.hidden{display:none}@keyframes starShine{0%,100%{opacity:.25;transform:scale(.98)}50%{opacity:1;transform:scale(1.02)}}
 </style>
@@ -364,21 +336,22 @@ function updateCanvasSize(){
 }
 function fit(){
  if(!baseCanvas)return;
- const r=stage.getBoundingClientRect();
- const maxW=Math.max(40,r.width-16)*.96;
- const maxH=Math.max(40,r.height-16)*.96;
+ const mobile=window.matchMedia("(max-width:650px)").matches;
+ const drawer=mobile&&$("#right").classList.contains("open")?Math.min(window.innerHeight*.48,430):0;
+ const maxW=Math.max(40,stage.clientWidth-(mobile?12:0))*.82;
+ const maxH=Math.max(40,stage.clientHeight-drawer-(mobile?12:0))*.82;
  zoom=Math.min(maxW/canvas.width,maxH/canvas.height);
  if(!isFinite(zoom)||zoom<=0)zoom=1;
- zoom=Math.min(zoom,4);
  updateCanvasSize();
 }
 $("#zoomIn").onclick=()=>{zoom=Math.min(4,zoom+.1);updateCanvasSize()};$("#zoomOut").onclick=()=>{zoom=Math.max(.1,zoom-.1);updateCanvasSize()};$("#fit").onclick=fit;
-window.addEventListener("resize",()=>{if(baseCanvas)requestAnimationFrame(()=>{fit();render()})});
+window.addEventListener("resize",()=>{if(baseCanvas)fit()});
 
 $$(".sidebtn").forEach(b=>b.onclick=()=>{ $$(".sidebtn").forEach(x=>x.classList.remove("active"));b.classList.add("active");
  const name=b.dataset.panel;$("#panelTitle").textContent=b.textContent.trim();
  ["adjust","crop","filters","text","draw","background","effects","resize"].forEach(p=>$("#"+p+"Panel").classList.toggle("hidden",p!==name));$("#right").classList.add("open");
- if(name==="crop")startCropMode(); if(baseCanvas){requestAnimationFrame(()=>{fit();render();});}
+ if(window.matchMedia("(max-width:650px)").matches && baseCanvas){requestAnimationFrame(()=>{fit();render()})}
+ if(name==="crop")startCropMode();
 });
 function mark(){pushUndo();render()}
 $$(".range").forEach(r=>{r.addEventListener("input",()=>{if(adj[r.id]!==undefined){adj[r.id]=+r.value;$("#"+r.id+"N").textContent=r.value;render()}});
