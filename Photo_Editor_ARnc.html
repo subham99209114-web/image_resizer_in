@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2M4G7P12B6"></script>
 <script>
@@ -49,7 +49,133 @@ button,input,select{font:inherit}.app{height:100%;display:flex;flex-direction:co
 .lightTheme{--bg:#f0f0f0;--bar:#fff;--panel:#fafafa;--panel2:#eee;--line:#d4d4d4;--text:#161616;--muted:#666}
 .lightTheme .top,.lightTheme .sidebar,.lightTheme .bottom{background:#fff;color:#222}.lightTheme .sidebtn{color:#555}.lightTheme .stage{background-color:#ddd}
 .tabs{display:flex;border-bottom:1px solid #414141}.tab{flex:1;background:transparent;color:#aaa;border:0;padding:10px;cursor:pointer}.tab.active{color:#fff;border-bottom:2px solid #3caeff}
-@media(max-width:900px){.right{width:290px}.sidebar{width:62px}}@media(max-width:650px){.right{width:100%;position:absolute;right:0;top:50px;bottom:34px;z-index:5;display:none}.right.open{display:flex}.sidebar{width:55px}.brand{display:none}}
+/* Responsive layout — design/function preserved */
+@media (max-width:1100px){
+  .right{width:300px}
+  .sidebar{width:64px}
+  .top{gap:3px;padding:0 7px}
+  .topbtn{padding:0 7px}
+}
+
+@media (max-width:760px){
+  html,body{overflow:hidden}
+  .top{
+    height:auto;
+    min-height:50px;
+    padding:5px 6px;
+    gap:4px;
+    flex-wrap:wrap;
+    align-content:center;
+  }
+  .brand{font-size:14px;margin-right:3px}
+  .topbtn{height:34px;min-width:34px;padding:0 7px}
+  .top .sep{display:none}
+  .top .grow{display:none}
+
+  .main{position:relative;min-height:0;overflow:hidden}
+  .sidebar{
+    width:58px;
+    min-width:58px;
+    padding:6px 4px;
+    overflow-y:auto;
+    gap:3px;
+  }
+  .sidebtn{
+    height:52px;
+    min-height:52px;
+    font-size:10px;
+  }
+  .sidebtn .ico{font-size:19px}
+
+  .stage{
+    min-width:0;
+    min-height:0;
+  }
+  #view{
+    max-width:96%;
+    max-height:92%;
+  }
+
+  .right{
+    width:min(330px,calc(100% - 58px));
+    position:absolute;
+    right:0;
+    top:0;
+    bottom:0;
+    z-index:5;
+    display:none;
+    box-shadow:-8px 0 24px rgba(0,0,0,.35);
+  }
+  .right.open{display:flex}
+  .panelHead{height:46px;min-height:46px}
+  .panelBody{padding:10px}
+  .empty{max-width:90%;padding:24px 20px}
+  .bottom{
+    height:34px;
+    min-height:34px;
+    padding:0 6px;
+  }
+  .status{
+    max-width:42vw;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+}
+
+@media (max-width:500px){
+  .top{
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scrollbar-width:none;
+  }
+  .top::-webkit-scrollbar{display:none}
+  .brand{flex:0 0 auto}
+  .topbtn{flex:0 0 auto}
+
+  .sidebar{width:54px;min-width:54px}
+  .right{width:calc(100% - 54px)}
+  .empty h2{font-size:16px}
+  .empty p{font-size:12px}
+  .grid2{gap:6px}
+  .action,.select,.textin,.numin{padding:7px}
+  .panelBody{padding:9px}
+}
+
+@media (max-width:760px) and (orientation:landscape){
+  .top{
+    min-height:46px;
+    height:46px;
+    padding:3px 6px;
+  }
+  .main{min-height:0}
+  .sidebar{
+    width:54px;
+    min-width:54px;
+    padding-top:4px;
+    padding-bottom:4px;
+  }
+  .sidebtn{
+    height:45px;
+    min-height:45px;
+    gap:2px;
+  }
+  .sidebtn .ico{font-size:17px;line-height:16px}
+  .right{width:min(320px,48vw)}
+  .bottom{height:30px;min-height:30px}
+  #view{max-width:94%;max-height:90%}
+}
+
+@media (max-width:380px){
+  .brand{font-size:13px}
+  .topbtn{padding:0 6px;font-size:12px}
+  .sidebar{width:50px;min-width:50px}
+  .right{width:calc(100% - 50px)}
+  .status{display:none}
+  .empty{padding:20px 14px}
+  .empty h2{font-size:15px}
+}
 .bgProcessing{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.92);color:#fff;font-weight:600;letter-spacing:.3px}.bgProcessing .stars{width:80%;max-width:700px;text-align:center;font-size:22px;line-height:3;animation:starShine 1s ease-in-out infinite}.bgProcessing.hidden{display:none}@keyframes starShine{0%,100%{opacity:.25;transform:scale(.98)}50%{opacity:1;transform:scale(1.02)}}
 </style>
 </head>
