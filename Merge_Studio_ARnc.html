@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NR8CZ36DPM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NR8CZ36DPM');
+</script>
+<!-- End Google Analytics -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Professional image and PDF merger with crop, reorder, preview, download and client-side processing.">
+<title>Merge Studio.ARnc — Image & PDF Merger</title>
+
+<!-- Open-source browser libraries -->
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs" type="module"></script>
+<!-- Image format decoders: HEIC/HEIF + TIFF -->
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/utif@3.1.0/UTIF.min.js"></script>
+
+<style>
+:root{
+  --bg1:#07111f; --bg2:#111827; --card:rgba(255,255,255,.075);
+  --line:rgba(255,255,255,.13); --text:#f7f9fc; --muted:#9aa8bc;
+  --primary:#4f8cff; --primary2:#7c5cff; --green:#20c997; --danger:#ff5c72;
+  --shadow:0 25px 70px rgba(0,0,0,.35); --radius:22px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:
+   radial-gradient(circle at 15% 10%,rgba(79,140,255,.18),transparent 30%),
+   radial-gradient(circle at 85% 0%,rgba(124,92,255,.18),transparent 28%),
+   linear-gradient(135deg,var(--bg1),var(--bg2));
+  min-height:100vh;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:1250px;margin:auto;padding:30px 18px 60px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:13px}
+.logo{
+ width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:24px;
+ background:linear-gradient(135deg,#4f8cff,#7c5cff);box-shadow:0 12px 30px rgba(79,140,255,.25)
+}
+h1{font-size:clamp(24px,4vw,38px);margin:0;letter-spacing:-.7px}
+.sub{margin:4px 0 0;color:var(--muted);font-size:14px}
+.badge{padding:9px 13px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.05);font-size:12px;color:#cbd5e1}
+.hero,.panel{background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(18px);border-radius:var(--radius)}
+.hero{padding:24px}
+.tabs{display:flex;gap:8px;margin-bottom:18px}
+.tab{border:1px solid var(--line);background:rgba(255,255,255,.045);color:#dbe6f5;padding:11px 18px;border-radius:13px;font-weight:700}
+.tab.active{background:linear-gradient(135deg,#4f8cff,#6d63ff);border-color:transparent}
+.drop{
+ border:2px dashed rgba(79,140,255,.65);border-radius:20px;padding:42px 18px;text-align:center;
+ background:rgba(79,140,255,.055);transition:.2s
+}
+.drop.drag{transform:translateY(-2px);border-color:#8db6ff;background:rgba(79,140,255,.11)}
+.drop .icon{font-size:44px}.drop h2{margin:9px 0 5px;font-size:21px}.drop p{margin:0 0 17px;color:var(--muted)}
+.primary,.green,.ghost,.danger{
+ border:0;border-radius:13px;padding:12px 17px;font-weight:800;color:white;transition:.18s
+}
+.primary{background:linear-gradient(135deg,#4f8cff,#695cff)} .green{background:linear-gradient(135deg,#13b981,#20c997)}
+.ghost{background:rgba(255,255,255,.07);border:1px solid var(--line)} .danger{background:rgba(255,92,114,.12);border:1px solid rgba(255,92,114,.25);color:#ff9bab}
+.primary:hover,.green:hover,.ghost:hover,.danger:hover,.tab:hover{transform:translateY(-1px)}
+input[type=file]{display:none}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 12px;flex-wrap:wrap}
+.toolbar-left,.toolbar-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.count{font-size:13px;color:var(--muted)}
+.panel{padding:18px;margin-top:18px}
+.list{display:grid;gap:10px}
+.item{
+ display:grid;grid-template-columns:72px minmax(0,1fr) auto;align-items:center;gap:13px;
+ padding:11px;border:1px solid var(--line);border-radius:16px;background:rgba(0,0,0,.14)
+}
+.thumb{width:72px;height:60px;border-radius:11px;overflow:hidden;background:#0b1220;display:grid;place-items:center;color:#8ea0b8;font-size:28px}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.meta{min-width:0}.name{font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.info{color:var(--muted);font-size:12px;margin-top:3px}
+.actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.mini{padding:8px 10px;border-radius:10px;font-size:12px}
+.handle{cursor:grab;font-size:19px;color:#8392a8;padding:7px}
+.empty{text-align:center;color:var(--muted);padding:25px}
+.mergebar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:17px}
+select{
+ background:#111a2a;color:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 12px;outline:none
+}
+.status{font-size:13px;color:#9fb0c8;min-height:20px}.status.ok{color:#61e6bb}.status.err{color:#ff8798}
+.progress{height:7px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin-top:9px;display:none}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,#4f8cff,#20c997);transition:.2s}
+.hidden{display:none!important}
+.pdf-page-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-left:auto}
+.pdf-page-tools select{min-width:150px}
+.pdf-note{font-size:12px;color:var(--muted)}
+.export-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+/* Crop studio */
+.modal{position:fixed;inset:0;background:rgba(2,6,15,.82);backdrop-filter:blur(10px);z-index:50;display:none}
+.modal.show{display:flex;flex-direction:column}
+.crop-head{
+ height:74px;display:flex;align-items:center;gap:9px;padding:10px 16px;border-bottom:1px solid var(--line);
+ background:rgba(9,13,22,.96)
+}
+.crop-head .title{font-weight:850;min-width:110px}.spacer{flex:1}
+.crop-work{flex:1;min-height:0;display:grid;place-items:center;padding:18px;overflow:auto;background:#05070b}
+.stage{
+ position:relative;display:inline-block;max-width:min(92vw,1100px);max-height:calc(100vh - 180px);
+ user-select:none;touch-action:none
+}
+.stage img{display:block;max-width:100%;max-height:calc(100vh - 180px);object-fit:contain}
+.overlay{
+ position:absolute;border:2px solid #fff;box-shadow:0 0 0 99999px rgba(0,0,0,.54),0 0 0 1px #111;
+ touch-action:none
+}
+.overlay:before,.overlay:after{
+ content:"";position:absolute;inset:33.333% 0;border-top:1px solid rgba(255,255,255,.65);border-bottom:1px solid rgba(255,255,255,.65);pointer-events:none
+}
+.overlay:after{inset:0 33.333%;border:0;border-left:1px solid rgba(255,255,255,.65);border-right:1px solid rgba(255,255,255,.65)}
+.handle8{
+ position:absolute;width:13px;height:13px;background:#fff;border:1px solid #111;border-radius:2px;z-index:3
+}
+.tl{left:-7px;top:-7px;cursor:nwse-resize}.tm{left:50%;top:-7px;transform:translateX(-50%);cursor:ns-resize}
+.tr{right:-7px;top:-7px;cursor:nesw-resize}.ml{left:-7px;top:50%;transform:translateY(-50%);cursor:ew-resize}
+.mr{right:-7px;top:50%;transform:translateY(-50%);cursor:ew-resize}.bl{left:-7px;bottom:-7px;cursor:nesw-resize}
+.bm{left:50%;bottom:-7px;transform:translateX(-50%);cursor:ns-resize}.br{right:-7px;bottom:-7px;cursor:nwse-resize}
+.crop-foot{height:78px;background:rgba(12,17,26,.97);border-top:1px solid var(--line);display:flex;align-items:center;gap:9px;padding:10px 16px;flex-wrap:wrap}
+.crop-foot .metric{font-size:13px;color:#c8d4e5;margin-left:auto;margin-right:8px}
+
+/* ---------- Gradient themes + conversion-session styling ---------- */
+:root{--accentA:#4f8cff;--accentB:#7c5cff;--accentC:#20c997}
+body{
+ background:
+  radial-gradient(circle at 8% 8%,rgba(79,140,255,.28),transparent 28%),
+  radial-gradient(circle at 92% 4%,rgba(124,92,255,.27),transparent 30%),
+  radial-gradient(circle at 52% 100%,rgba(32,201,151,.12),transparent 34%),
+  linear-gradient(135deg,var(--bg1),var(--bg2));
+ background-attachment:fixed;transition:background .35s ease
+}
+.top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.theme-wrap{
+ display:flex;align-items:center;gap:7px;padding:5px 7px 5px 10px;
+ border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.07);
+ box-shadow:0 10px 25px rgba(0,0,0,.16);backdrop-filter:blur(12px)
+}
+.theme-label{font-size:12px;font-weight:800;color:#dce7f6}
+.theme-select{
+ min-width:120px!important;padding:7px 27px 7px 10px!important;border-radius:999px!important;
+ background:rgba(8,15,28,.78)!important;border-color:rgba(255,255,255,.15)!important
+}
+.hero,.panel{
+ position:relative;overflow:hidden;
+ background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.045))
+}
+.hero:before,.panel:before{
+ content:"";position:absolute;inset:0;pointer-events:none;
+ background:linear-gradient(120deg,rgba(79,140,255,.09),transparent 38%,rgba(124,92,255,.08))
+}
+.hero>* ,.panel>*{position:relative}
+.logo{background:linear-gradient(135deg,var(--accentA),var(--accentB))}
+.tab.active{background:linear-gradient(135deg,var(--accentA),var(--accentB))}
+.drop{
+ border-color:rgba(79,140,255,.72);
+ background:linear-gradient(135deg,rgba(79,140,255,.11),rgba(124,92,255,.07))
+}
+.primary{background:linear-gradient(135deg,var(--accentA),var(--accentB))}
+.progress>div{background:linear-gradient(90deg,var(--accentA),var(--accentC))}
+
+/* Keep both image↔PDF conversion actions clearly blue. */
+#convertBtn{
+ background:linear-gradient(135deg,#087cf7,#32a9ff)!important;
+ border:1px solid rgba(120,195,255,.62)!important;
+ box-shadow:0 8px 26px rgba(8,124,247,.27);
+ color:#fff!important
+}
+#convertBtn:hover{box-shadow:0 11px 32px rgba(8,124,247,.42)}
+
+/* Theme palettes */
+body[data-theme="ocean"]{--accentA:#1597ff;--accentB:#2563eb;--accentC:#22d3ee}
+body[data-theme="sunset"]{--accentA:#ff7a59;--accentB:#d946ef;--accentC:#fbbf24}
+body[data-theme="emerald"]{--accentA:#10b981;--accentB:#0f766e;--accentC:#84cc16}
+body[data-theme="violet"]{--accentA:#8b5cf6;--accentB:#ec4899;--accentC:#38bdf8}
+
+@media(max-width:700px){
+ .app{padding:18px 12px 45px}.hero{padding:14px}.item{grid-template-columns:58px minmax(0,1fr)}.thumb{width:58px;height:52px}
+ .actions{grid-column:1/-1;justify-content:flex-start}.crop-head{height:auto;min-height:64px;flex-wrap:wrap}.crop-foot{height:auto}.crop-foot .metric{margin-left:0}
+}
+
+/* ---------- Output Preview (added without changing existing controls) ---------- */
+.output-preview{
+  margin-top:18px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:rgba(0,0,0,.14);
+  overflow:hidden;
+}
+.output-preview-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:12px 14px;border-bottom:1px solid var(--line);
+}
+.output-preview-title{font-weight:850}
+.output-preview-status{font-size:12px;color:var(--muted)}
+.output-preview-body{
+  min-height:150px;display:grid;place-items:center;padding:14px;
+  background:
+    linear-gradient(45deg,rgba(255,255,255,.025) 25%,transparent 25%),
+    linear-gradient(-45deg,rgba(255,255,255,.025) 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,rgba(255,255,255,.025) 75%),
+    linear-gradient(-45deg,transparent 75%,rgba(255,255,255,.025) 75%);
+  background-size:24px 24px;
+  background-position:0 0,0 12px,12px -12px,-12px 0;
+}
+.output-preview-body img{
+  max-width:100%;max-height:520px;object-fit:contain;border-radius:10px;
+  box-shadow:0 12px 35px rgba(0,0,0,.25);
+}
+.output-preview-body iframe{
+  width:min(100%,1000px);height:520px;border:0;border-radius:10px;background:#fff;
+}
+.output-preview-empty{color:var(--muted);text-align:center;font-size:13px;padding:30px}
+.output-preview-grid{
+  width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+}
+.output-preview-grid img{width:100%;height:180px;object-fit:contain}
+@media(max-width:700px){
+  .output-preview-body iframe{height:390px}
+  .output-preview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+ <header class="topbar">
+  <div class="brand"><div class="logo">✦</div><div><h1>Merge Studio</h1><p class="sub">Professional Image & PDF Merger • Crop • Reorder • Export</p></div></div>
+  <div class="badge">🔒 100% client-side</div>
+ 
+   <div class="top-actions">
+    <div class="theme-wrap">
+     <span class="theme-label">🎨 Theme</span>
+     <select id="themeSelect" class="theme-select" aria-label="Choose theme">
+      <option value="aurora">Aurora</option>
+      <option value="ocean">Ocean Blue</option>
+      <option value="sunset">Sunset</option>
+      <option value="emerald">Emerald</option>
+      <option value="violet">Violet</option>
+     </select>
+    </div>
+   </div>
+</header>
+
+ <section class="hero">
+  <div class="tabs">
+   <button class="tab active" id="tabImage">🖼️ Merge Images</button>
+   <button class="tab" id="tabPdf">📄 Merge PDFs</button>
+  </div>
+  <div class="drop" id="drop">
+   <div class="icon" id="dropIcon">🖼️</div>
+   <h2 id="dropTitle">Add images to start</h2>
+   <p id="dropText">JPG, JPEG, PNG, WEBP, GIF, BMP, AVIF, SVG, TIFF, HEIC/HEIF • multiple files supported</p>
+   <label class="primary" for="fileInput">＋ Choose files</label>
+   <input id="fileInput" type="file" multiple accept="image/*">
+  </div>
+ </section>
+
+ <section class="panel">
+  <div class="toolbar">
+   <div class="toolbar-left"><strong id="listTitle">Images</strong><span class="count" id="count">0 files</span></div>
+   <div class="toolbar-right">
+    <button class="ghost mini" id="clearBtn">Clear all</button>
+    <button class="ghost mini" id="sortBtn">↕ Sort name</button>
+   </div>
+  </div>
+  <div class="list" id="list"><div class="empty">Your files will appear here. Drag items to reorder them.</div></div>
+
+  <section class="output-preview" id="outputPreview">
+    <div class="output-preview-head">
+      <div class="output-preview-title">👁️ Preview</div>
+      <div class="output-preview-status" id="previewStatus">Apply a function to see the result here.</div>
+    </div>
+    <div class="output-preview-body" id="previewBody">
+      <div class="output-preview-empty">Your processed result will appear here before/while downloading.</div>
+    </div>
+  </section>
+
+  <div class="mergebar">
+   <div style="min-width:240px">
+    <div class="status" id="status"></div>
+    <div class="progress" id="progress"><div id="progressFill"></div></div>
+   </div>
+   <div class="toolbar-right export-actions">
+    <select id="imageLayout" title="Image layout">
+      <option value="vertical">Images: Vertical</option>
+      <option value="horizontal">Images: Horizontal</option>
+      <option value="grid2">Images: 2-column grid</option>
+    </select>
+    <select id="imageFormat" title="Image output format">
+      <option value="image/jpeg">JPG</option>
+      <option value="image/png">PNG</option>
+      <option value="image/webp">WEBP</option>
+      <option value="image/bmp">BMP</option>
+      <option value="image/gif">GIF</option>
+      <option value="image/avif">AVIF</option>
+      <option value="image/x-icon">ICO</option>
+    </select>
+    <select id="pdfLayout" title="PDF layout" style="display:none">
+      <option value="vertical">PDF: Vertical</option>
+      <option value="horizontal">PDF: Horizontal</option>
+      <option value="grid2">PDF: 2-column grid</option>
+    </select>
+    <button class="green" id="mergeBtn">Merge & Download</button>
+    <button class="ghost" id="convertBtn">Convert PDF to Image</button>
+     <button class="primary" id="splitBtn">Split Image</button>
+   </div>
+  </div>
+ </section>
+</div>
+
+<!-- Crop studio -->
+<div class="modal" id="cropModal">
+ <div class="crop-head">
+  <button class="ghost mini" id="cropBack">← Back</button>
+  <button class="ghost mini" id="cropReset">Reset</button>
+  <button class="ghost mini" id="cropUndo">↶</button>
+  <button class="ghost mini" id="cropRedo">↷</button>
+  <div class="title">✂️ Crop</div>
+  <button class="primary" id="saveCrop">Save Crop</button>
+  <button class="ghost mini" id="cancelCrop">Cancel</button>
+ </div>
+ <div class="crop-work">
+  <div class="stage" id="stage">
+   <img id="cropImage" alt="Crop preview">
+   <div class="overlay" id="overlay">
+    <i class="handle8 tl" data-h="tl"></i><i class="handle8 tm" data-h="tm"></i><i class="handle8 tr" data-h="tr"></i>
+    <i class="handle8 ml" data-h="ml"></i><i class="handle8 mr" data-h="mr"></i>
+    <i class="handle8 bl" data-h="bl"></i><i class="handle8 bm" data-h="bm"></i><i class="handle8 br" data-h="br"></i>
+   </div>
+  </div>
+ </div>
+ <div class="crop-foot">
+  <button class="ghost mini" id="zoomOut">−</button><b id="zoomVal">100%</b><button class="ghost mini" id="zoomIn">＋</button>
+  <button class="ghost mini" id="aspectBtn">1:1</button>
+  <button class="ghost mini" id="rotateBtn">↻</button>
+  <span class="metric" id="cropMetric">0 × 0</span>
+ </div>
+</div>
+
+<script type="module">
+/* ---------- PDF.js setup ---------- */
+import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs";
+pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs";
+
+/* ---------- State ---------- */
+const $=s=>document.querySelector(s);
+let mode="image", files=[], dragged=null;
+let cropIndex=-1, cropMode="image", cropState=null, cropHistory=[], cropFuture=[], pdfCropStates=[], pdfCropPage=1, pdfCropPageCount=0;
+const PDFLib=window.PDFLib;
+/* ---------- Theme ---------- */
+const themeSelect=$("#themeSelect");
+function applyTheme(theme){
+ const allowed=["aurora","ocean","sunset","emerald","violet"];
+ const t=allowed.includes(theme)?theme:"aurora";
+ document.body.dataset.theme=t;
+ if(themeSelect) themeSelect.value=t;
+ try{localStorage.setItem("mergeStudioTheme",t)}catch(e){}
+}
+try{applyTheme(localStorage.getItem("mergeStudioTheme")||"aurora")}catch(e){applyTheme("aurora")}
+if(themeSelect) themeSelect.onchange=()=>applyTheme(themeSelect.value);
+
+
+
+/* ---------- Helpers ---------- */
+const fmtBytes=b=>b<1024?b+" B":b<1048576?(b/1024).toFixed(1)+" KB":(b/1048576).toFixed(2)+" MB";
+const id=()=>crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random();
+function setStatus(t,err=false){$("#status").textContent=t;$("#status").className="status "+(err?"err":"ok")}
+function setProgress(v){$("#progress").style.display=v>=0&&v<100?"block":"none";$("#progressFill").style.width=v+"%"}
+function downloadBlob(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
+
+let previewUrls=[];
+function clearPreviewUrls(){
+  previewUrls.forEach(u=>{try{URL.revokeObjectURL(u)}catch(e){}});
+  previewUrls=[];
+}
+function showPreviewMessage(message){
+  clearPreviewUrls();
+  $("#previewBody").innerHTML=`<div class="output-preview-empty">${escapeHtml(message)}</div>`;
+  $("#previewStatus").textContent=message;
+}
+function showImagePreview(blobOrDataUrl, message="Preview ready"){
+  clearPreviewUrls();
+  const img=document.createElement("img");
+  img.alt="Processed preview";
+  if(typeof blobOrDataUrl==="string"){
+    img.src=blobOrDataUrl;
+  }else{
+    const u=URL.createObjectURL(blobOrDataUrl); previewUrls.push(u); img.src=u;
+  }
+  $("#previewBody").replaceChildren(img);
+  $("#previewStatus").textContent=message;
+}
+function showPdfPreview(blob, message="PDF preview ready"){
+  clearPreviewUrls();
+  const u=URL.createObjectURL(blob); previewUrls.push(u);
+  const frame=document.createElement("iframe");
+  frame.title="PDF preview";
+  frame.src=u+"#toolbar=1&navpanes=0&view=FitH";
+  $("#previewBody").replaceChildren(frame);
+  $("#previewStatus").textContent=message;
+}
+function showMultiImagePreview(blobs, message="Preview ready"){
+  clearPreviewUrls();
+  const grid=document.createElement("div"); grid.className="output-preview-grid";
+  blobs.forEach((blob,i)=>{
+    const u=URL.createObjectURL(blob); previewUrls.push(u);
+    const wrap=document.createElement("div");
+    const img=document.createElement("img");
+    img.src=u; img.alt=`Preview ${i+1}`;
+    wrap.appendChild(img); grid.appendChild(wrap);
+  });
+  $("#previewBody").replaceChildren(grid);
+  $("#previewStatus").textContent=message;
+}
+
+function readImage(file){return new Promise((res,rej)=>{const img=new Image();const u=URL.createObjectURL(file);img.onload=()=>{URL.revokeObjectURL(u);res(img)};img.onerror=e=>{URL.revokeObjectURL(u);rej(e)};img.src=u})}
+function loadBitmap(file){return createImageBitmap(file)}
+
+/* Decode common formats that some browsers cannot open natively.
+   The decoded result is normalized to PNG so every studio tool can use it. */
+async function decodeSpecialImage(file){
+  const name=file.name.toLowerCase(), type=(file.type||'').toLowerCase();
+  const isHEIC=/\.(heic|heif)$/.test(name)||type.includes('heic')||type.includes('heif');
+  const isTIFF=/\.(tif|tiff)$/.test(name)||type.includes('tiff');
+  if(!isHEIC && !isTIFF) return file;
+  if(isHEIC){
+    if(typeof heic2any!=='function') throw new Error('HEIC/HEIF decoder could not be loaded.');
+    const out=await heic2any({blob:file,toType:'image/png',quality:1});
+    const blob=Array.isArray(out)?out[0]:out;
+    return new File([blob],file.name.replace(/\.(heic|heif)$/i,'.png'),{type:'image/png'});
+  }
+  if(typeof UTIF==='undefined') throw new Error('TIFF decoder could not be loaded.');
+  const buf=await file.arrayBuffer();
+  const ifds=UTIF.decode(buf);
+  if(!ifds.length) throw new Error('TIFF image could not be decoded.');
+  UTIF.decodeImage(buf,ifds[0]);
+  const rgba=UTIF.toRGBA8(ifds[0]);
+  const w=ifds[0].width,h=ifds[0].height;
+  const c=document.createElement('canvas');c.width=w;c.height=h;
+  c.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(rgba),w,h),0,0);
+  const blob=await new Promise((res,rej)=>c.toBlob(b=>b?res(b):rej(new Error('TIFF conversion failed.')),'image/png'));
+  return new File([blob],file.name.replace(/\.(tif|tiff)$/i,'.png'),{type:'image/png'});
+}
+
+async function prepareImageFile(file){
+  try{
+    const decoded=await decodeSpecialImage(file);
+    if(decoded!==file) return decoded;
+    // Verify that the browser can actually decode the image.
+    await readImage(file);
+    return file;
+  }catch(e){
+    throw new Error(file.name+': image format is not supported by this browser/decoder.');
+  }
+}
+function imageDataURL(blob){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(blob)})}
+
+/* ---------- Mode ---------- */
+function setMode(m){
+ mode=m; files=[];
+ $("#tabImage").classList.toggle("active",m==="image"); $("#tabPdf").classList.toggle("active",m==="pdf");
+ $("#dropIcon").textContent=m==="image"?"🖼️":"📄";
+ $("#dropTitle").textContent=m==="image"?"Add images to start":"Add PDF files to start";
+ $("#dropText").textContent=m==="image"?"All browser-supported image formats • multiple files supported":"PDF files • multiple files supported";
+ $("#fileInput").accept=m==="image"?"image/*":"application/pdf";
+ $("#listTitle").textContent=m==="image"?"Images":"PDF files";
+ $("#imageLayout").style.display=m==="image"?"":"none";
+ $("#imageFormat").style.display=m==="image"?"":"none";
+ $("#mergeBtn").textContent=m==="image"?"Merge & Download":"Merge PDFs"; $("#convertBtn").textContent=m==="image"?"Convert Image to PDF":"Convert PDF to Image"; $("#splitBtn").textContent=m==="image"?"Split Image":"Split PDF";
+ render();
+}
+$("#tabImage").onclick=()=>setMode("image");
+$("#tabPdf").onclick=()=>setMode("pdf");
+
+/* ---------- Add files ---------- */
+async function addFiles(list){
+ const incoming=[...list];
+ const arr=mode==="image"
+   ? incoming.filter(f=>{const n=f.name.toLowerCase(),t=(f.type||'').toLowerCase();return t.startsWith('image/')||/\.(jpg|jpeg|png|webp|gif|bmp|avif|svg|tif|tiff|heic|heif)$/i.test(n)})
+   : incoming.filter(f=>f.type==="application/pdf"||/\.pdf$/i.test(f.name));
+ if(!arr.length){setStatus("Please choose valid "+(mode==="image"?"image":"PDF")+" files.",true);return}
+ if(mode==="image"){
+   setStatus(`Preparing ${arr.length} image${arr.length>1?'s':''}…`);
+   let added=0,failed=0;
+   for(const original of arr){
+     try{
+       const f=await prepareImageFile(original);
+       files.push({id:id(),file:f,name:original.name,size:f.size,type:f.type,crop:null,thumb:null});
+       added++;
+     }catch(e){console.warn(e);failed++;}
+   }
+   if(!added){setStatus("No selected image could be decoded by this browser.",true);return}
+   setStatus(`${added} image${added>1?'s':''} added${failed?` • ${failed} skipped`:''}.`);
+   render();
+   for(const x of files){if(!x.thumb) x.thumb=await imageDataURL(x.file)}
+   render();
+ }else{
+   for(const f of arr) files.push({id:id(),file:f,name:f.name,size:f.size,type:f.type,crop:null,thumb:null});
+   setStatus(`${arr.length} PDF${arr.length>1?'s':''} added.`);render();
+ }
+}
+$("#fileInput").onchange=e=>{addFiles(e.target.files);e.target.value=""};
+["dragenter","dragover"].forEach(ev=>$("#drop").addEventListener(ev,e=>{e.preventDefault();$("#drop").classList.add("drag")}));
+["dragleave","drop"].forEach(ev=>$("#drop").addEventListener(ev,e=>{e.preventDefault();$("#drop").classList.remove("drag")}));
+$("#drop").addEventListener("drop",e=>addFiles(e.dataTransfer.files));
+
+/* ---------- List UI ---------- */
+function render(){
+ $("#count").textContent=files.length+" file"+(files.length===1?"":"s");
+ if(!files.length){$("#list").innerHTML='<div class="empty">Your files will appear here. Drag items to reorder them.</div>';return}
+ $("#list").innerHTML=files.map((x,i)=>`
+ <div class="item" draggable="true" data-id="${x.id}">
+   <div class="handle">☷</div>
+   <div class="thumb">${mode==="image"&&x.thumb?`<img src="${x.thumb}" alt="">`:"📄"}</div>
+   <div class="meta"><div class="name">${escapeHtml(x.name)}</div><div class="info">${fmtBytes(x.size)} ${mode==="image"?(x.crop?"• Cropped":"• Original"):"• PDF"}</div></div>
+   <div class="actions">
+    <button class="ghost mini" data-action="crop" data-id="${x.id}">${mode==="image"?"✂️ Crop":"✂️ Crop Pages"}</button>
+    <button class="ghost mini" data-action="up" data-id="${x.id}">↑</button>
+    <button class="ghost mini" data-action="down" data-id="${x.id}">↓</button>
+    <button class="danger mini" data-action="remove" data-id="${x.id}">Remove</button>
+   </div>
+ </div>`).join("");
+ document.querySelectorAll(".item").forEach(el=>{
+   el.addEventListener("dragstart",()=>dragged=el.dataset.id);
+   el.addEventListener("dragover",e=>e.preventDefault());
+   el.addEventListener("drop",e=>{e.preventDefault();const target=el.dataset.id;if(dragged===target)return;const a=files.findIndex(x=>x.id===dragged),b=files.findIndex(x=>x.id===target);[files[a],files[b]]=[files[b],files[a]];render()});
+ });
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+$("#list").addEventListener("click",e=>{
+ const b=e.target.closest("button");if(!b)return;const i=files.findIndex(x=>x.id===b.dataset.id);if(i<0)return;
+ const a=b.dataset.action;
+ if(a==="remove")files.splice(i,1);
+ if(a==="up"&&i>0)[files[i-1],files[i]]=[files[i],files[i-1]];
+ if(a==="down"&&i<files.length-1)[files[i+1],files[i]]=[files[i],files[i+1]];
+ if(a==="crop")openCrop(i);
+ render();
+});
+$("#clearBtn").onclick=()=>{files=[];setStatus("All files cleared.");render()};
+$("#sortBtn").onclick=()=>{files.sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:"base"}));render()};
+
+/* ---------- Crop engine: image and PDF preview ---------- */
+function cloneState(s){return JSON.parse(JSON.stringify(s))}
+function pushCropHistory(){cropHistory.push(cloneState(cropState));if(cropHistory.length>30)cropHistory.shift();cropFuture=[]}
+function stageRect(){return $("#stage").getBoundingClientRect()}
+function updateCropUI(){
+ if(!cropState)return;
+ const img=$("#cropImage"), r=stageRect();
+ const x=cropState.x*r.width, y=cropState.y*r.height, w=cropState.w*r.width, h=cropState.h*r.height;
+ Object.assign($("#overlay").style,{left:x+"px",top:y+"px",width:w+"px",height:h+"px"});
+ $("#zoomVal").textContent=Math.round(cropState.zoom*100)+"%";
+ const iw=cropState.sourceW||img.naturalWidth||0, ih=cropState.sourceH||img.naturalHeight||0;
+ $("#cropMetric").textContent=Math.max(0,Math.round(iw*cropState.w))+" × "+Math.max(0,Math.round(ih*cropState.h));
+}
+function fitInitial(){cropState.x=.05;cropState.y=.05;cropState.w=.9;cropState.h=.9;cropState.zoom=1;cropState.angle=0;updateCropUI()}
+async function openCrop(i){
+  cropIndex=i; cropMode=mode; const x=files[i];
+  $("#cropModal").classList.add("show"); $("#cropImage").style.transform="";
+  $("#cropModal .title").textContent=mode==="image"?"✂️ Crop Image":"✂️ Crop PDF";
+  cropHistory=[];cropFuture=[];pdfCropStates=[];pdfCropPage=1;pdfCropPageCount=0;
+  if(mode==="image"){
+    $("#cropImage").src=URL.createObjectURL(x.file);
+    const img=$("#cropImage"); await new Promise(r=>img.onload=r);
+    cropState={x:.05,y:.05,w:.9,h:.9,zoom:1,angle:0,sourceW:img.naturalWidth,sourceH:img.naturalHeight};
+    fitStage();updateCropUI();
+  }else{
+    try{
+      const pdf=await pdfjsLib.getDocument({data:(await x.file.arrayBuffer()).slice(0)}).promise;
+      pdfCropPageCount=pdf.numPages;
+      pdfCropStates=Array.from({length:pdfCropPageCount},()=>({x:.04,y:.04,w:.92,h:.92,zoom:1,angle:0}));
+      await renderPdfCropPage(pdf,1);
+    }catch(err){console.error(err);setStatus("Could not preview this PDF.",true);closeCrop()}
+  }
+}
+async function renderPdfCropPage(pdf,pageNo){
+  pdfCropPage=pageNo; const page=await pdf.getPage(pageNo),vp=page.getViewport({scale:1.4});
+  const c=document.createElement("canvas");c.width=vp.width;c.height=vp.height;
+  await page.render({canvasContext:c.getContext("2d"),viewport:vp}).promise;
+  $("#cropImage").src=c.toDataURL("image/png"); await new Promise(r=>$("#cropImage").onload=r);
+  cropState={...pdfCropStates[pageNo-1],sourceW:vp.width,sourceH:vp.height,pdf:true};
+  fitStage();updateCropUI();updatePdfCropControls();
+}
+function updatePdfCropControls(){
+  const old=$("#pdfPageTools");if(old)old.remove();
+  if(cropMode!=="pdf"||!pdfCropPageCount)return;
+  const tools=document.createElement("div");tools.id="pdfPageTools";tools.className="pdf-page-tools";
+  tools.innerHTML=`<span class="pdf-note">Page crop:</span><button class="ghost mini" id="pdfPrevPage">←</button>
+  <select id="pdfPageSelect">${Array.from({length:pdfCropPageCount},(_,i)=>`<option value="${i+1}" ${i+1===pdfCropPage?"selected":""}>Page ${i+1}</option>`).join("")}</select>
+  <button class="ghost mini" id="pdfNextPage">→</button>`;
+  $(".crop-head").appendChild(tools);
+  $("#pdfPageSelect").onchange=async e=>switchPdfCropPage(+e.target.value);
+  $("#pdfPrevPage").onclick=async()=>{if(pdfCropPage>1)await switchPdfCropPage(pdfCropPage-1)};
+  $("#pdfNextPage").onclick=async()=>{if(pdfCropPage<pdfCropPageCount)await switchPdfCropPage(pdfCropPage+1)};
+}
+async function switchPdfCropPage(n){
+  if(cropMode==="pdf"&&cropState)pdfCropStates[pdfCropPage-1]={x:cropState.x,y:cropState.y,w:cropState.w,h:cropState.h};
+  const pdf=await pdfjsLib.getDocument({data:(await files[cropIndex].file.arrayBuffer()).slice(0)}).promise;
+  await renderPdfCropPage(pdf,n);
+}
+function fitStage(){
+ const img=$("#cropImage");img.style.transform=`rotate(${cropState.angle||0}deg) scale(${cropState.zoom||1})`;
+ requestAnimationFrame(updateCropUI);
+}
+function closeCrop(){const t=$("#pdfPageTools");if(t)t.remove();$("#cropModal").classList.remove("show");$("#cropImage").src="";cropState=null;cropHistory=[];cropFuture=[];pdfCropStates=[];pdfCropPage=1;pdfCropPageCount=0}
+$("#cancelCrop").onclick=closeCrop;$("#cropBack").onclick=closeCrop;
+$("#cropReset").onclick=()=>{if(!cropState)return;pushCropHistory();fitInitial();fitStage()};
+$("#cropUndo").onclick=()=>{if(!cropHistory.length)return;cropFuture.push(cloneState(cropState));cropState=cropHistory.pop();fitStage();updateCropUI()};
+$("#cropRedo").onclick=()=>{if(!cropFuture.length)return;cropHistory.push(cloneState(cropState));cropState=cropFuture.pop();fitStage();updateCropUI()};
+$("#zoomIn").onclick=()=>{pushCropHistory();cropState.zoom=Math.min(3,cropState.zoom+.1);fitStage()};
+$("#zoomOut").onclick=()=>{pushCropHistory();cropState.zoom=Math.max(.5,cropState.zoom-.1);fitStage()};
+$("#rotateBtn").onclick=()=>{pushCropHistory();cropState.angle=(cropState.angle+90)%360;fitStage()};
+let ratios=[null,1,4/3,16/9,3/4,9/16],ri=0;
+$("#aspectBtn").onclick=()=>{$("#aspectBtn").textContent=ri===0?"Free":(["1:1","4:3","16:9","3:4","9:16"][ri-1]);ri=(ri+1)%ratios.length};
+let dragInfo=null;
+$("#overlay").addEventListener("pointerdown",e=>{
+ e.preventDefault();const h=e.target.closest(".handle8");const r=stageRect();
+ dragInfo={startX:e.clientX,startY:e.clientY,state:cloneState(cropState),handle:h?h.dataset.h:"move",rw:r.width,rh:r.height};
+ $("#overlay").setPointerCapture(e.pointerId);
+});
+$("#overlay").addEventListener("pointermove",e=>{
+ if(!dragInfo)return;const dx=(e.clientX-dragInfo.startX)/dragInfo.rw,dy=(e.clientY-dragInfo.startY)/dragInfo.rh,s=dragInfo.state;
+ let x=s.x,y=s.y,w=s.w,h=s.h;
+ if(dragInfo.handle==="move"){x+=dx;y+=dy}
+ else{
+  if(dragInfo.handle.includes("l")){x=s.x+dx;w=s.w-dx}
+  if(dragInfo.handle.includes("r"))w=s.w+dx;
+  if(dragInfo.handle.includes("t")){y=s.y+dy;h=s.h-dy}
+  if(dragInfo.handle.includes("b"))h=s.h+dy;
+  const ratio=ratios[ri];
+  if(ratio){
+   if(["l","r"].some(v=>dragInfo.handle.includes(v))) h=w/ratio;
+   else w=h*ratio;
+   if(dragInfo.handle.includes("l"))x=s.x+s.w-w;
+   if(dragInfo.handle.includes("t"))y=s.y+s.h-h;
+  }
+ }
+ const min=.03;
+ if(w<min){w=min;x=s.x+s.w-min} if(h<min){h=min;y=s.y+s.h-min}
+ x=Math.max(0,Math.min(1-w,x));y=Math.max(0,Math.min(1-h,y));w=Math.min(1-x,w);h=Math.min(1-y,h);
+ cropState={...cropState,x,y,w,h};updateCropUI();
+});
+$("#overlay").addEventListener("pointerup",()=>{if(dragInfo){cropHistory.push(dragInfo.state);cropFuture=[];dragInfo=null}});
+window.addEventListener("resize",updateCropUI);
+
+async function saveImageCrop(item){
+ const img=await readImage(item.file);
+ const rad=(cropState.angle||0)*Math.PI/180;
+ const rot90=(cropState.angle%180!==0);
+ const W=Math.max(1,Math.round(img.naturalWidth*cropState.w)),H=Math.max(1,Math.round(img.naturalHeight*cropState.h));
+ const c=document.createElement("canvas");c.width=W;c.height=H;const ctx=c.getContext("2d");
+ ctx.save();ctx.translate(W/2,H/2);ctx.rotate(rad);
+ const sx=img.naturalWidth*cropState.x,sy=img.naturalHeight*cropState.y;
+ ctx.drawImage(img,sx,sy,W,H,-W/2,-H/2,W,H);ctx.restore();
+ const blob=await new Promise(r=>c.toBlob(r,item.file.type||"image/png",.95));
+ item.file=new File([blob],item.name,{type:item.file.type||"image/png"});item.size=blob.size;item.crop=true;
+ item.thumb=await imageDataURL(blob);
+}
+async function savePdfCrop(item){
+  const src=await PDFLib.PDFDocument.load(await item.file.arrayBuffer()),pages=src.getPages();
+  if(cropState&&pdfCropPageCount)pdfCropStates[pdfCropPage-1]={x:cropState.x,y:cropState.y,w:cropState.w,h:cropState.h};
+  for(let i=0;i<pages.length;i++){
+    const st=pdfCropStates[i]||{x:.04,y:.04,w:.92,h:.92},p=pages[i],{width,height}=p.getSize();
+    const left=st.x*width,right=(st.x+st.w)*width,top=(1-st.y)*height,bottom=(1-(st.y+st.h))*height;
+    p.setCropBox(left,bottom,Math.max(1,right-left),Math.max(1,top-bottom));
+  }
+  const out=await src.save();item.file=new File([out],item.name,{type:"application/pdf"});item.size=out.byteLength;item.crop=true;
+}
+$("#saveCrop").onclick=async()=>{
+ if(cropIndex<0)return;
+ const b=$("#saveCrop");b.disabled=true;b.textContent="Saving…";
+ try{
+  if(cropMode==="image")await saveImageCrop(files[cropIndex]);else await savePdfCrop(files[cropIndex]);
+  closeCrop();render();setStatus("Crop saved successfully.");
+   if(cropMode==="image" && files[cropIndex]) showImagePreview(files[cropIndex].thumb || await imageDataURL(files[cropIndex].file), "Cropped image preview");
+ }catch(e){console.error(e);setStatus("Could not save crop: "+e.message,true)}
+ b.disabled=false;b.textContent="Save Crop";
+};
+
+/* ---------- Merge Images ---------- */
+async function canvasBlobForMime(canvas,mime){
+  const native=await new Promise(resolve=>canvas.toBlob(resolve,mime,.94));
+  if(native)return native;
+  if(mime==="image/bmp")return canvasToBMP(canvas);
+  return await new Promise(resolve=>canvas.toBlob(resolve,"image/png"));
+}
+function canvasToBMP(canvas){
+  const w=canvas.width,h=canvas.height,d=canvas.getContext("2d").getImageData(0,0,w,h).data;
+  const rowSize=Math.floor((24*w+31)/32)*4,pixelSize=rowSize*h,size=54+pixelSize,out=new ArrayBuffer(size),v=new DataView(out);
+  v.setUint8(0,0x42);v.setUint8(1,0x4D);v.setUint32(2,size,true);v.setUint32(10,54,true);v.setUint32(14,40,true);
+  v.setInt32(18,w,true);v.setInt32(22,-h,true);v.setUint16(26,1,true);v.setUint16(28,24,true);v.setUint32(34,pixelSize,true);
+  let off=54;for(let y=0;y<h;y++){for(let x=0;x<w;x++){const i=(y*w+x)*4;v.setUint8(off++,d[i+2]);v.setUint8(off++,d[i+1]);v.setUint8(off++,d[i])}off+=rowSize-w*3}
+  return new Blob([out],{type:"image/bmp"});
+}
+function imageExtForMime(m){return ({"image/jpeg":"jpg","image/png":"png","image/webp":"webp","image/bmp":"bmp","image/gif":"gif","image/avif":"avif","image/x-icon":"ico"})[m]||"png"}
+async function buildMergedImageCanvas(){
+  const imgs=[];for(const f of files)imgs.push(await loadBitmap(f.file));
+  const layout=$("#imageLayout").value,gap=24,maxW=2200;let W,H;
+  if(layout==="vertical"){W=Math.min(maxW,Math.max(...imgs.map(x=>x.width)));H=0;imgs.forEach(x=>{const w=Math.min(W,x.width);H+=x.height*w/x.width+gap});H-=gap}
+  else if(layout==="horizontal"){H=Math.min(1800,Math.max(...imgs.map(x=>x.height)));W=0;imgs.forEach(x=>{const h=Math.min(H,x.height);W+=x.width*h/x.height+gap});W-=gap}
+  else{const cellW=Math.min(maxW/2,1100),rows=Math.ceil(imgs.length/2),cellH=900;W=cellW*2+gap;H=cellH*rows+gap*(rows-1)}
+  const canvas=document.createElement("canvas");canvas.width=Math.ceil(W);canvas.height=Math.ceil(H);const ctx=canvas.getContext("2d");
+  ctx.fillStyle="#fff";ctx.fillRect(0,0,canvas.width,canvas.height);
+  if(layout==="vertical"){let y=0;imgs.forEach(im=>{const w=Math.min(W,im.width),h=im.height*w/im.width;ctx.drawImage(im,(W-w)/2,y,w,h);y+=h+gap})}
+  else if(layout==="horizontal"){let x=0;imgs.forEach(im=>{const h=Math.min(H,im.height),w=im.width*h/im.height;ctx.drawImage(im,x,(H-h)/2,w,h);x+=w+gap})}
+  else{const cellW=(W-gap)/2,cellH=900;imgs.forEach((im,i)=>{const col=i%2,row=Math.floor(i/2),sc=Math.min(cellW/im.width,cellH/im.height),w=im.width*sc,h=im.height*sc;ctx.drawImage(im,col*(cellW+gap)+(cellW-w)/2,row*(cellH+gap)+(cellH-h)/2,w,h)})}
+  return canvas;
+}
+async function mergeImages(){
+  if(!files.length){setStatus("Add at least one image first.",true);return}
+  setProgress(5);setStatus("Preparing merged image…");const canvas=await buildMergedImageCanvas();setProgress(70);
+  const mime=$("#imageFormat").value,blob=await canvasBlobForMime(canvas,mime),ext=imageExtForMime(mime);
+  showImagePreview(blob, `Merged ${ext.toUpperCase()} preview`);
+  downloadBlob(blob,"merged-images-"+new Date().toISOString().slice(0,10)+"."+ext);
+  setProgress(100);setStatus(`Merged image downloaded successfully as ${ext.toUpperCase()}.`);setTimeout(()=>setProgress(-1),700);
+}
+async function convertMergedImageToPDF(){
+  if(!files.length){setStatus("Add at least one image first.",true);return}
+  if(!PDFLib){setStatus("PDF engine is not loaded. Check your internet connection.",true);return}
+  setProgress(5);setStatus("Creating PDF from merged image…");
+  try{const canvas=await buildMergedImageCanvas(),pdf=await PDFLib.PDFDocument.create();
+    const jpg=await pdf.embedJpg(canvas.toDataURL("image/jpeg",.95)),page=pdf.addPage([canvas.width,canvas.height]);
+    page.drawImage(jpg,{x:0,y:0,width:canvas.width,height:canvas.height});
+    const bytes=await pdf.save();
+    const pdfBlob=new Blob([bytes],{type:"application/pdf"});
+    showPdfPreview(pdfBlob, "Image → PDF preview");
+    downloadBlob(pdfBlob,"merged-images-to-pdf-"+new Date().toISOString().slice(0,10)+".pdf");
+    setProgress(100);setStatus("Merged image converted to PDF successfully.");setTimeout(()=>setProgress(-1),700)
+  }catch(e){console.error(e);setProgress(-1);setStatus("Image to PDF failed: "+e.message,true)}
+}
+/* ---------- Merge PDFs ---------- */
+async function mergePDFs(){
+  if(files.length<1){alert("Upload at least one PDF.");return;}
+  const pdf=await PDFLib.PDFDocument.create();
+  for(const f of files){
+    try{
+      const srcPdf=await PDFLib.PDFDocument.load(await f.file.arrayBuffer());
+      const pages=await pdf.copyPages(srcPdf,srcPdf.getPageIndices());
+      pages.forEach(p=>pdf.addPage(p));
+    }catch(e){
+      console.error(e);
+      alert("Could not read one of the PDF files.");
+      return;
+    }
+  }
+  const bytes=await pdf.save();
+  const blob=new Blob([bytes],{type:"application/pdf"});
+
+  // Show the actual merged PDF in the existing Preview panel first.
+  showPdfPreview(blob,"Merged PDF preview");
+
+  // Keep the existing download behavior.
+  downloadBlob(blob,"merged.pdf");
+}
+async function convertMergedPDFToImages(){
+  if(!files.length){setStatus("Add at least one PDF first.",true);return}
+  setProgress(2);setStatus("Rendering PDF pages…");
+  try{
+    const pages=[];
+    for(const f of files){
+      const pdf=await pdfjsLib.getDocument({data:(await f.file.arrayBuffer()).slice(0)}).promise;
+      for(let n=1;n<=pdf.numPages;n++){
+        const page=await pdf.getPage(n),vp=page.getViewport({scale:1.5}),c=document.createElement("canvas");
+        c.width=Math.ceil(vp.width);c.height=Math.ceil(vp.height);
+        await page.render({canvasContext:c.getContext("2d"),viewport:vp}).promise;pages.push(c);
+      }
+    }
+    const layout=$("#pdfLayout").value,gap=24,sheets=[];
+    if(layout==="vertical")pages.forEach(p=>{const c=document.createElement("canvas");c.width=p.width;c.height=p.height;c.getContext("2d").drawImage(p,0,0);sheets.push(c)});
+    else if(layout==="horizontal"){for(let i=0;i<pages.length;i+=2){const a=pages[i],b=pages[i+1],h=Math.max(a.height,b.height),c=document.createElement("canvas");c.width=a.width+(b?gap+b.width:0);c.height=h;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(a,0,(h-a.height)/2);if(b)x.drawImage(b,a.width+gap,(h-b.height)/2);sheets.push(c)}}
+    else{const cw=Math.max(...pages.map(p=>p.width)),ch=Math.max(...pages.map(p=>p.height));for(let i=0;i<pages.length;i+=4){const c=document.createElement("canvas");c.width=cw*2+gap;c.height=ch*2+gap;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);for(let j=0;j<4&&i+j<pages.length;j++){const p=pages[i+j],sc=Math.min(cw/p.width,ch/p.height),w=p.width*sc,h=p.height*sc,col=j%2,row=Math.floor(j/2);x.drawImage(p,col*(cw+gap)+(cw-w)/2,row*(ch+gap)+(ch-h)/2,w,h)}sheets.push(c)}}
+    const mime=$("#imageFormat").value,ext=imageExtForMime(mime),previewBlobs=[];
+    for(let i=0;i<sheets.length;i++){
+      const blob=await canvasBlobForMime(sheets[i],mime);
+      previewBlobs.push(blob);
+      downloadBlob(blob,`merged-pdf-${i+1}.${ext}`);
+    }
+    showMultiImagePreview(previewBlobs, `PDF → ${ext.toUpperCase()} preview (${previewBlobs.length} file${previewBlobs.length===1?"":"s"})`);
+    setProgress(100);setStatus(`${sheets.length} image file${sheets.length===1?"":"s"} created from merged PDF.`);setTimeout(()=>setProgress(-1),700)
+  }catch(e){console.error(e);setProgress(-1);setStatus("PDF to image failed: "+e.message,true)}
+}
+
+
+/* ---------- Split tools ---------- */
+async function splitMergedImage(){
+  if(files.length!==1){
+    if(files.length>1){
+      // If multiple source images were uploaded, keep the useful old behavior:
+      // save each uploaded image separately.
+      try{
+        setProgress(3);setStatus(`Separating ${files.length} uploaded images…`);
+        const mime=$("#imageFormat").value,ext=imageExtForMime(mime),previewBlobs=[];
+        for(let i=0;i<files.length;i++){
+          const source=files[i],img=await readImage(source.file);
+          const c=document.createElement("canvas");
+          c.width=img.naturalWidth||img.width;c.height=img.naturalHeight||img.height;
+          c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+          const blob=await canvasBlobForMime(c,mime);
+          previewBlobs.push(blob);
+          const base=source.name.replace(/\.[^.]+$/,'');
+          downloadBlob(blob,`${base}-split.${ext}`);
+          setProgress(5+((i+1)/files.length)*90);
+        }
+        setProgress(100);
+        showMultiImagePreview(previewBlobs, `Split image preview (${previewBlobs.length} file${previewBlobs.length===1?"":"s"})`);
+        setStatus(`${files.length} images separated successfully.`);
+        setTimeout(()=>setProgress(-1),700);
+      }catch(e){console.error(e);setProgress(-1);setStatus("Split Image failed: "+e.message,true)}
+    }else{
+      setStatus("Upload one merged image first.",true);
+    }
+    return;
+  }
+
+  // One uploaded image: detect the white gaps created by Merge Images
+  // and restore the individual images from the merged canvas.
+  try{
+    setProgress(3);setStatus("Detecting merged image sections…");
+    const source=files[0],img=await readImage(source.file);
+    const maxSide=1200,scale=Math.min(1,maxSide/Math.max(img.naturalWidth,img.naturalHeight));
+    const sw=Math.max(1,Math.round(img.naturalWidth*scale)),sh=Math.max(1,Math.round(img.naturalHeight*scale));
+    const scan=document.createElement("canvas");scan.width=sw;scan.height=sh;
+    const sctx=scan.getContext("2d",{willReadFrequently:true});sctx.drawImage(img,0,0,sw,sh);
+    const data=sctx.getImageData(0,0,sw,sh).data;
+
+    // A separator generated by this app is a continuous white band.
+    // We sample the middle 90% of the opposite dimension so white content
+    // inside a photo is not mistaken for a separator.
+    const rowScore=[],colScore=[];
+    for(let y=0;y<sh;y++){
+      let white=0,total=0;
+      const y0=Math.max(0,y-Math.max(1,Math.floor(sh*.002)));
+      const y1=Math.min(sh-1,y+Math.max(0,Math.floor(sh*.002)));
+      const step=Math.max(1,Math.floor(sw/500));
+      for(let x=Math.floor(sw*.05);x<Math.ceil(sw*.95);x+=step){
+        let ok=true;
+        for(let yy=y0;yy<=y1;yy++){const k=(yy*sw+x)*4;if(data[k]<246||data[k+1]<246||data[k+2]<246||data[k+3]<245){ok=false;break}}
+        total++;if(ok)white++;
+      }
+      rowScore[y]=total?white/total:0;
+    }
+    for(let x=0;x<sw;x++){
+      let white=0,total=0;
+      const x0=Math.max(0,x-Math.max(1,Math.floor(sw*.002)));
+      const x1=Math.min(sw-1,x+Math.max(0,Math.floor(sw*.002)));
+      const step=Math.max(1,Math.floor(sh/500));
+      for(let y=Math.floor(sh*.05);y<Math.ceil(sh*.95);y+=step){
+        let ok=true;
+        for(let xx=x0;xx<=x1;xx++){const k=(y*sw+xx)*4;if(data[k]<246||data[k+1]<246||data[k+2]<246||data[k+3]<245){ok=false;break}}
+        total++;if(ok)white++;
+      }
+      colScore[x]=total?white/total:0;
+    }
+
+    function runs(scores,threshold=.985){
+      const minRun= Math.max(3,Math.round(Math.min(sw,sh)*.008));
+      const out=[];let a=-1;
+      for(let i=0;i<scores.length;i++){
+        if(scores[i]>=threshold){if(a<0)a=i}
+        else if(a>=0){if(i-a>=minRun)out.push([a,i-1]);a=-1}
+      }
+      if(a>=0&&scores.length-a>=minRun)out.push([a,scores.length-1]);
+      return out;
+    }
+    function mergeRuns(rs){
+      if(!rs.length)return [];
+      const out=[rs[0].slice()];
+      for(let i=1;i<rs.length;i++){
+        if(rs[i][0]-out[out.length-1][1]<=3)out[out.length-1][1]=rs[i][1];
+        else out.push(rs[i].slice());
+      }
+      return out;
+    }
+    const rows=mergeRuns(runs(rowScore)),cols=mergeRuns(runs(colScore));
+
+    // Convert separator bands into content intervals.
+    function intervals(n,rs){
+      const out=[];let a=0;
+      for(const r of rs){
+        const b=r[0];
+        if(b-a>8)out.push([a,b]);
+        a=r[1]+1;
+      }
+      if(n-a>8)out.push([a,n]);
+      return out;
+    }
+    let ys=intervals(sh,rows),xs=intervals(sw,cols);
+
+    // Ignore tiny border bands and choose the useful layout.
+    ys=ys.filter(r=>r[1]-r[0]>=Math.max(12,sh*.03));
+    xs=xs.filter(r=>r[1]-r[0]>=Math.max(12,sw*.03));
+
+    let boxes=[];
+    if(xs.length>1 && ys.length>1){
+      // 2-column/grid merge: every non-empty cell is one original image.
+      for(let r=0;r<ys.length;r++)for(let c=0;c<xs.length;c++)boxes.push([xs[c][0],ys[r][0],xs[c][1],ys[r][1]]);
+    }else if(ys.length>1){
+      boxes=ys.map(r=>[0,r[0],sw,r[1]]);
+    }else if(xs.length>1){
+      boxes=xs.map(r=>[r[0],0,r[1],sh]);
+    }else{
+      setProgress(-1);
+      setStatus("Could not find clear image separators. This works best with images merged by this website.",true);
+      return;
+    }
+
+    const mime=$("#imageFormat").value,ext=imageExtForMime(mime);
+    const base=source.name.replace(/\.[^.]+$/,'');
+    const previewBlobs=[];
+    let made=0;
+    for(let i=0;i<boxes.length;i++){
+      const [x1,y1,x2,y2]=boxes[i];
+      const sx=Math.max(0,Math.floor(x1/scale)),sy=Math.max(0,Math.floor(y1/scale));
+      const ex=Math.min(img.naturalWidth||img.width,Math.ceil(x2/scale)),ey=Math.min(img.naturalHeight||img.height,Math.ceil(y2/scale));
+      const c=document.createElement("canvas");c.width=Math.max(1,ex-sx);c.height=Math.max(1,ey-sy);
+      c.getContext("2d").drawImage(img,sx,sy,c.width,c.height,0,0,c.width,c.height);
+      const blob=await canvasBlobForMime(c,mime);
+      previewBlobs.push(blob);
+      downloadBlob(blob,`${base}-split-${++made}.${ext}`);
+      setProgress(10+(made/boxes.length)*85);
+    }
+    setProgress(100);
+    showMultiImagePreview(previewBlobs, `Split image preview (${made} result${made===1?"":"s"})`);
+    setStatus(`${made} separate images extracted from the merged image.`);
+    setTimeout(()=>setProgress(-1),700);
+  }catch(e){
+    console.error(e);setProgress(-1);setStatus("Split Image failed: "+e.message,true);
+  }
+}
+async function splitPDF(){
+  if(!files.length){setStatus("Add at least one PDF first.",true);return}
+  if(!PDFLib){setStatus("PDF engine is not loaded. Check your internet connection.",true);return}
+  try{
+    setProgress(3);setStatus("Splitting PDF pages…");
+    let firstSplitPdfBlob=null;
+    for(let fi=0;fi<files.length;fi++){
+      const src=await PDFLib.PDFDocument.load(await files[fi].file.arrayBuffer());
+      const total=src.getPageCount();
+      if(total<2){
+        const one=await src.save();
+        downloadBlob(new Blob([one],{type:"application/pdf"}),`split-pdf-${fi+1}-part-1.pdf`);
+        continue;
+      }
+      const cut=Math.ceil(total/2);
+      const ranges=[[0,cut],[cut,total]];
+      for(let r=0;r<ranges.length;r++){
+        const [from,to]=ranges[r]; if(from>=to)continue;
+        const out=await PDFLib.PDFDocument.create();
+        const copied=await out.copyPages(src,Array.from({length:to-from},(_,i)=>from+i));
+        copied.forEach(p=>out.addPage(p));
+        const bytes=await out.save({useObjectStreams:true});
+        const splitBlob=new Blob([bytes],{type:"application/pdf"});
+        if(!firstSplitPdfBlob) firstSplitPdfBlob=splitBlob;
+        downloadBlob(splitBlob,`split-pdf-${fi+1}-part-${r+1}.pdf`);
+      }
+      setProgress(10+((fi+1)/files.length)*85);
+    }
+    if(firstSplitPdfBlob) showPdfPreview(firstSplitPdfBlob, "Split PDF preview (first part)");
+    setProgress(100);setStatus("PDF split into 2 separate PDF files successfully.");
+    setTimeout(()=>setProgress(-1),700);
+  }catch(e){console.error(e);setProgress(-1);setStatus("PDF split failed: "+e.message,true)}
+}
+
+$("#mergeBtn").onclick=()=>mode==="image"?mergeImages():mergePDFs();
+$("#convertBtn").onclick=()=>mode==="image"?convertMergedImageToPDF():convertMergedPDFToImages();
+$("#splitBtn").onclick=()=>mode==="image"?splitMergedImage():splitPDF();
+</script>
+</body>
+</html>
