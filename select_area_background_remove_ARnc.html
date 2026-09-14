@@ -64,7 +64,7 @@ button,.upload{border:0;border-radius:10px;padding:11px 16px;font-weight:700;cur
 button:disabled{opacity:.45;cursor:not-allowed}
 input{display:none}
 .status{margin:14px 0;padding:11px 13px;border-radius:10px;background:#f7f9fc;color:#475467;font-size:14px}
-.progress{height:7px;background:#e5e7eb;border-radius:10px;overflow:hidden;display:none;margin-bottom:12px}
+.progress{height:10px;background:rgba(255,255,255,.16);border-radius:999px;overflow:hidden;display:none;margin-bottom:12px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.10)}.progress .pb{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,#1769e0,#63a4ff,#1769e0);background-size:200% 100%;animation:progressShine 1.1s linear infinite;transition:width .35s ease}.processingProgress{position:absolute;left:8%;right:8%;bottom:9%;z-index:5}.processingProgressLabel{color:#fff;text-align:center;font-size:13px;font-weight:600;margin-bottom:7px;text-shadow:0 1px 3px #000}.processingProgressTrack{height:9px;background:rgba(255,255,255,.18);border-radius:999px;overflow:hidden;box-shadow:0 0 12px rgba(255,255,255,.12)}.processingProgressBar{height:100%;width:0%;background:linear-gradient(90deg,#fff,#8ec5ff,#fff);background-size:200% 100%;animation:progressShine 1s linear infinite;transition:width .35s ease;border-radius:999px}@keyframes progressShine{to{background-position:200% 0}}
 .pb{height:100%;width:0;background:#1769e0;transition:width .2s}
 .workspace{
  min-height:520px;border:2px dashed #cbd5e1;border-radius:16px;
@@ -256,7 +256,7 @@ body.theme-dark .workspace{border-color:#475569}
 .cropViewport{position:relative;flex:1;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:22px 20px 105px;background:#1d1d1f}
 #cropStage{position:relative;display:inline-block;transform-origin:center center;user-select:none;touch-action:none;line-height:0}
 #cropPreview{display:block;max-width:min(88vw,1100px);max-height:calc(100vh - 210px);width:auto;height:auto;user-select:none;-webkit-user-drag:none}
-#cropRect{position:absolute;left:8%;top:8%;width:84%;height:84%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.55),0 0 0 9999px rgba(0,0,0,.30);cursor:move;touch-action:none}
+#cropRect{position:absolute;left:8%;top:8%;width:84%;height:84%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.55),0 0 0 9999px rgba(0,0,0,.30);cursor:move;touch-action:none;transform-origin:center center;will-change:transform,left,top,width,height}
 .cropGrid{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to right,transparent 33.2%,rgba(255,255,255,.45) 33.2%,rgba(255,255,255,.45) 33.6%,transparent 33.6%,transparent 66.4%,rgba(255,255,255,.45) 66.4%,rgba(255,255,255,.45) 66.8%,transparent 66.8%),linear-gradient(to bottom,transparent 33.2%,rgba(255,255,255,.45) 33.2%,rgba(255,255,255,.45) 33.6%,transparent 33.6%,transparent 66.4%,rgba(255,255,255,.45) 66.4%,rgba(255,255,255,.45) 66.8%,transparent 66.8%)}
 .cropHandle{position:absolute;width:15px;height:15px;background:#fff;border:2px solid #222;z-index:3;touch-action:none}
 .cropHandle.nw{left:-8px;top:-8px;cursor:nwse-resize}.cropHandle.n{left:50%;top:-8px;transform:translateX(-50%);cursor:ns-resize}.cropHandle.ne{right:-8px;top:-8px;cursor:nesw-resize}
@@ -267,6 +267,7 @@ body.theme-dark .workspace{border-color:#475569}
 .cropZoom{display:flex;align-items:center;gap:6px}
 .cropZoom button{border:0;background:#2b2b2e;color:#fff;width:38px;height:38px;border-radius:8px;font-size:20px;cursor:pointer}
 #cropZoomValue{min-width:52px;text-align:center;font-weight:700}
+#cropRotateBtn{border:0;background:#2b2b2e;color:#fff;width:38px;height:38px;border-radius:8px;font-size:20px;cursor:pointer}#cropRotateBtn:hover{background:#3a3a3e}
 #cropAngle{width:min(420px,38vw);accent-color:#fff}
 #cropAngleValue{width:48px;text-align:center;font-weight:800}
 @media(max-width:700px){#themeBtn{padding:8px 10px;font-size:12px}.cropTop{height:58px;padding:7px 8px}.cropTop button{padding:8px 9px}.cropTitle{display:none}.cropViewport{padding:12px 8px 108px}.cropBottom{height:96px;gap:7px;flex-wrap:wrap;padding:8px}.cropBottom #cropAngle{width:34vw}.cropTopGroup{gap:5px}}
@@ -327,7 +328,7 @@ body.theme-dark .workspace{border-color:#475569}
   <div class="cropBottom">
     <div class="cropZoom"><button id="cropZoomOut" type="button">−</button><span id="cropZoomValue">100%</span><button id="cropZoomIn" type="button">+</button></div>
     <button id="cropZoomReset" type="button">1:1</button>
-    <span>↻</span><input id="cropAngle" type="range" min="-45" max="45" step="1" value="0"><span id="cropAngleValue">0°</span>
+    <button id="cropRotateBtn" type="button" aria-label="Rotate 90 degrees">↻</button><input id="cropAngle" type="range" min="-180" max="180" step="1" value="0"><span id="cropAngleValue">0°</span>
   </div>
 </div>
 
@@ -425,7 +426,7 @@ AI removes background both inside and outside your drawn selection.
 <div class="workspace">
 <canvas id="canvas"></canvas>
 
-<div id="processingOverlay">
+<div id="processingOverlay"><div class="processingProgress"><div id="processingProgressLabel" class="processingProgressLabel">Processing 0%</div><div class="processingProgressTrack"><div id="processingProgressBar" class="processingProgressBar"></div></div></div>
   <img id="processingImage" alt="">
   <div id="stars"></div>
   <div id="scanLine"></div>
@@ -493,6 +494,9 @@ const processingOverlay=document.getElementById('processingOverlay');
 const processingImage=document.getElementById('processingImage');
 const stars=document.getElementById('stars');
 const processingText=document.getElementById('processingText');
+const processingProgressBar=document.getElementById('processingProgressBar');
+const processingProgressLabel=document.getElementById('processingProgressLabel');
+function setProcessingProgress(n){n=Math.max(0,Math.min(100,Number(n)||0));if(processingProgressBar)processingProgressBar.style.width=n+"%";if(processingProgressLabel)processingProgressLabel.textContent="Processing "+Math.round(n)+"%";if(pb)pb.style.width=n+"%";}
 const revealLayer=document.getElementById('revealLayer');
 const revealImage=document.getElementById('revealImage');
 const revealShade=document.getElementById('revealShade');
@@ -701,6 +705,7 @@ function showProcessing(){
   makeProcessingStars();
 
   processingOverlay.classList.add("active");
+  setProcessingProgress(0);
 
   processingText.innerHTML=
     "AI Background Processing...<br><small>Detecting foreground</small>";
@@ -708,6 +713,7 @@ function showProcessing(){
 
 function hideProcessing(){
   processingOverlay.classList.remove("active");
+  setProcessingProgress(0);
   stars.innerHTML="";
 }
 
@@ -952,12 +958,6 @@ function cropOpen(){
    *
    * If there is no selection, the Video-style Crop Studio opens normally.
    */
-  const poly=getSelectionPolygon();
-  if(poly.length>=3){
-    cropShapeSelection();
-    return;
-  }
-
   cropStudio.classList.add('open'); cropStudio.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
   cropPreview.onload=()=>cropInit(); cropPreview.src=cropImageURL();
   if(cropPreview.complete) cropInit();
@@ -1024,21 +1024,38 @@ function cropShapeSelection(){
 }
 function cropInit(){
   if(!cropPreview.naturalWidth)return;
-  cropState={x:.08,y:.08,w:.84,h:.84,angle:0,zoom:1};
+  const poly=getSelectionPolygon();
+  if(poly.length>=3){
+    let minX=1,minY=1,maxX=0,maxY=0;
+    for(const p of poly){minX=Math.min(minX,p.x/work.width);minY=Math.min(minY,p.y/work.height);maxX=Math.max(maxX,p.x/work.width);maxY=Math.max(maxY,p.y/work.height)}
+    cropState={x:Math.max(0,minX),y:Math.max(0,minY),w:Math.min(1,Math.max(.025,maxX-minX)),h:Math.min(1,Math.max(.025,maxY-minY)),angle:0,zoom:1};
+  }else{
+    cropState={x:.08,y:.08,w:.84,h:.84,angle:0,zoom:1};
+  }
   cropBase={x:cropState.x,y:cropState.y,w:cropState.w,h:cropState.h};
   cropHistory=[cropSnapshot()];cropHistoryIndex=0;
   cropAngle.value=0;cropAngleValue.textContent='0°';cropApplyZoom();cropRenderRect();
 }
 function cropCloseStudio(){cropStudio.classList.remove('open');cropStudio.setAttribute('aria-hidden','true');document.body.style.overflow='';cropDrag=null}
 function cropApplyZoom(){
-  const z=cropState.zoom||1; cropStage.style.transform='scale('+z+') rotate(0deg)';
+  const z=cropState.zoom||1;
+  const a=cropState.angle||0;
+  cropStage.style.transform='scale('+z+') rotate('+a+'deg)';
   cropZoomValue.textContent=Math.round(z*100)+'%';
   requestAnimationFrame(cropRenderRect);
 }
 function cropRenderRect(){
   if(!cropPreview.clientWidth||!cropPreview.clientHeight)return;
   const iw=cropPreview.clientWidth,ih=cropPreview.clientHeight;
-  cropRect.style.left=(cropState.x*iw)+'px';cropRect.style.top=(cropState.y*ih)+'px';cropRect.style.width=(cropState.w*iw)+'px';cropRect.style.height=(cropState.h*ih)+'px';
+  const a=(cropState.angle||0)*Math.PI/180;
+  const cx=(cropState.x+cropState.w/2)*iw, cy=(cropState.y+cropState.h/2)*ih;
+  const ox=iw/2,oy=ih/2, dx=cx-ox,dy=cy-oy;
+  const cos=Math.cos(-a),sin=Math.sin(-a);
+  const localCx=ox+(dx*cos-dy*sin), localCy=oy+(dx*sin+dy*cos);
+  const fw=cropState.w*iw,fh=cropState.h*ih;
+  cropRect.style.width=fw+'px'; cropRect.style.height=fh+'px';
+  cropRect.style.left=(localCx-fw/2)+'px'; cropRect.style.top=(localCy-fh/2)+'px';
+  cropRect.style.transform='rotate('+(-cropState.angle)+'deg)';
   const rw=Math.max(1,Math.round(cropState.w*cropPreview.naturalWidth));
   const rh=Math.max(1,Math.round(cropState.h*cropPreview.naturalHeight));
   cropSize.textContent=rw+' × '+rh;
@@ -1063,24 +1080,23 @@ function cropMove(e){
 function cropEnd(e){if(!cropDrag)return;cropDrag=null;cropPushHistory()}
 function cropSave(){
   if(!work||!cropPreview.naturalWidth)return;
-  const nw=work.width,nh=work.height,angle=cropState.angle*Math.PI/180;
-  const src=document.createElement('canvas');src.width=nw;src.height=nh;src.getContext('2d').putImageData(work,0,0);
-  let rotated=src;
-  if(Math.abs(angle)>0.0001){
-    const rw=Math.ceil(Math.abs(nw*Math.cos(angle))+Math.abs(nh*Math.sin(angle)));
-    const rh=Math.ceil(Math.abs(nw*Math.sin(angle))+Math.abs(nh*Math.cos(angle)));
-    rotated=document.createElement('canvas');rotated.width=rw;rotated.height=rh;
-    const rc=rotated.getContext('2d');rc.translate(rw/2,rh/2);rc.rotate(angle);rc.drawImage(src,-nw/2,-nh/2);
-  }
-  const x=Math.max(0,Math.round(cropState.x*rotated.width));
-  const y=Math.max(0,Math.round(cropState.y*rotated.height));
-  const w=Math.min(rotated.width-x,Math.max(1,Math.round(cropState.w*rotated.width)));
-  const h=Math.min(rotated.height-y,Math.max(1,Math.round(cropState.h*rotated.height)));
-  const out=document.createElement('canvas');out.width=w;out.height=h;out.getContext('2d').drawImage(rotated,x,y,w,h,0,0,w,h);
-  const cropped=out.getContext('2d').getImageData(0,0,w,h);
-  history.push({type:'crop',imageData:new ImageData(new Uint8ClampedArray(work.data),work.width,work.height)});undoBtn.disabled=false;
-  canvas.width=w;canvas.height=h;work=cropped;points=[];shapeStart=null;shapeCurrent=null;backgroundRemovalDone=false;
-  fitCanvas();redraw();cropCloseStudio();status('Crop saved successfully. You can crop again or remove the background.');
+  const nw=work.width,nh=work.height,angle=(cropState.angle||0)*Math.PI/180;
+  const src=document.createElement('canvas'); src.width=nw; src.height=nh;
+  src.getContext('2d').putImageData(work,0,0);
+  const rw=Math.max(1,Math.ceil(nw*Math.abs(Math.cos(angle))+nh*Math.abs(Math.sin(angle))));
+  const rh=Math.max(1,Math.ceil(nw*Math.abs(Math.sin(angle))+nh*Math.abs(Math.cos(angle))));
+  const rotated=document.createElement('canvas'); rotated.width=rw; rotated.height=rh;
+  const rc=rotated.getContext('2d'); rc.translate(rw/2,rh/2); rc.rotate(angle); rc.drawImage(src,-nw/2,-nh/2);
+  const sx=(cropState.x+cropState.w/2)*nw, sy=(cropState.y+cropState.h/2)*nh;
+  const dx=sx-nw/2,dy=sy-nh/2,cos=Math.cos(angle),sin=Math.sin(angle);
+  const rcx=rw/2+dx*cos-dy*sin, rcy=rh/2+dx*sin+dy*cos;
+  const outW=Math.max(1,Math.round(cropState.w*nw)),outH=Math.max(1,Math.round(cropState.h*nh));
+  const out=document.createElement('canvas'); out.width=outW; out.height=outH;
+  out.getContext('2d').drawImage(rotated,rcx-outW/2,rcy-outH/2,outW,outH,0,0,outW,outH);
+  const cropped=out.getContext('2d').getImageData(0,0,outW,outH);
+  history.push({type:'crop',imageData:new ImageData(new Uint8ClampedArray(work.data),work.width,work.height)}); undoBtn.disabled=false;
+  canvas.width=outW; canvas.height=outH; work=cropped; points=[]; shapeStart=null; shapeCurrent=null; backgroundRemovalDone=false;
+  fitCanvas(); redraw(); cropCloseStudio(); status('Crop saved successfully. Photo rotation applied; crop selection stayed fixed.');
 }
 
 cropBtn.addEventListener('click',cropOpen);
@@ -1093,8 +1109,17 @@ document.getElementById('cropRedo').addEventListener('click',()=>{if(cropHistory
 document.getElementById('cropZoomIn').addEventListener('click',()=>{cropState.zoom=Math.min(3,+(cropState.zoom+.1).toFixed(2));cropApplyZoom()});
 document.getElementById('cropZoomOut').addEventListener('click',()=>{cropState.zoom=Math.max(.5,+(cropState.zoom-.1).toFixed(2));cropApplyZoom()});
 document.getElementById('cropZoomReset').addEventListener('click',()=>{cropState.zoom=1;cropApplyZoom()});
-cropAngle.addEventListener('input',()=>{cropState.angle=+cropAngle.value;cropAngleValue.textContent=cropState.angle+'°'});
+cropAngle.addEventListener('input',()=>{cropState.angle=+cropAngle.value;cropAngleValue.textContent=cropState.angle+'°';cropApplyZoom()});
 cropAngle.addEventListener('change',cropPushHistory);
+document.getElementById('cropRotateBtn').addEventListener('click',()=>{
+  let a=(cropState.angle||0)+90;
+  if(a>180)a-=360;
+  cropState.angle=a;
+  cropAngle.value=a;
+  cropAngleValue.textContent=a+'°';
+  cropApplyZoom();
+  cropPushHistory();
+});
 cropRect.addEventListener('pointerdown',e=>cropBegin(e,'move'));
 document.querySelectorAll('#cropRect .cropHandle').forEach(h=>h.addEventListener('pointerdown',e=>cropBegin(e,h.dataset.handle)));
 window.addEventListener('pointermove',cropMove,{passive:false});window.addEventListener('pointerup',cropEnd,{passive:false});window.addEventListener('resize',()=>{if(cropStudio.classList.contains('open'))cropRenderRect()});
@@ -1406,10 +1431,18 @@ removeBtn.addEventListener("click",async()=>{
  */
  showProcessing();
 
+ /* Paint the processing UI immediately before any model work. */
  progress.style.display="block";
- pb.style.width="8%";
+ setProcessingProgress(2);
+ status("Starting background removal...");
+
+ /* Yield two frames so the browser visibly renders the bar at once. */
+ await new Promise(resolve => requestAnimationFrame(resolve));
+ await new Promise(resolve => requestAnimationFrame(resolve));
 
  try{
+
+   setProcessingProgress(8);
 
    status(
      "Loading AI foreground model..."
@@ -1418,7 +1451,7 @@ removeBtn.addEventListener("click",async()=>{
 
    const session=await getSession();
 
-   pb.style.width="30%";
+   setProcessingProgress(30);
 
    status(
      "AI is detecting Person / Animal / Object..."
@@ -1437,7 +1470,7 @@ removeBtn.addEventListener("click",async()=>{
    const output=
      result[session.outputNames[0]];
 
-   pb.style.width="65%";
+   setProcessingProgress(65);
 
    const mask=
      makeMask(
@@ -1505,7 +1538,7 @@ removeBtn.addEventListener("click",async()=>{
 
    redraw();
 
-   pb.style.width="100%";
+   setProcessingProgress(100);
 
    /*
    Keep the dark/black screen + twinkling stars visible.
