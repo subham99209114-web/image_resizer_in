@@ -64,9 +64,13 @@ button,input,select{font:inherit}.app{height:100%;display:flex;flex-direction:co
     min-height:50px;
     padding:5px 6px;
     gap:4px;
-    flex-wrap:wrap;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    overflow-y:hidden;
     align-content:center;
+    scrollbar-width:none;
   }
+  .top::-webkit-scrollbar{display:none}
   .brand{font-size:14px;margin-right:3px}
   .topbtn{height:34px;min-width:34px;padding:0 7px}
   .top .sep{display:none}
@@ -177,6 +181,25 @@ button,input,select{font:inherit}.app{height:100%;display:flex;flex-direction:co
   .empty h2{font-size:15px}
 }
 .bgProcessing{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.92);color:#fff;font-weight:600;letter-spacing:.3px}.bgProcessing .stars{width:80%;max-width:700px;text-align:center;font-size:22px;line-height:3;animation:starShine 1s ease-in-out infinite}.bgProcessing.hidden{display:none}@keyframes starShine{0%,100%{opacity:.25;transform:scale(.98)}50%{opacity:1;transform:scale(1.02)}}
+
+@media (max-width:760px){
+  .top label.topbtn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 auto;
+    white-space:nowrap;
+  }
+  #file{
+    display:none!important;
+  }
+  .filepick{
+    max-width:100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+}
 </style>
 </head>
 <body>
