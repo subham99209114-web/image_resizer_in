@@ -49,7 +49,95 @@ button,input,select{font:inherit}.app{height:100%;display:flex;flex-direction:co
 .lightTheme{--bg:#f0f0f0;--bar:#fff;--panel:#fafafa;--panel2:#eee;--line:#d4d4d4;--text:#161616;--muted:#666}
 .lightTheme .top,.lightTheme .sidebar,.lightTheme .bottom{background:#fff;color:#222}.lightTheme .sidebtn{color:#555}.lightTheme .stage{background-color:#ddd}
 .tabs{display:flex;border-bottom:1px solid #414141}.tab{flex:1;background:transparent;color:#aaa;border:0;padding:10px;cursor:pointer}.tab.active{color:#fff;border-bottom:2px solid #3caeff}
-@media(max-width:900px){.right{width:290px}.sidebar{width:62px}}@media(max-width:650px){.right{width:100%;position:absolute;right:0;top:50px;bottom:34px;z-index:5;display:none}.right.open{display:flex}.sidebar{width:55px}.brand{display:none}}
+@media(max-width:900px){
+  .right{width:290px}
+  .sidebar{width:62px}
+}
+@media(max-width:650px){
+  html,body{overflow:hidden}
+  .app{min-width:0;height:100dvh}
+  .top{height:50px;overflow-x:auto;overflow-y:hidden;flex-shrink:0;white-space:nowrap}
+  .top>*{flex-shrink:0}
+  .main{
+    min-height:0;
+    flex:1;
+    position:relative;
+    display:flex;
+    overflow:hidden;
+  }
+  .sidebar{
+    width:55px;
+    min-width:55px;
+    flex-shrink:0;
+    overflow-y:auto;
+    overflow-x:hidden;
+  }
+  .stage{
+    min-width:0;
+    flex:1;
+    overflow:auto;
+    padding:8px;
+    -webkit-overflow-scrolling:touch;
+  }
+  #view{
+    max-width:none;
+    max-height:none;
+    margin:auto;
+    display:block;
+  }
+  .right{
+    width:100%;
+    max-width:100%;
+    position:absolute;
+    right:0;
+    top:0;
+    bottom:0;
+    z-index:5;
+    display:none;
+    min-height:0;
+  }
+  .right.open{display:flex}
+  .panelBody{
+    overflow-y:auto;
+    overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:20px;
+  }
+  .brand{display:none}
+  .bottom{
+    height:38px;
+    min-height:38px;
+    flex-shrink:0;
+    overflow-x:auto;
+    white-space:nowrap;
+  }
+  .bottom>*{flex-shrink:0}
+}
+@media(max-width:650px) and (orientation:portrait){
+  .stage{
+    align-items:flex-start;
+    justify-content:center;
+    padding:10px 8px 14px;
+  }
+  #view{
+    max-width:100%;
+    max-height:calc(100dvh - 50px - 38px - 24px);
+    width:auto !important;
+    height:auto !important;
+  }
+}
+@media(max-width:650px) and (orientation:landscape){
+  .stage{
+    align-items:center;
+    justify-content:flex-start;
+    overflow-x:auto;
+    overflow-y:auto;
+  }
+  #view{
+    max-width:none;
+    max-height:calc(100dvh - 50px - 38px - 16px);
+  }
+}
 .bgProcessing{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.92);color:#fff;font-weight:600;letter-spacing:.3px}.bgProcessing .stars{width:80%;max-width:700px;text-align:center;font-size:22px;line-height:3;animation:starShine 1s ease-in-out infinite}.bgProcessing.hidden{display:none}@keyframes starShine{0%,100%{opacity:.25;transform:scale(.98)}50%{opacity:1;transform:scale(1.02)}}
 </style>
 </head>
@@ -309,9 +397,23 @@ function updateCanvasSize(){
  canvas.style.width=(canvas.width*zoom)+"px";canvas.style.height=(canvas.height*zoom)+"px";
  $("#zoomN").textContent=Math.round(zoom*100)+"%";
 }
-function fit(){if(!baseCanvas)return;const maxW=stage.clientWidth*.82,maxH=stage.clientHeight*.82;zoom=Math.min(maxW/canvas.width,maxH/canvas.height);if(!isFinite(zoom)||zoom<=0)zoom=1;updateCanvasSize()}
+function fit(){
+  if(!baseCanvas)return;
+  const mobile=window.matchMedia("(max-width:650px)").matches;
+  const portrait=window.matchMedia("(max-width:650px) and (orientation:portrait)").matches;
+  const maxW=stage.clientWidth*(mobile?(portrait?.94:.92):.82);
+  const maxH=stage.clientHeight*(mobile?(portrait?.92:.90):.82);
+  zoom=Math.min(maxW/canvas.width,maxH/canvas.height);
+  if(!isFinite(zoom)||zoom<=0)zoom=1;
+  updateCanvasSize();
+}
 $("#zoomIn").onclick=()=>{zoom=Math.min(4,zoom+.1);updateCanvasSize()};$("#zoomOut").onclick=()=>{zoom=Math.max(.1,zoom-.1);updateCanvasSize()};$("#fit").onclick=fit;
-window.addEventListener("resize",()=>{if(baseCanvas)fit()});
+window.addEventListener("resize",()=>{
+  if(baseCanvas){
+    fit();
+    requestAnimationFrame(()=>fit());
+  }
+});
 
 $$(".sidebtn").forEach(b=>b.onclick=()=>{ $$(".sidebtn").forEach(x=>x.classList.remove("active"));b.classList.add("active");
  const name=b.dataset.panel;$("#panelTitle").textContent=b.textContent.trim();
