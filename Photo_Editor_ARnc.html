@@ -71,7 +71,7 @@ button,input,select{font:inherit}.app{height:100%;display:flex;flex-direction:co
     overflow:hidden;
     display:grid;
     grid-template-columns:55px minmax(0,1fr);
-    grid-template-rows:minmax(0,1fr) minmax(0,52%);
+    grid-template-rows:minmax(0,55%) minmax(0,45%);
   }
   .sidebar{
     grid-column:1;
@@ -411,11 +411,13 @@ function updateCanvasSize(){
 }
 function fit(){if(!baseCanvas)return;const maxW=stage.clientWidth*.82,maxH=stage.clientHeight*.82;zoom=Math.min(maxW/canvas.width,maxH/canvas.height);if(!isFinite(zoom)||zoom<=0)zoom=1;updateCanvasSize()}
 $("#zoomIn").onclick=()=>{zoom=Math.min(4,zoom+.1);updateCanvasSize()};$("#zoomOut").onclick=()=>{zoom=Math.max(.1,zoom-.1);updateCanvasSize()};$("#fit").onclick=fit;
-window.addEventListener("resize",()=>{if(baseCanvas)fit()});
+window.addEventListener("resize",()=>{if(baseCanvas)requestAnimationFrame(fit)});
 
 $$(".sidebtn").forEach(b=>b.onclick=()=>{ $$(".sidebtn").forEach(x=>x.classList.remove("active"));b.classList.add("active");
  const name=b.dataset.panel;$("#panelTitle").textContent=b.textContent.trim();
  ["adjust","crop","filters","text","draw","background","effects","resize"].forEach(p=>$("#"+p+"Panel").classList.toggle("hidden",p!==name));$("#right").classList.add("open");
+ // Re-fit the canvas after the mobile options panel opens so the full image stays visible.
+ requestAnimationFrame(()=>{if(baseCanvas)fit();});
  if(name==="crop")startCropMode();
 });
 function mark(){pushUndo();render()}
