@@ -413,12 +413,15 @@ html,body{
 .footerFeatureDetailsLink{color:#9bdcff}
 
 </style>
+<!-- Extended image-format support -->
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/utif@3.1.0/UTIF.min.js"></script>
 </head>
 <body>
 <div class="app" id="app">
 <header class="top">
  <div class="brand">Photo Editor <i>ARnc</i></div>
- <label class="topbtn" title="Open image">📂 Open<input id="file" type="file" accept="image/*" hidden></label>
+ <label class="topbtn" title="Open image">📂 Open<input id="file" type="file" accept="image/*,.heic,.heif,.heics,.heifs,.hif,.tif,.tiff,.avif,.bmp,.gif,.svg,.ico" hidden></label>
  <button class="topbtn" id="new">＋ New</button>
  <button class="topbtn" id="undo" title="Undo">↶</button><button class="topbtn" id="redo" title="Redo">↷</button>
  <div class="sep"></div>
@@ -442,7 +445,7 @@ html,body{
  </aside>
  <section class="stage" id="stage">
   <canvas id="view"></canvas>
-  <div id="empty" class="empty"><h2>Open a photo to start editing</h2><p>Drag & drop an image here or choose a file.</p><label class="filepick">Choose image<input id="file2" type="file" accept="image/*"></label></div>
+  <div id="empty" class="empty"><h2>Open a photo to start editing</h2><p>Drag & drop an image here or choose a file.</p><label class="filepick">Choose image<input id="file2" type="file" accept="image/*,.heic,.heif,.heics,.heifs,.hif,.tif,.tiff,.avif,.bmp,.gif,.svg,.ico"></label></div>
   <div id="cropBox" class="cropBox"></div><div id="bgProcessing" class="bgProcessing hidden"><div class="stars">✦ · ✧ · ✦ · ✧ · ✦ · ✧ · ✦ · ✧ · ✦</div><div>Removing background…</div></div>
  </section>
  <aside class="right" id="right">
@@ -515,7 +518,7 @@ html,body{
     </div>
     <div class="section"><div class="sectionTitle">Replace background</div>
      <input id="bgColor" class="color" type="color" value="#ffffff">
-     <label class="filepick" style="margin-top:7px;width:100%;text-align:center">Choose background image<input id="bgImage" type="file" accept="image/*"></label>
+     <label class="filepick" style="margin-top:7px;width:100%;text-align:center">Choose background image<input id="bgImage" type="file" accept="image/*,.heic,.heif,.heics,.heifs,.hif,.tif,.tiff,.avif,.bmp,.gif,.svg,.ico"></label>
      <button class="action" id="applyBg" style="width:100%;margin-top:7px">Apply background</button>
      <button class="action" id="clearBg" style="width:100%;margin-top:7px">Keep transparent</button>
     </div>
@@ -674,13 +677,41 @@ function syncControls(){
  Object.keys(adj).forEach(k=>{if($("#"+k)){$("#"+k).value=adj[k];$("#"+k+"N").textContent=adj[k]}});
  $("#tolerance").nextElementSibling;$("#straighten").value=rotation;$("#straightenN").textContent=rotation;
 }
-function loadFile(file){
- if(!file||!file.type.startsWith("image/"))return;
- const url=URL.createObjectURL(file),im=new Image();
- im.onload=()=>{source=im;baseCanvas=makeCanvas(im.naturalWidth,im.naturalHeight);baseCanvas.getContext("2d").drawImage(im,0,0);
-  bgLayer=null;bgImage=null;texts=[];rotation=0;flipX=flipY=1;filter="none";Object.keys(adj).forEach(k=>adj[k]=0);
-  undoStack=[];redoStack=[];syncControls();$("#empty").classList.add("hidden");fit();render();msg("Image loaded — all tools are ready.");URL.revokeObjectURL(url)
- };im.src=url;
+async function decodeImageFile(file){
+ if(!file) throw new Error("No image selected");
+ const name=(file.name||"").toLowerCase(),type=(file.type||"").toLowerCase();
+ const isHEIF=/\.(heic|heif|heics|heifs|hif)$/.test(name)||/image\/hei[cf]/.test(type)||type==="image/heic-sequence"||type==="image/heif-sequence";
+ const isTIFF=/\.(tif|tiff)$/.test(name)||type==="image/tiff"||type==="image/x-tiff";
+ if(isHEIF){
+  if(typeof heic2any!=="function")throw new Error("HEIC/HEIF decoder could not load");
+  const out=await heic2any({blob:file,toType:"image/png",quality:1});
+  return await blobToImage(Array.isArray(out)?out[0]:out);
+ }
+ if(isTIFF){
+  if(!window.UTIF)throw new Error("TIFF decoder could not load");
+  const buffer=await file.arrayBuffer(),ifds=UTIF.decode(buffer);
+  if(!ifds.length)throw new Error("Invalid TIFF image");
+  UTIF.decodeImage(buffer,ifds[0]);
+  const rgba=UTIF.toRGBA8(ifds[0]),w=ifds[0].width,h=ifds[0].height;
+  const c=makeCanvas(w,h),x=c.getContext("2d");
+  x.putImageData(new ImageData(new Uint8ClampedArray(rgba),w,h),0,0);return c;
+ }
+ return await blobToImage(file);
+}
+function blobToImage(blob){return new Promise((resolve,reject)=>{const url=URL.createObjectURL(blob),im=new Image();im.onload=()=>{URL.revokeObjectURL(url);resolve(im)};im.onerror=()=>{URL.revokeObjectURL(url);reject(new Error("This format is not supported by the current browser"))};im.src=url})}
+async function loadFile(file){
+ if(!file)return;
+ const name=(file.name||"").toLowerCase(),type=(file.type||"").toLowerCase();
+ const known=/\.(png|jpe?g|webp|gif|bmp|svg|avif|ico|heic|heif|heics|heifs|hif|tif|tiff)$/.test(name)||type.startsWith("image/")||type==="application/octet-stream";
+ if(!known){msg("Please choose a supported image file.");return}
+ try{
+  msg("Loading image…");const decoded=await decodeImageFile(file);
+  const w=decoded instanceof HTMLCanvasElement?decoded.width:(decoded.naturalWidth||decoded.width),h=decoded instanceof HTMLCanvasElement?decoded.height:(decoded.naturalHeight||decoded.height);
+  if(!w||!h)throw new Error("Image has no readable dimensions");
+  source=decoded;baseCanvas=makeCanvas(w,h);baseCanvas.getContext("2d").drawImage(decoded,0,0);
+  bgLayer=null;bgImage=null;texts=[];rotation=0;flipX=flipY=1;filter="none";Object.keys(adj).forEach(k=>adj[k]=0);undoStack=[];redoStack=[];syncControls();$("#empty").classList.add("hidden");fit();render();
+  const ext=name.split(".").pop()||"image";msg("Image loaded ("+ext.toUpperCase()+") — all tools are ready.");
+ }catch(err){console.error("Image decode:",err);msg("Image could not be loaded: "+String(err?.message||err).slice(0,110))}
 }
 $("#file").onchange=e=>loadFile(e.target.files[0]);$("#file2").onchange=e=>loadFile(e.target.files[0]);
 stage.addEventListener("dragover",e=>e.preventDefault());stage.addEventListener("drop",e=>{e.preventDefault();loadFile(e.dataTransfer.files[0])});
@@ -860,7 +891,7 @@ async function removeBackground(){
 
 $("#removeBg").onclick=removeBackground;
 $("#tolerance").oninput=e=>{$("#tolN").textContent=e.value};
-$("#bgColor").oninput=()=>{};$("#bgImage").onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{bgImage=im;bgLayer=null;render();msg("Background image selected — click Apply background")};im.src=URL.createObjectURL(f)};
+$("#bgColor").oninput=()=>{};$("#bgImage").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{bgImage=await decodeImageFile(f);bgLayer=null;render();msg("Background image selected — click Apply background")}catch(err){msg("Background image could not be loaded: "+String(err?.message||err).slice(0,90))}};
 $("#applyBg").onclick=()=>{if(!baseCanvas)return;pushUndo();if(!bgImage){bgLayer=makeCanvas(canvas.width,canvas.height);const x=bgLayer.getContext("2d");x.fillStyle=$("#bgColor").value;x.fillRect(0,0,bgLayer.width,bgLayer.height)}render();msg("Background applied")};
 $("#clearBg").onclick=()=>{bgLayer=null;bgImage=null;render();msg("Background set to transparent")};
 
