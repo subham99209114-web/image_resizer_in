@@ -452,7 +452,7 @@ body[data-theme="violet"]{--accentA:#8b5cf6;--accentB:#ec4899;--accentC:#38bdf8}
       <option value="grid2">PDF: 2-column grid</option>
     </select>
     <button class="green" id="mergeBtn">Merge & Download</button>
-    <button class="ghost" id="convertBtn">Convert PDF to Image</button>
+    <button class="ghost" id="convertBtn">Convert Image to PDF</button>
      <button class="primary" id="splitBtn">Split Image</button>
    </div>
   </div>
@@ -517,7 +517,24 @@ const fmtBytes=b=>b<1024?b+" B":b<1048576?(b/1024).toFixed(1)+" KB":(b/1048576).
 const id=()=>crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random();
 function setStatus(t,err=false){$("#status").textContent=t;$("#status").className="status "+(err?"err":"ok")}
 function setProgress(v){$("#progress").style.display=v>=0&&v<100?"block":"none";$("#progressFill").style.width=v+"%"}
-function downloadBlob(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
+function downloadBlob(blob,name){
+  return new Promise((resolve,reject)=>{
+    if(!blob){reject(new Error("No file was generated."));return}
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;a.download=name;a.style.display="none";
+    document.body.appendChild(a);
+    requestAnimationFrame(()=>{
+      try{
+        a.click();
+        setTimeout(()=>{URL.revokeObjectURL(url);a.remove();resolve()},1800);
+      }catch(e){
+        URL.revokeObjectURL(url);a.remove();reject(e);
+      }
+    });
+  });
+}
+async function waitForDownloadGap(ms=300){await new Promise(r=>setTimeout(r,ms));}
 
 let previewUrls=[];
 function clearPreviewUrls(){
@@ -617,6 +634,7 @@ function setMode(m){
  $("#listTitle").textContent=m==="image"?"Images":"PDF files";
  $("#imageLayout").style.display=m==="image"?"":"none";
  $("#imageFormat").style.display=m==="image"?"":"none";
+ $("#pdfLayout").style.display=m==="pdf"?"":"none";
  $("#mergeBtn").textContent=m==="image"?"Merge & Download":"Merge PDFs"; $("#convertBtn").textContent=m==="image"?"Convert Image to PDF":"Convert PDF to Image"; $("#splitBtn").textContent=m==="image"?"Split Image":"Split PDF";
  render();
 }
@@ -822,7 +840,11 @@ $("#saveCrop").onclick=async()=>{
  try{
   if(cropMode==="image")await saveImageCrop(files[cropIndex]);else await savePdfCrop(files[cropIndex]);
   closeCrop();render();setStatus("Crop saved successfully.");
-   if(cropMode==="image" && files[cropIndex]) showImagePreview(files[cropIndex].thumb || await imageDataURL(files[cropIndex].file), "Cropped image preview");
+   if(cropMode==="image" && files[cropIndex]) {
+     showImagePreview(files[cropIndex].thumb || await imageDataURL(files[cropIndex].file), "Cropped image preview");
+   } else if(cropMode==="pdf" && files[cropIndex]) {
+     showPdfPreview(files[cropIndex].file, "Cropped PDF preview");
+   }
  }catch(e){console.error(e);setStatus("Could not save crop: "+e.message,true)}
  b.disabled=false;b.textContent="Save Crop";
 };
@@ -858,12 +880,20 @@ async function buildMergedImageCanvas(){
 }
 async function mergeImages(){
   if(!files.length){setStatus("Add at least one image first.",true);return}
-  setProgress(5);setStatus("Preparing merged image…");const canvas=await buildMergedImageCanvas();setProgress(70);
-  const mime=$("#imageFormat").value,blob=await canvasBlobForMime(canvas,mime),ext=imageExtForMime(mime);
-  showImagePreview(blob, `Merged ${ext.toUpperCase()} preview`);
-  downloadBlob(blob,"merged-images-"+new Date().toISOString().slice(0,10)+"."+ext);
-  setProgress(100);setStatus(`Merged image downloaded successfully as ${ext.toUpperCase()}.`);setTimeout(()=>setProgress(-1),700);
+  const b=$("#mergeBtn"); if(b.disabled)return;
+  b.disabled=true; setProgress(5); setStatus("Preparing merged image…");
+  try{
+    const canvas=await buildMergedImageCanvas();setProgress(70);
+    const mime=$("#imageFormat").value,blob=await canvasBlobForMime(canvas,mime),ext=imageExtForMime(mime);
+    showImagePreview(blob, `Merged ${ext.toUpperCase()} preview`);
+    await downloadBlob(blob,"merged-images-"+new Date().toISOString().slice(0,10)+"."+ext);
+    setProgress(100);setStatus(`Merged image downloaded successfully as ${ext.toUpperCase()}.`);
+    setTimeout(()=>setProgress(-1),700);
+  }catch(e){
+    console.error(e);setProgress(-1);setStatus("Merge image failed: "+e.message,true);
+  }finally{b.disabled=false}
 }
+
 async function convertMergedImageToPDF(){
   if(!files.length){setStatus("Add at least one image first.",true);return}
   if(!PDFLib){setStatus("PDF engine is not loaded. Check your internet connection.",true);return}
@@ -880,56 +910,70 @@ async function convertMergedImageToPDF(){
 }
 /* ---------- Merge PDFs ---------- */
 async function mergePDFs(){
-  if(files.length<1){alert("Upload at least one PDF.");return;}
-  const pdf=await PDFLib.PDFDocument.create();
-  for(const f of files){
-    try{
-      const srcPdf=await PDFLib.PDFDocument.load(await f.file.arrayBuffer());
-      const pages=await pdf.copyPages(srcPdf,srcPdf.getPageIndices());
-      pages.forEach(p=>pdf.addPage(p));
-    }catch(e){
-      console.error(e);
-      alert("Could not read one of the PDF files.");
-      return;
-    }
-  }
-  const bytes=await pdf.save();
-  const blob=new Blob([bytes],{type:"application/pdf"});
-
-  // Show the actual merged PDF in the existing Preview panel first.
-  showPdfPreview(blob,"Merged PDF preview");
-
-  // Keep the existing download behavior.
-  downloadBlob(blob,"merged.pdf");
-}
-async function convertMergedPDFToImages(){
   if(!files.length){setStatus("Add at least one PDF first.",true);return}
-  setProgress(2);setStatus("Rendering PDF pages…");
+  if(!PDFLib){setStatus("PDF engine is not loaded. Check your internet connection.",true);return}
+  const b=$("#mergeBtn"),old=b.textContent;b.disabled=true;
   try{
-    const pages=[];
-    for(const f of files){
-      const pdf=await pdfjsLib.getDocument({data:(await f.file.arrayBuffer()).slice(0)}).promise;
-      for(let n=1;n<=pdf.numPages;n++){
-        const page=await pdf.getPage(n),vp=page.getViewport({scale:1.5}),c=document.createElement("canvas");
-        c.width=Math.ceil(vp.width);c.height=Math.ceil(vp.height);
-        await page.render({canvasContext:c.getContext("2d"),viewport:vp}).promise;pages.push(c);
+    setProgress(3);setStatus("Preparing PDF merge…");
+    const layout=$("#pdfLayout")?.value||"vertical";
+    const out=await PDFLib.PDFDocument.create();
+
+    if(layout==="vertical"){
+      // Normal PDF merge: copy real PDF pages into the output document.
+      for(let i=0;i<files.length;i++){
+        const src=await PDFLib.PDFDocument.load(await files[i].file.arrayBuffer());
+        const copied=await out.copyPages(src,src.getPageIndices());
+        copied.forEach(page=>out.addPage(page));
+        setProgress(5+((i+1)/files.length)*75);
+      }
+    }else{
+      // Horizontal / 2-column layouts need PDFEmbeddedPage objects for drawPage().
+      // Keep each embedded page together with its original dimensions.
+      const embeddedPages=[];
+      for(let i=0;i<files.length;i++){
+        const src=await PDFLib.PDFDocument.load(await files[i].file.arrayBuffer());
+        const indices=src.getPageIndices();
+        const embedded=await out.embedPages(src.getPages());
+        for(let j=0;j<embedded.length;j++){
+          const srcPage=src.getPage(indices[j]);
+          embeddedPages.push({page:embedded[j],width:srcPage.getWidth(),height:srcPage.getHeight()});
+        }
+        setProgress(5+((i+1)/files.length)*25);
+      }
+
+      for(let i=0;i<embeddedPages.length;i+=2){
+        const first=embeddedPages[i],second=embeddedPages[i+1];
+        const aw=first.width,ah=first.height;
+        const bw=second?second.width:0,bh=second?second.height:0;
+
+        if(layout==="horizontal"){
+          const w=aw+bw,h=Math.max(ah,bh),sheet=out.addPage([w,h]);
+          sheet.drawPage(first.page,{x:0,y:h-ah,width:aw,height:ah});
+          if(second)sheet.drawPage(second.page,{x:aw,y:h-bh,width:bw,height:bh});
+        }else if(layout==="grid2"){
+          const cw=Math.max(aw,bw),rh=Math.max(ah,bh),sheet=out.addPage([cw*2,rh]);
+          sheet.drawPage(first.page,{x:0,y:rh-ah,width:aw,height:ah});
+          if(second)sheet.drawPage(second.page,{x:cw,y:rh-bh,width:bw,height:bh});
+        }else{
+          // Safety fallback: create a normal page from the embedded page.
+          const sheet=out.addPage([aw,ah]);
+          sheet.drawPage(first.page,{x:0,y:0,width:aw,height:ah});
+          if(second){const sheet2=out.addPage([bw,bh]);sheet2.drawPage(second.page,{x:0,y:0,width:bw,height:bh})}
+        }
+        setProgress(30+Math.min(65,((i+2)/Math.max(1,embeddedPages.length))*65));
       }
     }
-    const layout=$("#pdfLayout").value,gap=24,sheets=[];
-    if(layout==="vertical")pages.forEach(p=>{const c=document.createElement("canvas");c.width=p.width;c.height=p.height;c.getContext("2d").drawImage(p,0,0);sheets.push(c)});
-    else if(layout==="horizontal"){for(let i=0;i<pages.length;i+=2){const a=pages[i],b=pages[i+1],h=Math.max(a.height,b.height),c=document.createElement("canvas");c.width=a.width+(b?gap+b.width:0);c.height=h;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(a,0,(h-a.height)/2);if(b)x.drawImage(b,a.width+gap,(h-b.height)/2);sheets.push(c)}}
-    else{const cw=Math.max(...pages.map(p=>p.width)),ch=Math.max(...pages.map(p=>p.height));for(let i=0;i<pages.length;i+=4){const c=document.createElement("canvas");c.width=cw*2+gap;c.height=ch*2+gap;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);for(let j=0;j<4&&i+j<pages.length;j++){const p=pages[i+j],sc=Math.min(cw/p.width,ch/p.height),w=p.width*sc,h=p.height*sc,col=j%2,row=Math.floor(j/2);x.drawImage(p,col*(cw+gap)+(cw-w)/2,row*(ch+gap)+(ch-h)/2,w,h)}sheets.push(c)}}
-    const mime=$("#imageFormat").value,ext=imageExtForMime(mime),previewBlobs=[];
-    for(let i=0;i<sheets.length;i++){
-      const blob=await canvasBlobForMime(sheets[i],mime);
-      previewBlobs.push(blob);
-      downloadBlob(blob,`merged-pdf-${i+1}.${ext}`);
-    }
-    showMultiImagePreview(previewBlobs, `PDF → ${ext.toUpperCase()} preview (${previewBlobs.length} file${previewBlobs.length===1?"":"s"})`);
-    setProgress(100);setStatus(`${sheets.length} image file${sheets.length===1?"":"s"} created from merged PDF.`);setTimeout(()=>setProgress(-1),700)
-  }catch(e){console.error(e);setProgress(-1);setStatus("PDF to image failed: "+e.message,true)}
-}
 
+    const bytes=await out.save({useObjectStreams:true});
+    const blob=new Blob([bytes],{type:"application/pdf"});
+    showPdfPreview(blob,"Merged PDF preview");
+    setProgress(100);setStatus("PDFs merged successfully.");
+    await downloadBlob(blob,"merged-pdfs.pdf");
+    setTimeout(()=>setProgress(-1),700);
+  }catch(e){
+    console.error(e);setProgress(-1);setStatus("PDF merge failed: "+e.message,true);
+  }finally{b.disabled=false;b.textContent=old}
+}
 
 /* ---------- Split tools ---------- */
 async function splitMergedImage(){
@@ -948,7 +992,7 @@ async function splitMergedImage(){
           const blob=await canvasBlobForMime(c,mime);
           previewBlobs.push(blob);
           const base=source.name.replace(/\.[^.]+$/,'');
-          downloadBlob(blob,`${base}-split.${ext}`);
+          await downloadBlob(blob,`${base}-split.${ext}`); if(i<files.length-1)await waitForDownloadGap();
           setProgress(5+((i+1)/files.length)*90);
         }
         setProgress(100);
@@ -1066,7 +1110,7 @@ async function splitMergedImage(){
       c.getContext("2d").drawImage(img,sx,sy,c.width,c.height,0,0,c.width,c.height);
       const blob=await canvasBlobForMime(c,mime);
       previewBlobs.push(blob);
-      downloadBlob(blob,`${base}-split-${++made}.${ext}`);
+      await downloadBlob(blob,`${base}-split-${++made}.${ext}`); if(i<boxes.length-1)await waitForDownloadGap();
       setProgress(10+(made/boxes.length)*85);
     }
     setProgress(100);
@@ -1077,6 +1121,113 @@ async function splitMergedImage(){
     console.error(e);setProgress(-1);setStatus("Split Image failed: "+e.message,true);
   }
 }
+
+/* ---------- PDF → Image conversion ---------- */
+async function convertMergedPDFToImages(){
+  if(mode!=="pdf"){
+    setStatus("Switch to the PDF tab first.",true);
+    return;
+  }
+  if(!files.length){setStatus("Add at least one PDF first.",true);return}
+  if(typeof pdfjsLib==="undefined" || !pdfjsLib?.getDocument){
+    setStatus("PDF rendering engine is not loaded. Check your internet connection.",true);
+    return;
+  }
+
+  const b=$("#convertBtn");
+  if(b.disabled)return;
+  const oldText=b.textContent;
+  b.disabled=true;
+  setProgress(2);
+  setStatus("Preparing PDF pages for image conversion…");
+
+  try{
+    const mime=$("#imageFormat").value || "image/png";
+    const ext=imageExtForMime(mime);
+    const previewBlobs=[];
+    let totalPages=0, made=0;
+
+    /* First count pages so progress remains meaningful for multiple PDFs. */
+    const pdfDocs=[];
+    for(let fi=0;fi<files.length;fi++){
+      const data=await files[fi].file.arrayBuffer();
+      const pdf=await pdfjsLib.getDocument({data:new Uint8Array(data),useWorkerFetch:true,isEvalSupported:true}).promise;
+      pdfDocs.push(pdf);
+      totalPages+=pdf.numPages;
+    }
+
+    if(!totalPages)throw new Error("The PDF contains no pages.");
+
+    for(let fi=0;fi<pdfDocs.length;fi++){
+      const pdf=pdfDocs[fi];
+      const base=files[fi].name.replace(/\.[^.]+$/,"");
+
+      for(let pageNo=1;pageNo<=pdf.numPages;pageNo++){
+        setStatus(`Rendering PDF ${fi+1}/${pdfDocs.length} • Page ${pageNo}/${pdf.numPages}…`);
+
+        const page=await pdf.getPage(pageNo);
+
+        /* High-quality browser rendering without changing the existing UI. */
+        const baseViewport=page.getViewport({scale:1});
+        const maxDimension=3200;
+        const scale=Math.min(2.0,Math.max(1.5,maxDimension/Math.max(baseViewport.width,baseViewport.height)));
+        const viewport=page.getViewport({scale});
+
+        const canvas=document.createElement("canvas");
+        canvas.width=Math.max(1,Math.ceil(viewport.width));
+        canvas.height=Math.max(1,Math.ceil(viewport.height));
+
+        const ctx=canvas.getContext("2d",{alpha:false});
+        ctx.fillStyle="#ffffff";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        await page.render({
+          canvasContext:ctx,
+          viewport
+        }).promise;
+
+        let blob=await canvasBlobForMime(canvas,mime);
+
+        /* canvas may not support GIF/ICO in a browser. Keep the existing
+           output pipeline safe by using PNG when encoding is unavailable. */
+        let actualExt=ext;
+        if(mime!=="image/png" && blob.type!=="image/png" && blob.type!==mime){
+          actualExt=blob.type==="image/png"?"png":ext;
+        }
+
+        previewBlobs.push(blob);
+        made++;
+
+        await downloadBlob(
+          blob,
+          `${base}-page-${pageNo}.${actualExt}`
+        );
+
+        setProgress(5+(made/totalPages)*90);
+        if(made<totalPages)await waitForDownloadGap(250);
+        canvas.width=1;canvas.height=1;
+        if(page.cleanup)page.cleanup();
+      }
+      if(pdfDocs[fi]?.cleanup)pdfDocs[fi].cleanup();
+    }
+
+    showMultiImagePreview(
+      previewBlobs,
+      `PDF to image preview (${made} page${made===1?"":"s"})`
+    );
+    setProgress(100);
+    setStatus(`${made} PDF page${made===1?"":"s"} converted to image${made===1?"":"s"} successfully.`);
+    setTimeout(()=>setProgress(-1),700);
+  }catch(e){
+    console.error("PDF to Image conversion failed:",e);
+    setProgress(-1);
+    setStatus("PDF to Image failed: "+(e?.message||e),true);
+  }finally{
+    b.disabled=false;
+    b.textContent=oldText;
+  }
+}
+
 async function splitPDF(){
   if(!files.length){setStatus("Add at least one PDF first.",true);return}
   if(!PDFLib){setStatus("PDF engine is not loaded. Check your internet connection.",true);return}
@@ -1088,7 +1239,7 @@ async function splitPDF(){
       const total=src.getPageCount();
       if(total<2){
         const one=await src.save();
-        downloadBlob(new Blob([one],{type:"application/pdf"}),`split-pdf-${fi+1}-part-1.pdf`);
+        await downloadBlob(new Blob([one],{type:"application/pdf"}),`split-pdf-${fi+1}-part-1.pdf`); await waitForDownloadGap();
         continue;
       }
       const cut=Math.ceil(total/2);
@@ -1101,7 +1252,7 @@ async function splitPDF(){
         const bytes=await out.save({useObjectStreams:true});
         const splitBlob=new Blob([bytes],{type:"application/pdf"});
         if(!firstSplitPdfBlob) firstSplitPdfBlob=splitBlob;
-        downloadBlob(splitBlob,`split-pdf-${fi+1}-part-${r+1}.pdf`);
+        await downloadBlob(splitBlob,`split-pdf-${fi+1}-part-${r+1}.pdf`); if(r<ranges.length-1)await waitForDownloadGap();
       }
       setProgress(10+((fi+1)/files.length)*85);
     }
