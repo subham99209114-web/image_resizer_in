@@ -300,6 +300,118 @@ button,input,select{font:inherit}.app{min-height:100vh;height:auto;display:flex;
   .footerFeatureBox{min-width:250px}
 }
 .bgProcessing{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.92);color:#fff;font-weight:600;letter-spacing:.3px}.bgProcessing .stars{width:80%;max-width:700px;text-align:center;font-size:22px;line-height:3;animation:starShine 1s ease-in-out infinite}.bgProcessing.hidden{display:none}@keyframes starShine{0%,100%{opacity:.25;transform:scale(.98)}50%{opacity:1;transform:scale(1.02)}}
+
+/* ===== ARnc Gradient Color Theme — visual colors only ===== */
+:root{
+  --bg:#10131f;
+  --bar:#14182a;
+  --panel:#1b2035;
+  --panel2:#232945;
+  --line:#394264;
+  --text:#f7f8ff;
+  --muted:#aeb7d2;
+  --blue:#55c7ff;
+  --blue2:#477cff;
+  --danger:#ff5d78;
+}
+html,body{
+  background:linear-gradient(135deg,#0d1220 0%,#17183a 45%,#102f4d 100%);
+}
+.top{
+  background:linear-gradient(90deg,#11162a 0%,#20204a 50%,#123a59 100%);
+  border-bottom-color:#3d4d78;
+}
+.brand i{color:#62cfff}
+.topbtn:hover{background:linear-gradient(135deg,#26305a,#174b6c);border-color:#4d70a8}
+.sep{background:#3e4d76}
+.primary{background:linear-gradient(135deg,#087fc9,#596cff)!important;border-color:#57c7ff!important}
+.primary:hover{background:linear-gradient(135deg,#1298e8,#6878ff)!important}
+.sidebar{
+  background:linear-gradient(180deg,#171c32 0%,#20254a 55%,#123b56 100%);
+  border-right-color:#3c4b72;
+}
+.sidebtn:hover,.sidebtn.active{
+  background:linear-gradient(135deg,#303967,#15536f);
+}
+.sidebtn.active{box-shadow:inset 3px 0 #5bc9ff}
+.stage{
+  background-color:#101a29;
+  background-image:
+    linear-gradient(45deg,#17243a 25%,transparent 25%),
+    linear-gradient(-45deg,#17243a 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#17243a 75%),
+    linear-gradient(-45deg,transparent 75%,#17243a 75%);
+}
+.empty{
+  background:linear-gradient(135deg,#202644,#153c55);
+  border-color:#5a6d9b;
+  color:#c5cce0;
+}
+.empty h2{color:#fff}
+.filepick{background:linear-gradient(135deg,#168de2,#5b63ff)}
+.cropBox{border-color:#69d1ff;background:#39a9ff22}
+.bottom{
+  background:linear-gradient(90deg,#11162a,#20234a,#123b56);
+  border-top-color:#3d4d78;
+  color:#b8c1d9;
+}
+.zoom button{
+  background:linear-gradient(135deg,#2a3153,#164c68);
+  color:#eef4ff;
+}
+.right{
+  background:linear-gradient(145deg,#1a1f35 0%,#24294a 55%,#17384d 100%);
+  border-left-color:#465579;
+}
+.panelHead{border-bottom-color:#465579}
+.section{border-bottom-color:#3d4969}
+.sectionTitle{color:#f0f3ff}
+.control label{color:#dce3f5}
+.num{color:#aeb8d0}
+.range{accent-color:#59caff}
+.action{
+  background:linear-gradient(135deg,#2b3150,#17445d);
+  border-color:#4a5b80;
+  color:#f0f4ff;
+}
+.action:hover{background:linear-gradient(135deg,#37406a,#1c5873)}
+.action.active{
+  border-color:#61caff;
+  background:linear-gradient(135deg,#294f71,#3c3e79);
+}
+.select,.textin,.numin{
+  background:linear-gradient(135deg,#12182b,#1d2340);
+  color:#f1f4ff;
+  border-color:#4b5b7d;
+}
+.color{
+  background:linear-gradient(135deg,#12182b,#1d2340);
+  border-color:#4b5b7d;
+}
+.small{color:#aeb8d0}
+.tabs{border-bottom-color:#465579}
+.tab{color:#aeb8d0}
+.tab.active{color:#fff;border-bottom-color:#61caff}
+
+/* Keep the feature cards black as requested; only their surrounding area gets the gradient. */
+.siteFooter{
+  background:linear-gradient(135deg,#10152a 0%,#20204b 50%,#123d58 100%);
+  border-top-color:#3d4d78;
+}
+.footerFeatureBox{
+  background:#050505;
+  border-color:#66666a;
+}
+.footerFeatureBox:hover{background:#181818;border-color:#77777b}
+.footerFeatureBox.expanded{background:#151515;border-color:#6a6a70}
+.footerAbout{
+  border-top-color:#465579;
+  color:#c8d0e4;
+}
+.footerAbout h2{color:#fff}
+.footerFeatureSummary{color:#f5f5f5}
+.footerFeatureDetailsLink{color:#9bdcff}
+
 </style>
 </head>
 <body>
