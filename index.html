@@ -4906,6 +4906,23 @@ async function loadAIEngine(){
    The editor/render pipeline scales the transparent result back to the
    selected output size, so there is no expensive second full-resolution
    PNG encode/decode step. */
+async function createFastAIInputFromImage(img,maxDim){
+  const width=img.naturalWidth||img.width;
+  const height=img.naturalHeight||img.height;
+  const scale=Math.min(1,maxDim/Math.max(width,height));
+  const w=Math.max(1,Math.round(width*scale));
+  const h=Math.max(1,Math.round(height*scale));
+  const canvas=document.createElement("canvas");
+  canvas.width=w; canvas.height=h;
+  const ctx=canvas.getContext("2d",{alpha:true});
+  ctx.imageSmoothingEnabled=true;
+  ctx.imageSmoothingQuality="medium";
+  ctx.drawImage(img,0,0,w,h);
+  return await new Promise((resolve,reject)=>
+    canvas.toBlob(b=>b?resolve(b):reject(new Error("Could not create AI working image.")),"image/png")
+  );
+}
+
 async function createFastAIInput(file,maxDim){
   const img=await fileToImage(file);
   const width=img.naturalWidth||img.width;
