@@ -1403,7 +1403,7 @@ body {
     <input
       type="file"
       id="fileInput"
-      accept="image/*"
+      accept="image/*,.heic,.heif,.avif,.tif,.tiff,.bmp,.ico,.jfif,.jxl,.svg,.gif,.webp,.jpg,.jpeg,.png"
       multiple
       hidden
     >
@@ -2325,6 +2325,11 @@ body {
 <div class="toast" id="toast"></div>
 
 
+<!-- Optional decoders for formats that many browsers cannot decode natively.
+     These do not change the existing UI/design. -->
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/utif@3.1.0/UTIF.min.js"></script>
+
 <script>
 "use strict";
 
@@ -2357,61 +2362,175 @@ let currentImage = null;
    ========================================================= */
 
 $("fileInput").addEventListener("change", e => {
-  handleFiles([...e.target.files]);
+  const selected = [...e.target.files];
+  handleFiles(selected);
+  // Allows the user to choose the same image again later.
+  e.target.value = "";
 });
 
 function addMore(){
+  // Keep this as a direct input click so mobile browsers can show
+  // their native "Camera / Files" chooser instead of a custom picker.
   $("fileInput").click();
 }
 
-function handleFiles(files){
+/*
+ * Broad image detection.
+ * Some phones/file managers return an empty or generic MIME type for
+ * HEIC/HEIF, TIFF, JXL, RAW and other extensions, so MIME-only filtering
+ * would incorrectly reject otherwise valid image files.
+ */
+function isImageFile(file){
+  if(!file) return false;
+  const type=(file.type||"").toLowerCase();
+  if(type.startsWith("image/")) return true;
 
-  const valid = files.filter(file =>
-    file.type.startsWith("image/")
-  );
+  const name=(file.name||"").toLowerCase();
+  const ext=name.includes(".") ? name.slice(name.lastIndexOf(".")+1) : "";
+  return [
+    "jpg","jpeg","jpe","jfif","pjpeg","pjp",
+    "png","apng","gif","webp","avif","heic","heif",
+    "tif","tiff","bmp","dib","ico","svg","svgz","jxl",
+    "raw","arw","cr2","cr3","nef","nrw","orf","rw2","raf",
+    "dng","pef","srw","3fr","iiq","rwl","x3f","kdc","dcr",
+    "erf","mrw","mos","mef","ptx","cap","gpr"
+  ].includes(ext);
+}
 
-  if(!valid.length){
+function fileExtension(file){
+  const name=(file && file.name || "").toLowerCase();
+  return name.includes(".") ? name.slice(name.lastIndexOf(".")+1) : "";
+}
+
+/*
+ * Decode the selected file into an Image object.
+ * Native browser formats use the normal Image decoder. HEIC/HEIF and
+ * TIFF get a client-side conversion fallback when the browser itself
+ * cannot decode them. RAW camera files are accepted by the picker, but
+ * are only processable when the current browser provides a RAW decoder.
+ */
+async function decodeImageFile(file){
+  const ext=fileExtension(file);
+  const type=(file.type||"").toLowerCase();
+
+  // HEIC / HEIF fallback for iPhone/Android photos.
+  if((ext==="heic" || ext==="heif" || type==="image/heic" || type==="image/heif") && typeof heic2any==="function"){
+    try{
+      const converted=await heic2any({blob:file,toType:"image/png",quality:1});
+      const blob=Array.isArray(converted) ? converted[0] : converted;
+      return await blobToImage(blob);
+    }catch(err){
+      console.warn("HEIC/HEIF conversion failed:",err);
+    }
+  }
+
+  // TIFF fallback using UTIF.js when available.
+  if((ext==="tif" || ext==="tiff" || type==="image/tiff") && window.UTIF){
+    try{
+      const buffer=await file.arrayBuffer();
+      const ifds=UTIF.decode(buffer);
+      if(ifds && ifds.length){
+        UTIF.decodeImage(buffer,ifds[0]);
+        const rgba=UTIF.toRGBA8(ifds[0]);
+        const w=ifds[0].width, h=ifds[0].height;
+        const canvas=document.createElement("canvas");
+        canvas.width=w; canvas.height=h;
+        const c=canvas.getContext("2d",{alpha:true});
+        c.putImageData(new ImageData(new Uint8ClampedArray(rgba),w,h),0,0);
+        return await blobToImage(await canvasToBlob(canvas,"image/png"));
+      }
+    }catch(err){
+      console.warn("TIFF conversion failed:",err);
+    }
+  }
+
+  // Normal browser decoder: JPG/JPEG/PNG/GIF/WebP/AVIF/SVG/BMP/ICO/JXL
+  // where supported by the device/browser.
+  try{
+    return await blobToImage(file);
+  }catch(err){
+    const label=file.name || "this image";
+    throw new Error('This browser cannot decode "'+label+'". The file was accepted, but a browser decoder for this format is required.');
+  }
+}
+
+function blobToImage(blob){
+  /*
+   * IMPORTANT: keep the image source alive.
+   * The previous version used a temporary ObjectURL and revoked it as soon
+   * as the image loaded. The editor could still display the decoded image,
+   * but the thumbnail in the Images list used item.image.src and therefore
+   * showed a broken-image icon. Using a data URL keeps the source available
+   * for thumbnails, previews, crop tools and the existing editor pipeline.
+   */
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>{
+      const img=new Image();
+      img.onload=()=>resolve(img);
+      img.onerror=()=>reject(new Error("Could not decode image."));
+      img.src=reader.result;
+    };
+    reader.onerror=()=>reject(new Error("Could not read image file."));
+    reader.readAsDataURL(blob);
+  });
+}
+
+function canvasToBlob(canvas,type){
+  return new Promise((resolve,reject)=>{
+    canvas.toBlob(blob=>blob ? resolve(blob) : reject(new Error("Could not create image.")),type);
+  });
+}
+
+async function handleFiles(files){
+  const candidates=files.filter(isImageFile);
+  const rejected=files.length-candidates.length;
+
+  if(!candidates.length){
     toast("Please select valid image files.");
     return;
   }
 
-  valid.forEach(file => {
+  let added=0;
+  let failed=0;
 
-    const reader = new FileReader();
+  // Process in order so the existing file list/current-image behavior stays stable.
+  for(const file of candidates){
+    try{
+      const img=await decodeImageFile(file);
 
-    reader.onload = e => {
+      state.files.push({
+        file:file,
+        image:img,
+        name:file.name,
+        originalSize:file.size,
+        cutoutImage:null,
+        cutoutUrl:null,
+        settings:defaultSettings()
+      });
 
-      const img = new Image();
+      if(state.current === -1){
+        state.current=0;
+      }
 
-      img.onload = () => {
+      $("app").classList.add("active");
+      renderFileList();
+      loadCurrent();
+      added++;
+    }catch(err){
+      failed++;
+      console.warn("Image skipped:",file.name,err);
+    }
+  }
 
-        state.files.push({
-          file:file,
-          image:img,
-          name:file.name,
-          originalSize:file.size,
-          cutoutImage:null,
-          cutoutUrl:null,
-          settings:defaultSettings()
-        });
-
-        if(state.current === -1){
-          state.current = 0;
-        }
-
-        $("app").classList.add("active");
-        renderFileList();
-        loadCurrent();
-
-      };
-
-      img.src = e.target.result;
-    };
-
-    reader.readAsDataURL(file);
-  });
-
-  toast(valid.length + " image(s) added.");
+  if(added){
+    let msg=added + " image(s) added.";
+    if(failed) msg += " " + failed + " image(s) could not be decoded by this browser.";
+    if(rejected) msg += " " + rejected + " non-image file(s) ignored.";
+    toast(msg);
+  }else{
+    toast("Selected image format is not supported by this browser.");
+  }
 }
 
 
@@ -4765,43 +4884,74 @@ function currentItem(){
 
 async function loadAIEngine(){
   if(state.aiModule) return state.aiModule;
-  setAIStatus("Loading AI engine… first run may take longer while the model is cached.");
+
+  setAIStatus("Loading AI engine… first run can take a little time while the model downloads.");
+
+  /*
+     IMPORTANT:
+     - Do not run the IMG.LY package through a Web Worker here.  A standalone
+       HTML/Blogger page can fail when the worker tries to resolve ONNX/WASM
+       module URLs.
+     - Load the browser bundle directly from a CDN and explicitly point the
+       model/WASM assets to IMG.LY's public asset directory.
+  */
   const urls=[
     "https://esm.sh/@imgly/background-removal@1.7.0?bundle",
-    "https://esm.sh/@imgly/background-removal@1.4.5?bundle"
+    "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm"
   ];
+
   let lastError=null;
   for(const url of urls){
     try{
       const mod=await import(url);
       const remover=mod.default || mod.removeBackground;
-      if(typeof remover!=="function") throw new Error("AI function was not exported.");
+      if(typeof remover!=="function") throw new Error("AI background-removal function was not exported.");
       state.aiModule=remover;
       return remover;
-    }catch(err){ lastError=err; console.warn("AI engine load failed",url,err); }
+    }catch(err){
+      lastError=err;
+      console.warn("AI engine load failed:",url,err);
+    }
   }
-  throw lastError || new Error("Unable to load AI engine.");
+
+  throw lastError || new Error("Unable to load the AI background-removal engine.");
 }
 
-/* Fast AI input: inference is performed on a smaller copy for large images.
-   The editor/render pipeline scales the transparent result back to the
-   selected output size, so there is no expensive second full-resolution
-   PNG encode/decode step. */
-async function createFastAIInput(file,maxDim){
-  const img=await fileToImage(file);
+/*
+   Always create the AI input from the image that the editor has already
+   decoded.  This is important for HEIC/HEIF/TIFF and other formats which may
+   be converted by the upload pipeline before reaching the editor.
+*/
+async function createFastAIInputFromImage(img,maxDim){
   const width=img.naturalWidth||img.width;
   const height=img.naturalHeight||img.height;
+  if(!width || !height) throw new Error("The selected image could not be decoded.");
+
   const scale=Math.min(1,maxDim/Math.max(width,height));
-  if(scale>=1) return file;
   const w=Math.max(1,Math.round(width*scale));
   const h=Math.max(1,Math.round(height*scale));
+
   const canvas=document.createElement("canvas");
-  canvas.width=w; canvas.height=h;
-  const ctx=canvas.getContext("2d",{alpha:true});
+  canvas.width=w;
+  canvas.height=h;
+  const ctx=canvas.getContext("2d",{alpha:true,willReadFrequently:false});
+  if(!ctx) throw new Error("Canvas is not available in this browser.");
   ctx.imageSmoothingEnabled=true;
-  ctx.imageSmoothingQuality="medium";
+  ctx.imageSmoothingQuality="high";
   ctx.drawImage(img,0,0,w,h);
-  return await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("Could not create AI working image.")),"image/jpeg",0.88));
+
+  return await new Promise((resolve,reject)=>{
+    canvas.toBlob(
+      blob=>blob?resolve(blob):reject(new Error("Could not create the AI working image.")),
+      "image/png"
+    );
+  });
+}
+
+/* Kept for compatibility with the rest of the editor. */
+async function createFastAIInput(file,maxDim){
+  const img=await fileToImage(file);
+  return createFastAIInputFromImage(img,maxDim);
 }
 
 function fileToImage(file){
@@ -4818,49 +4968,92 @@ async function runAIBackgroundRemoval(){
   const item=currentItem();
   if(!item){toast("Please upload an image first.");return;}
   if(state.aiBusy){toast("AI background removal is already running.");return;}
-  state.aiBusy=true;
-  $("aiRemoveBtn").disabled=true;
-  $("aiRemoveBtn").textContent="⏳ AI Processing…";
-  setProgress(5);
-  try{
-    const br=item.settings.backgroundRemoval || (item.settings.backgroundRemoval=defaultSettings().backgroundRemoval);
-    br.subjectMode=$("aiSubjectMode").value;
-    const removeBackground=await loadAIEngine();
-    setProgress(18);
 
-    /* 1024px keeps inference much faster on large phone/camera photos. */
-    const source=await createFastAIInput(item.file,1024);
-    setProgress(28);
+  state.aiBusy=true;
+  const btn=$("aiRemoveBtn");
+  if(btn){
+    btn.disabled=true;
+    btn.textContent="⏳ AI Processing…";
+  }
+  setProgress(3);
+
+  try{
+    const br=item.settings.backgroundRemoval ||
+      (item.settings.backgroundRemoval=defaultSettings().backgroundRemoval);
+
+    br.subjectMode=$("aiSubjectMode") ? $("aiSubjectMode").value : "auto";
+
+    /* The editor's decoded image is used, not the original file extension. */
+    const workingImage=item.image || currentImage;
+    if(!workingImage) throw new Error("No decoded image is available for AI processing.");
+
+    const removeBackground=await loadAIEngine();
+    setProgress(12);
+
+    /*
+       1024px is a practical mobile/desktop compromise. The result is scaled
+       back to the editor output when rendered. PNG keeps transparency and
+       avoids another JPEG decode step.
+    */
+    const source=await createFastAIInputFromImage(workingImage,1024);
+    setProgress(25);
 
     const resultBlob=await removeBackground(source,{
       debug:false,
       model:"isnet_quint8",
-      proxyToWorker:true,
+      proxyToWorker:false,
+      publicPath:"https://staticimgly.com/@imgly/background-removal-data/1.7.0/dist/",
       output:{type:"foreground",format:"image/png"},
       progress:(key,current,total)=>{
-        if(total) setProgress(Math.min(92,28+Math.round(current/total*64)));
+        if(total){
+          const ratio=Math.max(0,Math.min(1,current/total));
+          setProgress(Math.min(94,25+Math.round(ratio*69)));
+        }
       }
     });
 
-    if(item.cutoutUrl) URL.revokeObjectURL(item.cutoutUrl);
-    item.cutoutUrl=URL.createObjectURL(resultBlob);
+    if(!(resultBlob instanceof Blob) || resultBlob.size===0){
+      throw new Error("AI returned an empty result.");
+    }
+
+    if(item.cutoutUrl){
+      try{URL.revokeObjectURL(item.cutoutUrl);}catch(e){}
+    }
+
+    const resultUrl=URL.createObjectURL(resultBlob);
     const cutout=new Image();
-    await new Promise((resolve,reject)=>{cutout.onload=resolve;cutout.onerror=reject;cutout.src=item.cutoutUrl;});
+
+    await new Promise((resolve,reject)=>{
+      cutout.onload=resolve;
+      cutout.onerror=()=>reject(new Error("AI result could not be decoded."));
+      cutout.src=resultUrl;
+    });
+
+    item.cutoutUrl=resultUrl;
     item.cutoutImage=cutout;
-    br.enabled=true; br.method="ai";
-    syncControls(item.settings); render();
+    br.enabled=true;
+    br.method="ai";
+
+    syncControls(item.settings);
+    render();
     setProgress(100);
     setAIStatus("AI background removed successfully. Select a background mode above.");
-    toast("AI background removed.");
+    toast("AI background removed successfully.");
+
   }catch(err){
-    console.error(err);
-    setAIStatus("AI removal failed: "+(err.message||err)+". Internet is required for the first AI run. Color Removal can be used for simple backgrounds.");
-    toast("AI background removal failed.");
+    console.error("AI background removal error:",err);
+    const msg=(err && err.message)?err.message:String(err);
+    setAIStatus("AI removal failed: "+msg);
+    toast("AI background removal failed. Check internet connection and try again.");
   }finally{
     state.aiBusy=false;
-    $("aiRemoveBtn").disabled=false;
-    $("aiRemoveBtn").textContent="✨ AI Remove Background";
-    setTimeout(()=>$("progress").style.display="none",700);
+    if(btn){
+      btn.disabled=false;
+      btn.textContent="✨ AI Remove Background";
+    }
+    setTimeout(()=>{
+      if($("progress")) $("progress").style.display="none";
+    },900);
   }
 }
 
