@@ -229,6 +229,135 @@ body[data-theme="violet"]{--accentA:#8b5cf6;--accentB:#ec4899;--accentC:#38bdf8}
   .output-preview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
+
+/* ---------- Footer feature cards + expandable long descriptions ---------- */
+.arnc-footer{
+  margin-top:28px;
+  padding:24px 0 0;
+  border-top:1px solid var(--line);
+}
+.arnc-footer-title{
+  margin:0 0 7px;
+  font-size:clamp(20px,3vw,28px);
+  letter-spacing:-.35px;
+}
+.arnc-footer-subtitle{
+  margin:0 0 18px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+}
+.arnc-feature-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(245px,1fr));
+  gap:12px;
+}
+.arnc-feature-card{
+  position:relative;
+  overflow:hidden;
+  min-height:176px;
+  padding:17px 16px 15px;
+  border:1px solid var(--line);
+  border-radius:17px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.105),rgba(255,255,255,.045)),
+    linear-gradient(135deg,rgba(79,140,255,.06),rgba(124,92,255,.05));
+  box-shadow:0 14px 35px rgba(0,0,0,.16);
+  cursor:pointer;
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease,background .2s ease;
+}
+.arnc-feature-card:hover{
+  transform:translateY(-2px);
+  border-color:rgba(79,140,255,.38);
+  box-shadow:0 18px 42px rgba(0,0,0,.22);
+}
+.arnc-feature-card.open{
+  min-height:0;
+  border-color:rgba(124,92,255,.46);
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.055)),
+    linear-gradient(135deg,rgba(79,140,255,.09),rgba(124,92,255,.10));
+}
+.arnc-feature-icon{
+  width:42px;height:42px;display:grid;place-items:center;
+  margin-bottom:11px;border-radius:13px;
+  font-size:21px;
+  background:linear-gradient(135deg,var(--accentA),var(--accentB));
+  box-shadow:0 9px 24px rgba(0,0,0,.18);
+}
+.arnc-feature-name{
+  margin:0;
+  font-size:16px;
+  line-height:1.3;
+  font-weight:850;
+}
+.arnc-feature-short{
+  margin:7px 0 10px;
+  color:#cbd7e8;
+  font-size:12.5px;
+  line-height:1.6;
+}
+.arnc-feature-more{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  color:#9fc0ff;
+  font-size:12px;
+  font-weight:800;
+}
+.arnc-feature-arrow{
+  display:inline-block;
+  transition:transform .2s ease;
+}
+.arnc-feature-card.open .arnc-feature-arrow{
+  transform:rotate(180deg);
+}
+.arnc-feature-long{
+  display:none;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid var(--line);
+  color:#d6dfed;
+  font-size:12.5px;
+  line-height:1.78;
+}
+.arnc-feature-card.open .arnc-feature-long{
+  display:block;
+}
+.arnc-about{
+  margin-top:22px;
+  padding:22px 20px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.085),rgba(255,255,255,.035));
+  box-shadow:0 18px 48px rgba(0,0,0,.18);
+}
+.arnc-about h2{
+  margin:0 0 12px;
+  font-size:21px;
+}
+.arnc-about p{
+  margin:0 0 13px;
+  color:#cbd6e7;
+  font-size:13px;
+  line-height:1.82;
+}
+.arnc-about p:last-child{margin-bottom:0}
+.arnc-footer-note{
+  margin-top:16px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6;
+}
+@media(max-width:700px){
+  .arnc-footer{margin-top:22px}
+  .arnc-feature-grid{grid-template-columns:1fr}
+  .arnc-feature-card{min-height:0;padding:15px}
+  .arnc-about{padding:18px 15px}
+}
+
 </style>
 </head>
 <body>
@@ -974,5 +1103,214 @@ $("#mergeBtn").onclick=()=>mode==="image"?mergeImages():mergePDFs();
 $("#convertBtn").onclick=()=>mode==="image"?convertMergedImageToPDF():convertMergedPDFToImages();
 $("#splitBtn").onclick=()=>mode==="image"?splitMergedImage():splitPDF();
 </script>
+
+<footer class="arnc-footer" id="arncFooter">
+  <h2 class="arnc-footer-title">✨ Website Features</h2>
+  <p class="arnc-footer-subtitle">Each feature is shown in its own box. Click once to read the long description; click the same box again to return it to the compact view.</p>
+  <div class="arnc-feature-grid">
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">🖼️</div>
+        <h3 class="arnc-feature-name">Merge Images</h3>
+        <p class="arnc-feature-short">Combine multiple images into one organized output.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">Merge Images is the central image-combining function of Merge Studio. You can add multiple supported image files and arrange them before producing one combined image. The application keeps the existing upload, list, ordering, crop, preview, layout, and export workflow together so that the merge operation remains simple and predictable. The Vertical layout places images one below another, the Horizontal layout places them side by side, and the two-column grid layout organizes the source images into a compact grid. After the merge is prepared, the result is shown in the existing Preview area before the download is completed. The output format can be selected from the available image format menu, allowing the same editing session to end in JPG, PNG, WEBP, BMP, GIF, AVIF, or ICO where the browser and the built-in conversion path support the selected format. This feature is useful for collages, document-style image sheets, comparison images, combined screenshots, product image boards, photo collections, and other situations where several separate images need to become one file without introducing a separate application.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">📄</div>
+        <h3 class="arnc-feature-name">Merge PDFs</h3>
+        <p class="arnc-feature-short">Combine uploaded PDF documents into one PDF file.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">Merge PDFs lets you select multiple PDF documents and combine their pages into a single PDF. The existing interface does not need a different page for this operation: the PDF tab changes the input mode while retaining the same overall studio layout. Each uploaded PDF appears in the file list, where it can be moved upward or downward, removed, or opened in the crop-pages workflow. When Merge PDFs is used, the application loads each source PDF and copies its pages into a new PDF in the same order as the current file list. The resulting document is displayed in the existing Preview panel so you can see the generated PDF before or while downloading it. This is useful for joining reports, scanned documents, application papers, receipts, study notes, project documents, and other PDF collections. Because the merge is performed in the browser with the existing PDF library, the page-combining workflow remains integrated with the site&#x27;s client-side processing approach and does not require changing the visual design of the studio.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">↕️</div>
+        <h3 class="arnc-feature-name">Reorder Files</h3>
+        <p class="arnc-feature-short">Drag files or use the arrow controls to change their final order.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">Reorder Files controls the sequence used by the merge operations. Every uploaded item appears in the existing list with a drag handle and upward and downward controls. You can drag an item to another position when working with several images or PDFs, or use the arrow buttons for precise movement. The order visible in the list is important because the merge functions process the files in that sequence. This means you can build a document or image collection in the exact order you want before pressing the final merge action. The feature is deliberately integrated into the existing file list rather than creating a second ordering screen, so the original workflow remains familiar. It is useful when combining pages that must follow a particular narrative, putting photographs into a chronological sequence, arranging scanned forms, preparing a presentation sheet, or correcting the order of files after uploading them in the wrong sequence.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">✂️</div>
+        <h3 class="arnc-feature-name">Crop Image</h3>
+        <p class="arnc-feature-short">Open the crop studio to select, resize, zoom, rotate, and save an image crop.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">Crop Image opens the existing crop studio for the selected image. The crop workspace provides a visible selection overlay with eight resize handles, allowing the selection to be moved and resized directly over the image. The crop toolbar also contains reset, undo, redo, zoom controls, aspect-ratio selection, rotation, save, and cancel controls. The rotation control rotates the image preview in ninety-degree steps while the crop selection remains an independently editable area in the studio. The aspect control can cycle through free selection and common proportions such as square, four-to-three, sixteen-to-nine, three-to-four, and nine-to-sixteen. When Save Crop is pressed, the selected area is rendered into a new image file while preserving the existing file workflow and updating the item&#x27;s preview. The feature is useful for removing unwanted edges, preparing social-media images, focusing on a subject, creating document snippets, or making consistent image compositions before merging or exporting.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">📑</div>
+        <h3 class="arnc-feature-name">Crop PDF Pages</h3>
+        <p class="arnc-feature-short">Select the visible page area for PDF pages before saving the cropped PDF.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">Crop PDF Pages uses the same crop-studio concept for PDF documents. When a PDF item is opened, its pages can be rendered for visual selection, and page navigation controls allow you to move between pages. The crop selection can be adjusted for each page, while the existing PDF crop workflow stores the selection and applies the resulting crop boxes to the source PDF pages when the operation is saved. This provides a practical way to remove margins, trim scanned paper, focus a page on its useful content, or standardize page framing without first converting the document to images. The existing controls for previous page, next page, page selection, reset, undo, redo, zoom, aspect selection, save, and cancel remain part of the same studio. The purpose of the footer description is only to explain the feature; it does not replace or alter the actual PDF crop controls already present in the website.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">👁️</div>
+        <h3 class="arnc-feature-name">Live Preview</h3>
+        <p class="arnc-feature-short">See processed image or PDF results inside the existing Preview panel.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">Live Preview provides a visual result area inside the main panel. When an operation produces an image, the preview displays the generated image; when an operation produces a PDF, the preview uses the PDF viewer area; and when an operation creates several image outputs, the preview can display them as a grid. This gives the user a quick visual checkpoint without changing the existing export process. The preview area also reports a short status message describing what has been produced, such as a merged image, cropped image, merged PDF, or PDF-to-image result. Preview object URLs are managed by the application so that temporary browser resources can be released when a new preview replaces the old one. This is particularly useful for checking layout, crop results, conversion output, and split results before leaving the current editing session.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">🎨</div>
+        <h3 class="arnc-feature-name">Image Layouts</h3>
+        <p class="arnc-feature-short">Choose vertical, horizontal, or two-column grid arrangements.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">Image Layouts determine how multiple source images are placed on the merged canvas. Vertical mode creates a tall composition with the images stacked one after another and a consistent gap between them. Horizontal mode creates a wide composition with the images arranged side by side and scaled to a common height. The two-column grid mode places images into a structured two-column arrangement with consistent cells. The layout selection is part of the existing export bar and works with the selected image output format. The layout system is useful for creating contact sheets, before-and-after comparisons, long image strips, photo boards, simple collages, and document-like collections. The design intentionally keeps the control compact so it does not replace or hide the site&#x27;s other functions.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">💾</div>
+        <h3 class="arnc-feature-name">Image Format Export</h3>
+        <p class="arnc-feature-short">Choose the available image format before image-based export.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">Image Format Export controls the format used by image-producing operations. The current interface provides selections for JPG, PNG, WEBP, BMP, GIF, AVIF, and ICO. The application uses browser canvas conversion when a native format is available and contains a BMP conversion path for cases where direct browser encoding is unavailable. The chosen format is also reflected in the generated filename extension. This makes it possible to use the same source images for different output requirements without changing the rest of the editing workflow. For example, PNG can be useful where lossless image data is desired, JPG can be convenient for broadly compatible photographic output, and WEBP can be useful for web-oriented images. Actual browser support can vary by format, so the application retains its existing fallback behavior rather than changing the design or replacing the export controls.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">🔄</div>
+        <h3 class="arnc-feature-name">Image ↔ PDF Conversion</h3>
+        <p class="arnc-feature-short">Convert a merged image to PDF or PDF pages to image files.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">The conversion tools connect the image and PDF workflows. In image mode, Convert Image to PDF takes the current merged image composition and creates a PDF containing that composition. In PDF mode, Convert PDF to Image renders the PDF pages into image canvases and produces image files using the selected image output format. The existing progress indicator communicates that a conversion is running, and the generated result is shown in the Preview area where appropriate. This makes the studio useful for both directions of a common document workflow: turning several photographs or scans into a PDF, or turning PDF pages into image files for further image-based handling. The conversion actions remain in the existing export controls so that the original page structure and user workflow are preserved.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">✂️</div>
+        <h3 class="arnc-feature-name">Split Image / Split PDF</h3>
+        <p class="arnc-feature-short">Separate merged image sections or divide PDF documents into parts.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">Split Image can work with multiple uploaded images by exporting the individual source images separately, while a single merged image can be analyzed for the white separator bands generated by the site&#x27;s merge process. When clear separators are detected, the application extracts the individual regions and creates separate image outputs. Split PDF works with PDF documents and divides multi-page PDFs into two parts according to the existing split logic, while a one-page document can be exported as its own part. Progress is displayed during longer operations and the first relevant result can be shown in the existing Preview panel. These tools are useful when a combined file needs to be separated again, particularly for documents or image sheets that were previously assembled with the same studio.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">📥</div>
+        <h3 class="arnc-feature-name">Choose Files &amp; Drag Drop</h3>
+        <p class="arnc-feature-short">Add multiple images or PDFs using the picker or the existing drop zone.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">Choose Files &amp; Drag Drop is the entry point for adding material to the studio. The file picker accepts the appropriate image or PDF input depending on the active tab, while the visible drop zone accepts dragged files. In image mode, the application recognizes common formats and also includes decoding support for HEIC/HEIF and TIFF through the libraries already present in the original file. Each accepted image is checked for browser decodability before it is placed into the working list. PDFs are accepted in PDF mode and remain associated with their original file data until an operation is performed. This design keeps uploading straightforward while allowing multiple files to be prepared in a single session.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">🔍</div>
+        <h3 class="arnc-feature-name">Zoom, Aspect &amp; Rotate</h3>
+        <p class="arnc-feature-short">Fine-tune the crop workspace with zoom, proportion, and ninety-degree rotation.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">Zoom, Aspect &amp; Rotate are crop-studio controls designed to make selection easier and more precise. Zoom can be increased or decreased within the existing crop workspace, helping you inspect details or position a selection more comfortably. The aspect control cycles through free selection and common proportions, which is useful when a final image must fit a particular shape. Rotate changes the crop preview in ninety-degree increments, allowing the source image to be viewed in a different orientation before the crop is saved. Undo and redo work alongside these adjustments so that changes can be explored without losing the previous crop state. Together, these controls make the crop area a more complete editing workspace while keeping the same visual structure and controls already present in the uploaded site.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">↶</div>
+        <h3 class="arnc-feature-name">Undo &amp; Redo Crop Changes</h3>
+        <p class="arnc-feature-short">Step backward or forward through crop adjustments without leaving the studio.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">Undo &amp; Redo Crop Changes provide a simple editing history for the crop workspace. Before a major crop adjustment is committed, the current crop state can be stored in the existing history. Undo returns to an earlier state, while redo restores a state that was undone. The crop workspace also clears future history when a new branch of edits is created, which is standard behavior for an interactive editing history. This is useful when experimenting with crop boundaries, zoom, rotation, or other selection changes. Instead of repeatedly closing and reopening the crop tool, you can refine the selection in place and move backward or forward through recent decisions. The feature is available within the same crop interface and does not require a separate editor screen.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">🗑️</div>
+        <h3 class="arnc-feature-name">Clear, Sort &amp; Remove</h3>
+        <p class="arnc-feature-short">Manage the working file list with clear-all, name sorting, and individual removal.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">Clear, Sort &amp; Remove keep the working list organized. Clear all removes the current file collection so a new session can be started without manually deleting every item. Sort name orders the visible files by filename using natural numeric-aware comparison, which helps lists containing names such as image2 and image10 appear in an intuitive order. The Remove action deletes one selected item from the working collection. These management tools are especially useful after testing several layouts or conversions, when only a subset of uploaded files should remain, or when a fresh merge needs to be prepared. They work within the existing list toolbar and do not replace the drag-and-drop ordering system.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">🎨</div>
+        <h3 class="arnc-feature-name">Theme Selection</h3>
+        <p class="arnc-feature-short">Switch among the existing Aurora, Ocean Blue, Sunset, Emerald, and Violet themes.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">Theme Selection changes the accent palette without replacing the site&#x27;s underlying layout. The current theme selector offers Aurora, Ocean Blue, Sunset, Emerald, and Violet. The chosen theme is applied through CSS variables and is stored in browser local storage so the selection can persist across reloads in the same browser context. The theme affects the visual accents used by the studio, including gradients, buttons, and related highlighted elements. It is intentionally separated from the core image and PDF processing functions, meaning changing the theme does not alter the files, crop state, merge logic, or conversion behavior. The footer cards use the same accent variables, so they visually belong to the existing website instead of looking like a separate component.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">🔒</div>
+        <h3 class="arnc-feature-name">Client-Side Processing</h3>
+        <p class="arnc-feature-short">The existing site performs its main image and PDF operations in the browser.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">Client-Side Processing is an important part of the site&#x27;s current structure. The uploaded HTML uses browser APIs and JavaScript libraries to read, decode, render, crop, merge, convert, preview, and download files. The page itself identifies the workflow as client-side, and the existing image handling includes browser decoding plus special-format decoders for HEIC/HEIF and TIFF. PDF processing uses PDF.js for rendering and pdf-lib for PDF creation and page manipulation. Keeping these operations in the browser helps the application remain a self-contained editing studio rather than requiring a server-side upload step for the functions implemented here. Browser capabilities and supported formats can still vary, but the existing design keeps the primary workflow inside the page.</div>
+      </article>
+
+      <article class="arnc-feature-card" tabindex="0" role="button" aria-expanded="false">
+        <div class="arnc-feature-icon">🧩</div>
+        <h3 class="arnc-feature-name">HEIC/HEIF &amp; TIFF Support</h3>
+        <p class="arnc-feature-short">Decode additional image formats already supported by the original studio.</p>
+        <div class="arnc-feature-more">Click for details <span class="arnc-feature-arrow">⌄</span></div>
+        <div class="arnc-feature-long">HEIC/HEIF &amp; TIFF Support is provided through the libraries already included in the uploaded HTML. HEIC and HEIF files are passed through the HEIC decoder and normalized to PNG for browser-side studio operations when necessary. TIFF files are decoded through UTIF, converted into RGBA image data, and normalized into a PNG file so the rest of the image workflow can operate on a browser-friendly representation. This is helpful when users receive photographs or scans from devices and applications that use formats not consistently decoded by every browser. The feature does not require a new upload screen; it is part of the existing image preparation stage and therefore remains compatible with the current list, crop, merge, preview, conversion, and export workflow.</div>
+      </article>
+  </div>
+
+  <section class="arnc-about" id="arncAbout">
+    <h2>📘 About This Website</h2>
+<p>Merge Studio.ARnc is a browser-based image and PDF workspace designed to bring several common file preparation tasks into one focused interface. The existing page combines image merging, PDF merging, crop tools, file ordering, preview, conversion, splitting, output-format selection, and theme controls without requiring the user to move between separate pages for each task. The main interface begins with an upload area where users can switch between Merge Images and Merge PDFs. In image mode, multiple image files can be selected or dropped into the workspace. In PDF mode, multiple PDF files can be added in the same general area. The file list then becomes the central place for managing the working collection. Each item has a visible name and size, and image items can show a thumbnail. The user can remove an item, move it up or down, or drag it to another position. This makes the file list not just an upload list but the working order used by later operations.</p>
+<p>The image workflow is built around the idea of preparing a collection and then choosing how that collection should become a final image. The Vertical option creates a stacked arrangement, the Horizontal option creates a side-by-side arrangement, and the two-column grid option creates a structured multi-image sheet. The studio creates the necessary canvas, places the source images into the selected arrangement, and then encodes the result in the chosen output format. The existing export menu includes JPG, PNG, WEBP, BMP, GIF, AVIF, and ICO. The application also contains a BMP encoder fallback so BMP can still be produced when direct canvas encoding is unavailable. A generated image is shown in the existing Preview panel before the status is updated and the file is downloaded. This makes the workflow useful for photo collections, contact sheets, comparison boards, long image compositions, simple collages, and other tasks where separate image files need to become one organized result.</p>
+<p>The PDF workflow follows the same general philosophy while using PDF-specific browser libraries. PDF files can be combined into one document, and the page order follows the order shown in the working list. The crop studio can also be used with PDFs. A PDF page is rendered for visual selection, page navigation is available when the document has multiple pages, and crop selections are stored for the pages before the resulting crop boxes are written back into the PDF. The PDF workflow therefore provides more than a simple merge button: it gives users a way to prepare page framing before producing a final document. The existing PDF conversion function can also render PDF pages into image canvases and export them using the selected image format. In the other direction, the image workflow can turn the current merged image canvas into a PDF document. Together these functions allow the same studio to move between common image and document formats while keeping the interface consistent.</p>
+<p>The Crop Studio is a dedicated modal workspace already present in the original website. It contains a stage, a visible crop overlay, eight resize handles, zoom controls, aspect-ratio selection, rotation, undo, redo, reset, save, and cancel. The overlay can be moved and resized directly with pointer interaction. The crop history allows recent states to be restored, which is useful when a selection is adjusted several times. The rotation control changes the preview angle in ninety-degree steps, while the crop coordinates remain managed separately by the crop state. For images, saving the crop renders the selected area into a new canvas and updates the corresponding file item and thumbnail. For PDFs, the selected page regions are represented as PDF crop boxes. This keeps the crop feature integrated with both sides of the application instead of treating images and PDFs as unrelated tools.</p>
+<p>Preview is another important part of the studio because it provides a visual checkpoint after processing. The existing Preview panel can display an image result, a PDF result, or multiple image results. Temporary browser object URLs are tracked and released when the preview is replaced, helping prevent an accumulation of temporary preview resources during repeated operations. The status line inside the preview identifies what kind of result is currently being shown. This is especially useful after merging, cropping, converting, or splitting because the user can immediately see the generated output inside the same page. The preview does not replace downloading; it complements the existing download behavior. The final file is still generated and downloaded through the original controls, while the preview gives the user a convenient visual confirmation of the operation.</p>
+<p>Split tools provide a reverse-style workflow for situations where a combined file needs to be separated. When multiple source images are present, the image split action can export each uploaded image individually. When one merged image is present, the studio can inspect the canvas for continuous white separator bands that match the separators generated by its own merge layouts. If clear vertical or horizontal separators are found, the regions can be extracted into individual image files. PDF splitting uses the existing PDF document structure and divides a multi-page document into two parts according to the current split logic. A one-page PDF can still be exported as a separate part. Progress feedback is shown during these longer tasks, and relevant results can be displayed in Preview. This gives the website a useful round-trip workflow: files can be assembled, previewed, exported, and in suitable cases separated again.</p>
+<p>The upload and decoding layer is designed to accept common image formats and PDFs while handling additional image formats through the libraries already included in the page. Image selection accepts browser-supported image files and recognizes extensions such as JPG, JPEG, PNG, WEBP, GIF, BMP, AVIF, SVG, TIFF, HEIC, and HEIF. Before an image is placed into the main working list, the application prepares it and verifies that the browser can decode it. HEIC/HEIF files can be normalized to PNG through the included decoder, while TIFF files can be decoded through UTIF and normalized to PNG. This means later crop and merge functions can work with a browser-friendly representation even when the original file format is not directly supported by the browser. Drag-and-drop and the file picker both feed into the same preparation process, keeping the upload experience consistent.</p>
+<p>The site&#x27;s theme selector is designed as a visual enhancement rather than a replacement for the editor. The existing theme choices are Aurora, Ocean Blue, Sunset, Emerald, and Violet. They are implemented with CSS variables so accent colors can change throughout the interface without rewriting the functional controls. The chosen theme is saved to local browser storage and restored when the page loads. The new footer feature boxes use the same accent variables, borders, glass-style backgrounds, rounded corners, and gradients already present elsewhere in the page. This is important for the requested design preservation: the footer additions are intended to look like a natural extension of the existing studio rather than a separate website embedded below it. The feature cards therefore reuse the site&#x27;s visual language and remain responsive on smaller screens.</p>
+<p>The website&#x27;s processing model is primarily browser-side. The HTML includes PDF.js for PDF rendering, pdf-lib for PDF creation and manipulation, heic2any for HEIC/HEIF decoding, and UTIF for TIFF decoding. Image work uses browser image objects, ImageBitmap where appropriate, canvas rendering, canvas encoding, and download links created from browser blobs. PDF pages are rendered to canvases when conversion to images is requested, while image compositions can be embedded into a newly created PDF. Because the operations are implemented in JavaScript inside the page, the main editing flow can happen without changing the page into a traditional server-upload editor. Browser support still matters, especially for less common output formats, but the original file already contains fallback handling for BMP and normalization paths for special input formats.</p>
+<p>The footer feature section added to this version is intentionally informational and non-destructive. Each feature is represented as its own compact box with an icon, a short explanation, and a Click for details control. Clicking a box expands that same box to reveal the longer description. Clicking the same box again collapses it back to its compact state. The behavior is implemented locally in the page and does not interfere with the existing merge, crop, PDF, conversion, split, upload, preview, or theme event handlers. Keyboard activation is also supported so the feature cards can be opened with Enter or Space when focused. The feature descriptions explain the functions already present in the uploaded source rather than pretending that unrelated functionality has been added. This keeps the footer useful as an in-page guide while preserving the actual editor as the main working area.</p>
+<p>The final About This Website section provides a long-form explanation of the purpose and workflow of Merge Studio.ARnc. It describes the upload process, file management, image and PDF merging, crop studio, preview, conversion, splitting, special-format decoding, themes, and browser-side processing. The section is placed after the individual feature cards so that users can first scan the available functions and then read the larger explanation if they want more context. The text is intentionally separated from the controls: it does not add buttons that could conflict with the editor and it does not replace any existing panel. The result is a footer that works as both a feature directory and an informational section while the original application remains visually and functionally intact above it.</p>
+<p>In practical use, the studio can support a wide range of everyday preparation tasks. A user can begin by dropping several photographs into the image area, inspect their thumbnails, reorder them, crop individual files, choose a layout, select an output format, merge them, and view the generated result. Another user can switch to PDF mode, add several documents, reorder them, crop page areas, merge the documents, and preview the resulting PDF. A PDF can also be rendered into image files, while a merged image can be turned into a PDF. If a combined image was produced with the studio&#x27;s own separator-based layouts, the split image workflow can attempt to identify those separators and recover individual sections. These workflows are intentionally connected so that the same file list and visual language remain useful from the beginning of a task through final export.</p>
+<p>The preservation goal for this footer update is straightforward: the existing editor remains the editor. The original top bar, theme selector, tabs, upload zone, file list, output preview, export controls, crop studio, PDF tools, progress indicator, status messages, and JavaScript processing routines are retained. The added footer uses new class names with an ARnc prefix to minimize the possibility of collisions with existing styles or event logic. Its responsive rules only govern the new footer cards and About section. On a desktop screen, the cards automatically form a multi-column grid based on available width; on a smaller screen, they stack into a single-column list. The expandable text remains inside the clicked card so the user can read a detailed explanation without navigating away from the page.</p>
+<p>Merge Studio.ARnc is therefore presented as a compact all-in-one workspace for combining, cropping, converting, organizing, previewing, and separating image and PDF files. Its main value comes from keeping related operations in one browser interface while allowing the user to decide the order and output format. The feature boxes at the bottom make these capabilities easier to discover, especially for visitors who may not immediately know what each existing control does. The long descriptions can be opened when more information is needed and closed when the user wants a compact footer again. The About section then provides a broader explanation of how the individual functions fit together. Above all, the footer is an explanatory layer added around the existing studio, not a replacement for the studio itself.</p>
+<p>For visitors evaluating the studio, the most useful way to understand it is as a sequence of small decisions. First choose the working mode, then add the files, inspect the list, correct the order, crop anything that needs trimming, choose a layout or conversion direction, select an output format when the operation uses images, and finally run the desired action. During processing, the existing progress and status areas communicate what the page is doing. After processing, the Preview panel provides a convenient result view. The footer now mirrors that sequence in explanatory form: each box names one capability, gives a short reason to use it, and can expand to provide a longer description. This makes the page more understandable without changing the controls that already perform the work. The same approach also makes the website more self-explanatory for new visitors because the feature descriptions connect familiar words such as merge, crop, preview, convert, split, reorder, theme, and export to the actual controls already available in the studio.</p>
+  </section>
+
+      <p>Another important part of the website is the relationship between the file list and every processing action. The list is the current working collection, so operations can use the exact items that the user has prepared. The visible count communicates how many files are currently available, while thumbnails make image collections easier to recognize. The remove control is useful when one file was selected by mistake, and the clear-all control provides a quick way to start again. Sorting by name can be helpful when files come from a folder with automatically numbered filenames. Dragging remains available for situations where a custom order is more important than alphabetical order. This combination makes the working area flexible without adding unnecessary screens or complicated navigation.</p>
+    <p>The image preparation stage also takes care of format differences before the main tools use an image. Browser support for image formats is not identical across every environment, so the original application checks whether an image can be decoded and includes dedicated handling for HEIC, HEIF, and TIFF. When special decoding is required, the result is normalized into a browser-friendly PNG representation. After preparation, the image enters the same working list as other images. This means a user does not have to learn a separate workflow simply because one photograph came from a different device or application. The footer feature descriptions explain this existing behavior so visitors understand why a format that is not directly previewed by a browser can still participate in the studio workflow.</p>
+    <p>The crop workspace is designed to be visual rather than form-heavy. Instead of requiring users to type coordinates, it provides a selection box directly over the image or rendered PDF page. The handles around the selection make the boundaries visible, and the grid inside the selection provides a familiar framing reference. Moving the selection changes its position, while the handles change its size. Zoom helps with detailed positioning, and the metric at the bottom communicates the approximate output dimensions. The reset control restores a broad starting selection, while undo and redo allow experimentation. This approach is especially useful for users who want to prepare images visually and do not need a complicated professional editing interface for a simple crop task.</p>
+    <p>The rotation control in the crop studio is deliberately simple: each activation advances the image orientation by ninety degrees. This is useful for photographs captured sideways, scanned documents with the wrong orientation, or images that need to be viewed in a different direction before cropping. The crop selection itself is represented as its own state, so the user can continue working with the selection after changing the preview orientation. Saving the crop then renders the selected region according to the current crop state. The footer does not change this mechanism; it only explains it. This separation between an explanatory footer and the functional crop engine is important because the requested update is intended to add discoverability without changing the behavior of the existing editor.</p>
+    <p>PDF page handling is another area where the studio combines visual interaction with document processing. A PDF can contain several pages, and the crop studio provides page navigation so that the user can inspect and adjust page framing. The selected page crop state can be retained while moving to another page. When the crop is saved, the page crop boxes are applied to the PDF document. This approach avoids converting the entire document into a collection of independent image files merely to trim page margins. The same PDF can subsequently be merged with other PDFs or rendered into image output through the existing conversion functions. The feature boxes therefore describe PDF cropping as part of a connected workflow rather than as an isolated function.</p>
+    <p>The output preview is also useful as a visual confirmation step because different operations produce different kinds of results. A single merged image can be shown directly, a PDF can be shown inside the PDF preview frame, and multiple generated image files can be arranged in a preview grid. This means the preview area can adapt to the operation instead of showing a generic message for every result. The status text above the preview provides a short description while the actual content provides visual confirmation. When a new preview replaces an older one, temporary object URLs are released. This keeps the preview system organized during repeated tests. The footer feature card explains the purpose of Preview so users know that they can inspect a result without changing the main export workflow.</p>
+    <p>Conversion between images and PDFs extends the usefulness of the same working collection. In image mode, the current merged canvas can be placed into a new PDF. In PDF mode, PDF pages can be rendered into image canvases and exported in the selected image format. The conversion controls change their labels according to the current mode, which makes the direction of the operation clear. Progress feedback is used for tasks that may take longer, especially when multiple PDF pages need to be rendered. The resulting files are still handled by the browser's download mechanism. This means the user can move from a photo-oriented task to a document-oriented task without leaving the page or learning an entirely different interface.</p>
+    <p>The split functions complement the merge functions by addressing the opposite need. A user may have several individual images and want separate downloads, or may have a combined image created by this website and want to recover its component sections. The image splitter therefore contains logic for both multiple-source separation and separator detection in a single merged canvas. The PDF splitter works with the document's page structure and divides multi-page documents into two parts. Because split operations can create several outputs, progress and preview feedback are useful. These details make the website more practical for repeated file preparation, where the user may assemble files for one purpose and later need to separate them again.</p>
+    <p>Theme selection provides a visual customization layer while keeping the application's functional controls recognizable. Aurora is the default palette, while Ocean Blue, Sunset, Emerald, and Violet provide alternative accent combinations. The selected theme is saved in local browser storage and restored when the page loads. The new feature cards intentionally use the same CSS accent variables as the rest of the interface. As a result, selecting another theme changes the appearance of the new footer cards along with the existing buttons and highlighted controls. The footer therefore feels integrated with the website instead of appearing as an unrelated block of content. No processing state depends on the theme selection, so changing the theme is a visual action rather than an image or PDF operation.</p>
+    <p>The feature cards are designed around a compact-to-expanded interaction. In the compact state, a card shows an icon, a feature name, a short description, and the words Click for details. This keeps the footer from becoming an extremely tall wall of text when the page is first opened. When the user clicks a card, the same card expands and reveals the long description below a divider. The user can read the detailed explanation and click the card again to collapse it. The state is local to the clicked card, so opening one card does not require leaving the page. Keyboard users can also focus a card and activate it with Enter or Space. The interaction is intentionally simple so it remains understandable on desktop and mobile screens.</p>
+    <p>The About This Website section is placed after the feature cards because the two areas serve different purposes. Feature cards are quick documentation: they help a visitor discover a particular capability. The About section is long-form documentation: it explains how the major capabilities relate to one another and why they are useful. The long text also gives search-engine-readable context about the purpose of the page, while the actual controls continue to provide the interactive experience. The About section does not introduce duplicate buttons or alternative workflows. It is informational content at the bottom of the page, leaving the original editor above it unchanged. The section is responsive and uses the same rounded glass-style panel language as the existing interface.</p>
+    <p>Responsive behavior is important because the feature section should remain usable when the browser becomes narrow. On larger screens, the cards automatically arrange themselves into multiple columns based on the available width. On smaller screens, they become a single-column sequence so the text has enough room to remain readable. The card padding, typography, and About panel spacing also adjust at the existing mobile breakpoint. These rules are scoped to the new footer classes and do not rewrite the existing crop, upload, file-list, or export layouts. This is part of preserving the original design: the update adds a responsive information layer without forcing the editor itself into a different layout.</p>
+    <p>The new footer code uses a distinct ARnc-prefixed naming convention for its classes and identifiers. This reduces the chance that the new feature-card styles accidentally override an existing editor class. The JavaScript for the cards is also wrapped in its own function and only selects elements carrying the feature-card class. Existing handlers for file upload, sorting, clearing, crop controls, merging, conversion, splitting, preview, and themes remain separate. This is an important implementation detail because a visual addition should not unintentionally change the behavior of unrelated controls. The footer therefore operates as an independent presentation layer connected to the page, while the original application logic continues to manage the actual editing operations.</p>
+    <p>The site can be understood as a client-side toolkit for common image and PDF preparation tasks. Users can upload source material, organize it, crop it, combine it, convert it, split it, preview the result, and download the generated output. The available functions are broad enough for everyday document and photo preparation while remaining centered around a single page. The footer now makes those capabilities easier to discover by presenting them as named feature boxes. The long descriptions explain the purpose of each control in ordinary language rather than requiring users to infer everything from button labels. This can be especially helpful for first-time visitors who see several controls such as Merge, Convert, Split, Crop, and Preview and want to understand the difference before using them.</p>
+    <p>A practical image example begins with a collection of photographs. The user can select all of the photographs together, allow the application to prepare them, and then inspect the resulting list. If one image needs adjustment, its Crop button opens the crop studio. After saving the crop, the item remains in the list with its updated preview. The user can then arrange the images using drag-and-drop or the arrow controls, select a layout such as vertical, horizontal, or grid, choose an image format, and run Merge & Download. The generated image appears in Preview and is then downloaded. This sequence demonstrates how the existing controls work together without requiring a separate editing application for each small task.</p>
+    <p>A practical PDF example follows a similar pattern. The user switches to the PDF tab, adds several PDF documents, and checks their order in the file list. If a page needs trimming, the PDF crop tool can render the page and provide a selection area. Page navigation allows other pages to be adjusted before the crop is saved. The documents can then be reordered and merged. The resulting PDF appears in the preview area and can be downloaded. If an image version is needed instead, the PDF-to-image conversion action can render the pages and create image outputs. The footer descriptions explain these steps so the page can function as both a working tool and a self-contained introduction to its capabilities.</p>
+    <p>The website also includes progress feedback for operations that may require several browser-side steps. A progress bar can become visible while an image is being prepared, a PDF is rendered, a conversion is performed, or a split operation processes several results. The status line communicates a more specific message, such as preparation, rendering, successful completion, or an error. This combination gives the user both a visual indication of activity and a text explanation of what is happening. The new footer does not interfere with these indicators. Instead, it documents the functions that use them. Keeping feedback in the existing editor area means the user can continue to understand processing without needing a new notification system.</p>
+    <p>Download behavior is based on browser-created blobs and temporary download links. After an operation produces an image or PDF, the application creates a download action with an appropriate filename and extension. Image exports use the selected format where browser encoding is available, while the existing BMP fallback handles a special case. PDF results use the PDF MIME type. This design keeps the output process straightforward: the user selects the desired operation and the browser receives the generated file. The footer descriptions explain export as part of the complete workflow rather than presenting it as a separate product feature. The visual controls remain exactly where the original editor places them.</p>
+    <p>The informational footer is also useful as a compact help area. A visitor who does not know what Crop PDF Pages means can open that box and read a fuller explanation. A visitor interested only in themes can open Theme Selection and ignore the other cards. Someone preparing a merged image can read the descriptions for Merge Images, Reorder Files, Image Layouts, Image Format Export, and Live Preview. Because the cards are independent, users can choose the amount of information they want. The compact state keeps the page visually clean, while the expanded state provides detailed documentation when requested. This balance is the main purpose of the new footer design.</p>
+    <p>The final result is intended to feel like the same website, simply with a more informative footer. The existing dark gradient background, rounded glass panels, accent gradients, compact controls, crop modal, preview panel, and responsive structure remain the visual foundation. The feature cards borrow those same design ideas, including rounded borders, translucent surfaces, subtle shadows, and accent gradients. The About panel uses the same visual language as the main panels. Because the feature cards and About section are added below the existing editor, they do not push a different navigation concept into the primary workspace. Users can continue to operate the site exactly as before while gaining a detailed explanation of what each existing capability does.</p>
+  <div class="arnc-footer-note">Merge Studio.ARnc • Image &amp; PDF Merger • Crop • Reorder • Preview • Convert • Split • Export • Browser-based workflow</div>
+</footer>
+
+
+<script>
+/* ---------- Footer feature cards: expand/collapse without touching editor logic ---------- */
+(function(){
+  const cards = document.querySelectorAll(".arnc-feature-card");
+  cards.forEach(card=>{
+    function toggle(){
+      const open = card.classList.toggle("open");
+      card.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+    card.addEventListener("click", function(e){
+      if(e.target.closest("a,button,input,select,textarea")) return;
+      toggle();
+    });
+    card.addEventListener("keydown", function(e){
+      if(e.key==="Enter" || e.key===" "){
+        e.preventDefault();
+        toggle();
+      }
+    });
+  });
+})();
+</script>
+
 </body>
 </html>
