@@ -1403,7 +1403,7 @@ body {
     <input
       type="file"
       id="fileInput"
-      accept="image/*"
+      accept="image/*,.heic,.heif,.avif,.tif,.tiff,.bmp,.ico,.jfif,.jxl,.svg,.gif,.webp,.jpg,.jpeg,.png"
       multiple
       hidden
     >
@@ -2325,6 +2325,11 @@ body {
 <div class="toast" id="toast"></div>
 
 
+<!-- Optional decoders for formats that many browsers cannot decode natively.
+     These do not change the existing UI/design. -->
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/utif@3.1.0/UTIF.min.js"></script>
+
 <script>
 "use strict";
 
@@ -2357,61 +2362,169 @@ let currentImage = null;
    ========================================================= */
 
 $("fileInput").addEventListener("change", e => {
-  handleFiles([...e.target.files]);
+  const selected = [...e.target.files];
+  handleFiles(selected);
+  // Allows the user to choose the same image again later.
+  e.target.value = "";
 });
 
 function addMore(){
+  // Keep this as a direct input click so mobile browsers can show
+  // their native "Camera / Files" chooser instead of a custom picker.
   $("fileInput").click();
 }
 
-function handleFiles(files){
+/*
+ * Broad image detection.
+ * Some phones/file managers return an empty or generic MIME type for
+ * HEIC/HEIF, TIFF, JXL, RAW and other extensions, so MIME-only filtering
+ * would incorrectly reject otherwise valid image files.
+ */
+function isImageFile(file){
+  if(!file) return false;
+  const type=(file.type||"").toLowerCase();
+  if(type.startsWith("image/")) return true;
 
-  const valid = files.filter(file =>
-    file.type.startsWith("image/")
-  );
+  const name=(file.name||"").toLowerCase();
+  const ext=name.includes(".") ? name.slice(name.lastIndexOf(".")+1) : "";
+  return [
+    "jpg","jpeg","jpe","jfif","pjpeg","pjp",
+    "png","apng","gif","webp","avif","heic","heif",
+    "tif","tiff","bmp","dib","ico","svg","svgz","jxl",
+    "raw","arw","cr2","cr3","nef","nrw","orf","rw2","raf",
+    "dng","pef","srw","3fr","iiq","rwl","x3f","kdc","dcr",
+    "erf","mrw","mos","mef","ptx","cap","gpr"
+  ].includes(ext);
+}
 
-  if(!valid.length){
+function fileExtension(file){
+  const name=(file && file.name || "").toLowerCase();
+  return name.includes(".") ? name.slice(name.lastIndexOf(".")+1) : "";
+}
+
+/*
+ * Decode the selected file into an Image object.
+ * Native browser formats use the normal Image decoder. HEIC/HEIF and
+ * TIFF get a client-side conversion fallback when the browser itself
+ * cannot decode them. RAW camera files are accepted by the picker, but
+ * are only processable when the current browser provides a RAW decoder.
+ */
+async function decodeImageFile(file){
+  const ext=fileExtension(file);
+  const type=(file.type||"").toLowerCase();
+
+  // HEIC / HEIF fallback for iPhone/Android photos.
+  if((ext==="heic" || ext==="heif" || type==="image/heic" || type==="image/heif") && typeof heic2any==="function"){
+    try{
+      const converted=await heic2any({blob:file,toType:"image/png",quality:1});
+      const blob=Array.isArray(converted) ? converted[0] : converted;
+      return await blobToImage(blob);
+    }catch(err){
+      console.warn("HEIC/HEIF conversion failed:",err);
+    }
+  }
+
+  // TIFF fallback using UTIF.js when available.
+  if((ext==="tif" || ext==="tiff" || type==="image/tiff") && window.UTIF){
+    try{
+      const buffer=await file.arrayBuffer();
+      const ifds=UTIF.decode(buffer);
+      if(ifds && ifds.length){
+        UTIF.decodeImage(buffer,ifds[0]);
+        const rgba=UTIF.toRGBA8(ifds[0]);
+        const w=ifds[0].width, h=ifds[0].height;
+        const canvas=document.createElement("canvas");
+        canvas.width=w; canvas.height=h;
+        const c=canvas.getContext("2d",{alpha:true});
+        c.putImageData(new ImageData(new Uint8ClampedArray(rgba),w,h),0,0);
+        return await blobToImage(await canvasToBlob(canvas,"image/png"));
+      }
+    }catch(err){
+      console.warn("TIFF conversion failed:",err);
+    }
+  }
+
+  // Normal browser decoder: JPG/JPEG/PNG/GIF/WebP/AVIF/SVG/BMP/ICO/JXL
+  // where supported by the device/browser.
+  try{
+    return await blobToImage(file);
+  }catch(err){
+    const label=file.name || "this image";
+    throw new Error('This browser cannot decode "'+label+'". The file was accepted, but a browser decoder for this format is required.');
+  }
+}
+
+function blobToImage(blob){
+  return new Promise((resolve,reject)=>{
+    const url=URL.createObjectURL(blob);
+    const img=new Image();
+    img.onload=()=>{
+      URL.revokeObjectURL(url);
+      resolve(img);
+    };
+    img.onerror=()=>{
+      URL.revokeObjectURL(url);
+      reject(new Error("Could not decode image."));
+    };
+    img.src=url;
+  });
+}
+
+function canvasToBlob(canvas,type){
+  return new Promise((resolve,reject)=>{
+    canvas.toBlob(blob=>blob ? resolve(blob) : reject(new Error("Could not create image.")),type);
+  });
+}
+
+async function handleFiles(files){
+  const candidates=files.filter(isImageFile);
+  const rejected=files.length-candidates.length;
+
+  if(!candidates.length){
     toast("Please select valid image files.");
     return;
   }
 
-  valid.forEach(file => {
+  let added=0;
+  let failed=0;
 
-    const reader = new FileReader();
+  // Process in order so the existing file list/current-image behavior stays stable.
+  for(const file of candidates){
+    try{
+      const img=await decodeImageFile(file);
 
-    reader.onload = e => {
+      state.files.push({
+        file:file,
+        image:img,
+        name:file.name,
+        originalSize:file.size,
+        cutoutImage:null,
+        cutoutUrl:null,
+        settings:defaultSettings()
+      });
 
-      const img = new Image();
+      if(state.current === -1){
+        state.current=0;
+      }
 
-      img.onload = () => {
+      $("app").classList.add("active");
+      renderFileList();
+      loadCurrent();
+      added++;
+    }catch(err){
+      failed++;
+      console.warn("Image skipped:",file.name,err);
+    }
+  }
 
-        state.files.push({
-          file:file,
-          image:img,
-          name:file.name,
-          originalSize:file.size,
-          cutoutImage:null,
-          cutoutUrl:null,
-          settings:defaultSettings()
-        });
-
-        if(state.current === -1){
-          state.current = 0;
-        }
-
-        $("app").classList.add("active");
-        renderFileList();
-        loadCurrent();
-
-      };
-
-      img.src = e.target.result;
-    };
-
-    reader.readAsDataURL(file);
-  });
-
-  toast(valid.length + " image(s) added.");
+  if(added){
+    let msg=added + " image(s) added.";
+    if(failed) msg += " " + failed + " image(s) could not be decoded by this browser.";
+    if(rejected) msg += " " + rejected + " non-image file(s) ignored.";
+    toast(msg);
+  }else{
+    toast("Selected image format is not supported by this browser.");
+  }
 }
 
 
