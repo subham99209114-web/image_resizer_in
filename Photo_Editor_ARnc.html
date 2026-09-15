@@ -429,7 +429,7 @@ html,body{
  <button class="topbtn" id="flipH">⇋</button><button class="topbtn" id="flipV">⇅</button>
  <div class="grow"></div>
  <button class="topbtn" id="theme">◐ Theme</button>
- <button class="topbtn" id="saveProject">💾 Save</button><label class="topbtn">📁 Open Project<input id="projectFile" type="file" accept=".arnc,.json" hidden></label>
+ <button class="topbtn" id="saveProject">💾 Save</button><label class="topbtn">📁 Open Project<input id="projectFile" type="file" accept=".arnc,.json,image/*" hidden></label>
  <button class="topbtn primary" id="export">Export</button>
 </header>
 <div class="main">
@@ -939,8 +939,63 @@ $("#theme").onclick=()=>{$("#app").classList.toggle("lightTheme");msg("Theme cha
 function project(){
  return {version:2,width:baseCanvas?.width||0,height:baseCanvas?.height||0,image:baseCanvas?.toDataURL("image/png")||null,texts,rotation,flipX,flipY,filter,adj,bgColor:$("#bgColor").value}
 }
-$("#saveProject").onclick=()=>{if(!baseCanvas)return msg("Open an image first");const blob=new Blob([JSON.stringify(project())],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="Photo_Editor_ARnc_Project.arnc";a.click();msg("Project saved")};
-$("#projectFile").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const p=JSON.parse(r.result);const im=new Image();im.onload=()=>{baseCanvas=makeCanvas(im.width,im.height);baseCanvas.getContext("2d").drawImage(im,0,0);texts=p.texts||[];rotation=p.rotation||0;flipX=p.flipX||1;flipY=p.flipY||1;filter=p.filter||"none";Object.assign(adj,p.adj||{});syncControls();$("#empty").classList.add("hidden");render();fit();msg("Project restored")};im.src=p.image}catch(err){msg("Invalid project file")}};r.readAsText(f)};
+$("#saveProject").onclick=()=>{
+  if(!baseCanvas)return msg("Open an image first");
+  render();
+  canvas.toBlob(blob=>{
+    if(!blob)return msg("Photo could not be saved");
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;
+    a.download="Photo_Editor_ARnc.png";
+    a.style.display="none";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},1000);
+    msg("Photo saved");
+  },"image/png");
+};
+$("#projectFile").onchange=e=>{
+  const f=e.target.files[0];
+  if(!f)return;
+
+  // Image file: open it directly in the editor
+  if(f.type && f.type.startsWith("image/")){
+    const url=URL.createObjectURL(f),im=new Image();
+    im.onload=()=>{
+      baseCanvas=makeCanvas(im.naturalWidth||im.width,im.naturalHeight||im.height);
+      baseCanvas.getContext("2d").drawImage(im,0,0);
+      texts=[];rotation=0;flipX=1;flipY=1;filter="none";
+      syncControls();
+      $("#empty").classList.add("hidden");
+      render();fit();
+      URL.revokeObjectURL(url);
+      msg("Image opened");
+    };
+    im.onerror=()=>{URL.revokeObjectURL(url);msg("Image could not be opened")};
+    im.src=url;
+    e.target.value="";
+    return;
+  }
+
+  // ARNC/JSON project: restore the saved project data
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const p=JSON.parse(r.result);
+      const im=new Image();
+      im.onload=()=>{
+        baseCanvas=makeCanvas(im.width,im.height);
+        baseCanvas.getContext("2d").drawImage(im,0,0);
+        texts=p.texts||[];rotation=p.rotation||0;flipX=p.flipX||1;flipY=p.flipY||1;filter=p.filter||"none";
+        Object.assign(adj,p.adj||{});syncControls();$("#empty").classList.add("hidden");render();fit();msg("Project restored");
+      };
+      im.src=p.image;
+    }catch(err){msg("Invalid project file")}
+  };
+  r.readAsText(f);
+  e.target.value="";
+};
 
 $("#export").onclick=()=>{if(!baseCanvas)return msg("Open an image first");const type=prompt("Export format: png, jpg, webp","png");if(!type)return;const t=type.toLowerCase()==="jpg"?"image/jpeg":type.toLowerCase()==="webp"?"image/webp":"image/png";const a=document.createElement("a");a.href=canvas.toDataURL(t,.94);a.download="Photo_Editor_ARnc."+(t==="image/jpeg"?"jpg":t.split("/")[1]);a.click();msg("Export complete")};
 
