@@ -36,11 +36,13 @@ button,input,select{font:inherit}.app{height:100%;display:flex;flex-direction:co
 .empty{position:absolute;text-align:center;background:#252525;border:1px dashed #555;padding:30px 50px;border-radius:10px;color:#bbb}
 .empty h2{margin:0 0 8px;color:#fff;font-size:18px}.empty p{margin:0 0 16px}.filepick{display:inline-block;padding:9px 16px;background:#168de2;border-radius:5px;color:#fff;cursor:pointer}.filepick input{display:none}
 .cropBox{position:absolute;border:1px solid #5cc2ff;background:#39a9ff22;display:none;pointer-events:none}.cropBox:after{content:"";position:absolute;inset:0;background:linear-gradient(#fff0 32.9%,#ffffff55 33%,#fff0 33.5%,#fff0 66.2%,#ffffff55 66.5%,#fff0 67%),linear-gradient(90deg,#fff0 32.9%,#ffffff55 33%,#fff0 33.5%,#fff0 66.2%,#ffffff55 66.5%,#fff0 67%)}
-.bottom{height:150px;background:#202020;border-top:1px solid #383838;display:flex;flex-direction:column;padding:7px 10px;color:#aaa;font-size:12px;overflow:hidden}
-.footerFeatures{width:100%;display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;padding-bottom:7px;scrollbar-width:thin}
-.featureBox{flex:0 0 245px;min-height:42px;height:42px;background:#292929;border:1px solid #454545;border-radius:6px;padding:8px 10px;display:flex;flex-direction:column;gap:5px;box-shadow:inset 0 1px #333;cursor:pointer;transition:height .18s ease,background .18s ease;overflow:hidden;user-select:none}
-.featureBox:hover{background:#303030;border-color:#555}.featureBox.active{height:105px;background:#303030;border-color:#3baeff}.featureBox b{color:#fff;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.featureBox span{color:#aaa;font-size:11px;line-height:1.35;display:none}.featureBox.active span{display:block}
-.footerControls{width:100%;height:34px;display:flex;align-items:center;flex:0 0 34px}.zoom{display:flex;gap:5px;align-items:center}.zoom button{border:0;background:#333;color:#ddd;border-radius:4px;width:25px;height:22px}.status{margin-left:12px}.right{width:340px;background:var(--panel);border-left:1px solid #414141;display:flex;flex-direction:column;min-height:0}
+.bottom{height:34px;background:#202020;border-top:1px solid #383838;display:flex;align-items:center;padding:3px 10px;color:#aaa;font-size:12px;overflow:visible;position:relative;z-index:50}
+.footerFeatures{width:100%;display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;padding:0 0 2px;scrollbar-width:thin;min-width:0;flex:1;align-items:center}
+.featureBox{flex:0 0 245px;height:28px;min-height:28px;background:#292929;border:1px solid #454545;border-radius:6px;padding:5px 10px;display:flex;align-items:center;box-shadow:inset 0 1px #333;cursor:pointer;transition:background .18s ease,border-color .18s ease;overflow:hidden;user-select:none}
+.featureBox:hover{background:#303030;border-color:#555}.featureBox.active{background:#303030;border-color:#3baeff;box-shadow:0 0 0 1px #3baeff33}.featureBox b{color:#fff;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}.featureBox span{display:none}
+.featureDetails{position:fixed;z-index:1000;display:none;max-width:min(420px,calc(100vw - 20px));background:#292929;color:#ddd;border:1px solid #3baeff;border-radius:7px;padding:10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.55);font-size:12px;line-height:1.45;pointer-events:none}
+.featureDetails.show{display:block}.featureDetails b{display:block;color:#fff;margin-bottom:5px;font-size:12px}
+.footerControls{width:auto;height:34px;display:flex;align-items:center;flex:0 0 auto}.zoom{display:flex;gap:5px;align-items:center}.zoom button{border:0;background:#333;color:#ddd;border-radius:4px;width:25px;height:22px}.status{margin-left:12px}.right{width:340px;background:var(--panel);border-left:1px solid #414141;display:flex;flex-direction:column;min-height:0}
 .panelHead{height:48px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 13px;font-size:15px;font-weight:600}.panelBody{padding:12px;overflow:auto;min-height:0;flex:1}
 .section{border-bottom:1px solid #3d3d3d;padding-bottom:12px;margin-bottom:12px}.section:last-child{border:0}.sectionTitle{font-weight:600;margin-bottom:10px;color:#eee}
 .control{margin:10px 0}.control label{display:flex;justify-content:space-between;color:#ddd;margin-bottom:5px}.num{color:#999}.range{width:100%;accent-color:#38aaff}
@@ -53,7 +55,7 @@ button,input,select{font:inherit}.app{height:100%;display:flex;flex-direction:co
 .lightTheme{--bg:#f0f0f0;--bar:#fff;--panel:#fafafa;--panel2:#eee;--line:#d4d4d4;--text:#161616;--muted:#666}
 .lightTheme .top,.lightTheme .sidebar,.lightTheme .bottom{background:#fff;color:#222}.lightTheme .sidebtn{color:#555}.lightTheme .stage{background-color:#ddd}
 .tabs{display:flex;border-bottom:1px solid #414141}.tab{flex:1;background:transparent;color:#aaa;border:0;padding:10px;cursor:pointer}.tab.active{color:#fff;border-bottom:2px solid #3caeff}
-@media(max-width:900px){.right{width:290px}.sidebar{width:62px}}@media(max-width:650px){.right{width:100%;position:absolute;right:0;top:50px;bottom:184px;z-index:5;display:none}.right.open{display:flex}.sidebar{width:55px}.brand{display:none}.bottom{height:184px;padding:6px}.featureBox{flex-basis:220px;min-height:42px;height:42px}.featureBox.active{height:122px}.footerFeatures{padding-bottom:6px}.footerControls{height:34px;flex-basis:34px}}
+@media(max-width:900px){.right{width:290px}.sidebar{width:62px}}@media(max-width:650px){.right{width:100%;position:absolute;right:0;top:50px;bottom:34px;z-index:5;display:none}.right.open{display:flex}.sidebar{width:55px}.brand{display:none}.bottom{height:34px;padding:3px 6px}.featureBox{flex-basis:190px;height:28px;min-height:28px}.footerControls{height:34px;flex-basis:auto}.status{max-width:42vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
 .bgProcessing{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.92);color:#fff;font-weight:600;letter-spacing:.3px}.bgProcessing .stars{width:80%;max-width:700px;text-align:center;font-size:22px;line-height:3;animation:starShine 1s ease-in-out infinite}.bgProcessing.hidden{display:none}@keyframes starShine{0%,100%{opacity:.25;transform:scale(.98)}50%{opacity:1;transform:scale(1.02)}}
 </style>
 </head>
@@ -476,18 +478,36 @@ $("#applyResize").onclick=()=>{
 };
 updateResizeUnit();
 
-// Footer feature boxes: first click expands the detailed feature text; second click collapses it again.
-$$(".featureBox").forEach(box=>{
+// Footer feature boxes: click once shows a floating long description; click again closes it.
+const featureDetails=document.createElement("div");
+featureDetails.className="featureDetails";
+document.body.appendChild(featureDetails);
+let openFeature=null;
+$$('.featureBox').forEach(box=>{
  box.setAttribute("role","button");
  box.setAttribute("tabindex","0");
+ const title=box.querySelector("b")?.textContent||"Feature";
+ const details=box.querySelector("span")?.textContent||"";
  const toggle=()=>{
-   const wasActive=box.classList.contains("active");
+   if(openFeature===box){box.classList.remove("active");featureDetails.classList.remove("show");openFeature=null;return;}
    $$(".featureBox.active").forEach(x=>x.classList.remove("active"));
-   if(!wasActive) box.classList.add("active");
+   openFeature=box; box.classList.add("active");
+   featureDetails.innerHTML="<b>"+title+"</b>"+details;
+   featureDetails.classList.add("show");
+   positionFeatureDetails();
  };
  box.addEventListener("click",toggle);
  box.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle()}});
 });
+function positionFeatureDetails(){
+ if(!openFeature)return;
+ const r=openFeature.getBoundingClientRect(), w=Math.min(420,window.innerWidth-20);
+ let left=Math.max(10,Math.min(r.left,window.innerWidth-w-10));
+ let top=r.top-featureDetails.offsetHeight-8;
+ if(top<10)top=Math.min(window.innerHeight-10-featureDetails.offsetHeight,r.bottom+8);
+ featureDetails.style.left=left+"px"; featureDetails.style.top=Math.max(10,top)+"px";
+}
+window.addEventListener("resize",positionFeatureDetails);
 
 $("#theme").onclick=()=>{$("#app").classList.toggle("lightTheme");msg("Theme changed")};
 function project(){
