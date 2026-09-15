@@ -58,7 +58,9 @@ button,input,select{font:inherit}.app{min-height:100vh;height:auto;display:flex;
   .sidebar{width:62px}
 }
 @media(max-width:650px){
-  html,body{overflow-x:hidden;overflow-y:auto}
+  html,body{overflow-x:hidden;overflow-y:auto;min-height:100%;height:auto}
+  .app{min-height:100dvh;height:auto}
+  .top{flex:0 0 58px}
   .top{height:58px;padding:0 7px;gap:3px;-webkit-overflow-scrolling:touch}
   .topbtn{height:40px;min-width:42px;padding:0 10px}
   .brand{display:none}
@@ -66,8 +68,8 @@ button,input,select{font:inherit}.app{min-height:100vh;height:auto;display:flex;
   /* Portrait: the tool panel gets its own space below the image.
      It no longer sits on top of / hides the canvas. */
   .main{
-    flex:0 0 calc(100vh - 58px);
-    height:calc(100vh - 58px);
+    flex:0 0 calc(100dvh - 58px);
+    height:calc(100dvh - 58px);
     min-height:0;
     position:relative;
     overflow:hidden;
@@ -132,8 +134,8 @@ button,input,select{font:inherit}.app{min-height:100vh;height:auto;display:flex;
 @media(max-width:900px) and (orientation:landscape) and (max-height:650px){
   .top{height:54px}
   .main{
-    flex:0 0 calc(100vh - 54px);
-    height:calc(100vh - 54px);
+    flex:0 0 calc(100dvh - 54px);
+    height:calc(100dvh - 54px);
     display:flex;
     position:relative;
     overflow:hidden;
