@@ -403,6 +403,7 @@ body[data-theme="violet"]{--accentA:#8b5cf6;--accentB:#ec4899;--accentC:#38bdf8}
    <p id="dropText">JPG, JPEG, PNG, WEBP, GIF, BMP, AVIF, SVG, TIFF, HEIC/HEIF • multiple files supported</p>
    <label class="primary" for="fileInput">＋ Choose files</label>
    <input id="fileInput" type="file" multiple accept="image/*">
+    <input id="cameraInput" type="file" accept="image/*" capture="environment">
   </div>
  </section>
 
@@ -669,6 +670,7 @@ async function addFiles(list){
  }
 }
 $("#fileInput").onchange=e=>{addFiles(e.target.files);e.target.value=""};
+$("#cameraInput").onchange=e=>{addFiles(e.target.files);e.target.value=""};
 ["dragenter","dragover"].forEach(ev=>$("#drop").addEventListener(ev,e=>{e.preventDefault();$("#drop").classList.add("drag")}));
 ["dragleave","drop"].forEach(ev=>$("#drop").addEventListener(ev,e=>{e.preventDefault();$("#drop").classList.remove("drag")}));
 $("#drop").addEventListener("drop",e=>addFiles(e.dataTransfer.files));
