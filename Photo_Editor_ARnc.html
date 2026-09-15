@@ -150,6 +150,149 @@ button,input,select{font:inherit}.app{height:100%;display:flex;flex-direction:co
   .right.open{display:flex}
   #view{max-width:90%;max-height:90%}
 }
+
+/* Footer feature information — card style matching the requested reference image */
+.siteFooter{
+  flex-shrink:0;
+  background:#202020;
+  border-top:1px solid #383838;
+  max-height:38vh;
+  overflow-y:auto;
+}
+.footerFeatures{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  padding:10px;
+}
+.footerFeatureBox{
+  appearance:none;
+  width:100%;
+  min-height:118px;
+  text-align:left;
+  background:#050505;
+  color:#fff;
+  border:1px solid #66666a;
+  border-radius:16px;
+  padding:14px 16px 13px;
+  cursor:pointer;
+  transition:background .18s ease,border-color .18s ease,transform .12s ease;
+  box-shadow:0 1px 0 rgba(255,255,255,.03) inset;
+}
+.footerFeatureBox:hover{
+  background:#181818;
+  border-color:#77777b;
+}
+.footerFeatureBox:active{transform:translateY(1px)}
+.footerFeatureIcon{
+  display:block;
+  font-size:24px;
+  line-height:1;
+  margin:0 0 9px;
+}
+.footerFeatureTitle{
+  display:block;
+  font-weight:700;
+  font-size:19px;
+  line-height:1.2;
+  white-space:normal;
+  overflow:visible;
+  text-overflow:clip;
+}
+.footerFeatureSummary{
+  display:block;
+  margin-top:7px;
+  color:#f5f5f5;
+  font-size:14px;
+  line-height:1.45;
+}
+.footerFeatureDetailsLink{
+  display:inline-block;
+  margin-top:8px;
+  color:#9bd2ff;
+  font-size:12px;
+  line-height:1.2;
+}
+.footerFeatureDetailsLink::after{
+  content:" ▾";
+  font-size:10px;
+}
+.footerFeatureLong{
+  display:none;
+  margin-top:9px;
+  padding-top:9px;
+  border-top:1px solid rgba(255,255,255,.12);
+  color:#d9d9d9;
+  font-size:12px;
+  line-height:1.55;
+  white-space:normal;
+}
+.footerFeatureBox.expanded{
+  background:#151515;
+  border-color:#6a6a70;
+}
+.footerFeatureBox.expanded .footerFeatureDetailsLink::after{content:" ▴"}
+.footerFeatureBox.expanded .footerFeatureLong{display:block}
+.footerAbout{
+  border-top:1px solid #3d3d3d;
+  padding:14px 16px 22px;
+  color:#c9c9c9;
+}
+.footerAbout h2{
+  margin:0 0 10px;
+  color:#fff;
+  font-size:16px;
+}
+.footerAbout p{
+  margin:0 0 11px;
+  font-size:12px;
+  line-height:1.65;
+}
+.lightTheme .siteFooter{background:#fff;border-top-color:#d4d4d4}
+.lightTheme .footerFeatureBox{
+  background:linear-gradient(135deg,#f2f2f2 0%,#ece9ed 55%,#e9e6eb 100%);
+  color:#222;
+  border-color:#d4d4d4;
+}
+.lightTheme .footerFeatureBox:hover{
+  background:#181818;
+}
+.lightTheme .footerFeatureSummary{color:#444}
+.lightTheme .footerFeatureDetailsLink{color:#168de2}
+.lightTheme .footerFeatureLong{color:#555;border-top-color:#ddd}
+.lightTheme .footerAbout{color:#555}
+.lightTheme .footerAbout{border-top-color:#d4d4d4}
+.lightTheme .footerAbout h2{color:#222}
+
+@media(max-width:900px){
+  .footerFeatures{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+  .siteFooter{max-height:43vh}
+  .footerFeatures{
+    grid-template-columns:1fr;
+    gap:7px;
+    padding:7px;
+  }
+  .footerFeatureBox{
+    min-height:0;
+    padding:12px 13px;
+    border-radius:14px;
+  }
+  .footerFeatureIcon{font-size:22px;margin-bottom:7px}
+  .footerFeatureTitle{font-size:17px}
+  .footerFeatureSummary{font-size:13px}
+  .footerAbout{padding:12px 10px 18px}
+  .footerAbout p{font-size:11.5px;line-height:1.6}
+}
+@media(max-width:900px) and (orientation:landscape) and (max-height:650px){
+  .siteFooter{max-height:30vh}
+  .footerFeatures{
+    grid-template-columns:repeat(2,minmax(250px,1fr));
+    overflow-x:auto;
+  }
+  .footerFeatureBox{min-width:250px}
+}
 .bgProcessing{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.92);color:#fff;font-weight:600;letter-spacing:.3px}.bgProcessing .stars{width:80%;max-width:700px;text-align:center;font-size:22px;line-height:3;animation:starShine 1s ease-in-out infinite}.bgProcessing.hidden{display:none}@keyframes starShine{0%,100%{opacity:.25;transform:scale(.98)}50%{opacity:1;transform:scale(1.02)}}
 </style>
 </head>
@@ -284,7 +427,92 @@ button,input,select{font:inherit}.app{height:100%;display:flex;flex-direction:co
   </div>
  </aside>
 </div>
-<footer class="bottom"><div class="zoom"><button id="zoomOut">−</button><span id="zoomN">100%</span><button id="zoomIn">＋</button><button id="fit">Fit</button></div><div class="status" id="status">Ready — open an image.</div><div class="grow"></div><span id="dimensions">0 × 0</span></footer>
+<footer class="siteFooter" id="siteFooter">
+  <div class="bottom">
+    <div class="zoom"><button id="zoomOut">−</button><span id="zoomN">100%</span><button id="zoomIn">＋</button><button id="fit">Fit</button></div>
+    <div class="status" id="status">Ready — open an image.</div>
+    <div class="grow"></div><span id="dimensions">0 × 0</span>
+  </div>
+<div><h2 style="color: yellowgreen;"><b>Photo Editor ARnc Features</b></h2></div>
+  <div class="footerFeatures" aria-label="Website features">  
+    <button class="footerFeatureBox" type="button">
+      <span class="footerFeatureIcon" aria-hidden="true">🖼️</span>
+      <span class="footerFeatureTitle">Image Editing &amp; Adjustments</span>
+      <span class="footerFeatureSummary">Brightness, contrast, exposure, color and detail controls.</span>
+      <span class="footerFeatureDetailsLink">Click for details</span>
+      <span class="footerFeatureLong">Professional image editing with brightness, exposure, contrast, highlights, shadows, saturation, temperature, tint, blur, sharpness, vignette, creative filters, text, drawing, crop, straighten, resize, rotate, flip and other practical editing controls while keeping the existing editor workflow simple and familiar.</span>
+    </button>
+
+    <button class="footerFeatureBox" type="button">
+      <span class="footerFeatureIcon" aria-hidden="true">📐</span>
+      <span class="footerFeatureTitle">Crop, Resize, Rotate &amp; Transform</span>
+      <span class="footerFeatureSummary">Crop, resize, rotate, flip and keep image proportions.</span>
+      <span class="footerFeatureDetailsLink">Click for details</span>
+      <span class="footerFeatureLong">Crop photographs using free or fixed aspect ratios, straighten images, resize by pixels, percentage or centimeters, keep the original aspect ratio, rotate left or right, rotate by 180 degrees, flip horizontally or vertically, and prepare images for different dimensions without changing the main editor design.</span>
+    </button>
+
+    <button class="footerFeatureBox" type="button">
+      <span class="footerFeatureIcon" aria-hidden="true">🎨</span>
+      <span class="footerFeatureTitle">Creative Filters &amp; Effects</span>
+      <span class="footerFeatureSummary">Vivid, B&amp;W, Sepia, Cool, Warm, Matte and more.</span>
+      <span class="footerFeatureDetailsLink">Click for details</span>
+      <span class="footerFeatureLong">Apply original, vivid, black and white, sepia, cool, warm, matte and dramatic presets together with creative invert, posterize, pixelate and duotone effects, giving users a practical way to create different visual styles directly inside the browser.</span>
+    </button>
+
+    <button class="footerFeatureBox" type="button">
+      <span class="footerFeatureIcon" aria-hidden="true">✏️</span>
+      <span class="footerFeatureTitle">Text, Brush &amp; Eraser Tools</span>
+      <span class="footerFeatureSummary">Add text, draw, erase and customize your canvas.</span>
+      <span class="footerFeatureDetailsLink">Click for details</span>
+      <span class="footerFeatureLong">Add customizable text with multiple fonts, font sizes and colors, move text directly over the image, draw with a brush, erase drawn areas, choose brush color and size, and clear drawings when required, all while preserving the existing canvas-based editing experience.</span>
+    </button>
+
+    <button class="footerFeatureBox" type="button">
+      <span class="footerFeatureIcon" aria-hidden="true">✦</span>
+      <span class="footerFeatureTitle">AI Background Removal &amp; Replacement</span>
+      <span class="footerFeatureSummary">Remove the background and replace it with color or image.</span>
+      <span class="footerFeatureDetailsLink">Click for details</span>
+      <span class="footerFeatureLong">Use the built-in AI background-removal workflow to detect the foreground and create a transparent result, then choose a solid color or an image as a replacement background, with a processing overlay and status messages that keep the user informed during the operation.</span>
+    </button>
+
+    <button class="footerFeatureBox" type="button">
+      <span class="footerFeatureIcon" aria-hidden="true">💾</span>
+      <span class="footerFeatureTitle">Project Save, Restore &amp; Export</span>
+      <span class="footerFeatureSummary">Save projects, restore them later and export your image.</span>
+      <span class="footerFeatureDetailsLink">Click for details</span>
+      <span class="footerFeatureLong">Save an editing project as an ARnc project file, reopen a saved project later, restore editing information such as image data, text, rotation, flips, filters and adjustments, and export the finished image as PNG, JPG or WEBP from the existing Export control.</span>
+    </button>
+
+    <button class="footerFeatureBox" type="button">
+      <span class="footerFeatureIcon" aria-hidden="true">↶</span>
+      <span class="footerFeatureTitle">Undo, Redo, Zoom &amp; Fit</span>
+      <span class="footerFeatureSummary">Undo changes, redo them and control the canvas view.</span>
+      <span class="footerFeatureDetailsLink">Click for details</span>
+      <span class="footerFeatureLong">Work safely with undo and redo history, zoom the canvas in or out, fit the image to the available workspace, view the current image dimensions and monitor editor status messages without changing the existing top toolbar or editing controls.</span>
+    </button>
+
+    <button class="footerFeatureBox" type="button">
+      <span class="footerFeatureIcon" aria-hidden="true">📱</span>
+      <span class="footerFeatureTitle">Mobile Responsive Editing</span>
+      <span class="footerFeatureSummary">Use the editor comfortably in portrait or landscape mode.</span>
+      <span class="footerFeatureDetailsLink">Click for details</span>
+      <span class="footerFeatureLong">The editor is arranged to remain usable on smaller screens, including portrait and landscape mobile layouts, with a dedicated tool-panel area and a visible central image workspace so editing controls and the uploaded image can continue to be used without replacing the existing visual design.</span>
+    </button>
+  </div>
+
+  <section class="footerAbout">
+    <h2>About Photo Editor ARnc</h2>
+    <p>Photo Editor ARnc is a browser-based photo editing workspace designed to bring useful image editing functions together in one focused and easy-to-understand interface. The editor is built around a central canvas where an uploaded photograph can be viewed and edited, while the surrounding toolbar, side tools and adjustment panel provide access to the main controls. The purpose of Photo Editor ARnc is to make common image-editing work practical for everyday users without requiring a separate desktop application for basic tasks. Users can open an image from their device, choose an image through the upload area, drag and drop a photograph into the editor, or paste an image from the clipboard when supported by the browser. After an image is loaded, the existing workspace provides controls for light, color and detail adjustments, including brightness, exposure, contrast, highlights, shadows, vignette, saturation, temperature, tint, blur and sharpness. These controls are designed to provide direct visual adjustment while the image remains inside the editor canvas.</p>
+    <p>The Crop area provides free cropping as well as common fixed ratios such as square, four-by-three and sixteen-by-nine. Straightening is also available for correcting the visual angle of a photograph. The editor includes transformation controls for rotating the image to the left or right and for flipping the image horizontally or vertically. The Resize area supports pixel dimensions, percentage-based resizing and centimeter-based sizing, with an option to keep the image aspect ratio. These tools are useful when an image needs to be prepared for a particular screen, document, website, social platform or other destination that requires a specific size.</p>
+    <p>Photo Editor ARnc also contains creative controls for changing the visual appearance of photographs. Preset filters include Original, Vivid, B&amp;W, Sepia, Cool, Warm, Matte and Dramatic. Additional creative effects include Invert, Posterize, Pixelate and Duotone. These features are intended to let users experiment with different looks without leaving the editor. The Text tool allows a user to enter text, select a font, change the font size and choose a text color before placing the text on the image. Text can then be moved directly on the canvas. The Draw area provides a brush and eraser workflow, with controls for brush color and brush size, allowing users to add marks or remove drawn areas as part of the editing process.</p>
+    <p>Background tools are another important part of the editor. The current interface includes an AI-powered background-removal workflow that loads the browser background-removal model when required, processes the image and creates a transparent foreground result. A processing overlay communicates that the background-removal operation is in progress. After removal, the transparent result can be used with the background replacement controls. A solid background color can be selected, or a background image can be chosen from the device and applied behind the foreground. This makes the background section useful for product images, portraits, creative compositions and other situations where the original background needs to be removed or replaced.</p>
+    <p>The editor also includes project and output functionality. Users can save a project using the existing Save control and later open an ARnc project file to restore the editing state. The project structure can retain image information, text elements, rotation, flips, selected filters, adjustment values and background color information. The Export control allows the edited image to be produced as PNG, JPG or WEBP. The editor also includes undo and redo history so that changes can be reversed or restored during an editing session. Zoom controls make it possible to enlarge or reduce the canvas view, while Fit adjusts the image to the available workspace. Current image dimensions are shown in the footer status area.</p>
+    <p>Photo Editor ARnc is designed with responsive use in mind. On smaller screens, the interface changes its layout so the tool area can occupy a dedicated portion of the available space while the central image workspace remains accessible. In landscape mobile use, the editor can retain a side-by-side working arrangement with the tool panel positioned over the available side area when opened. The goal is to keep the existing editor controls usable across desktop, portrait mobile and landscape mobile orientations rather than removing important functions simply because the screen is smaller. The footer feature boxes below summarize the major capabilities of the website and are interactive: clicking a feature opens its longer explanation, and clicking it again returns the box to its compact form.</p>
+    <p>Photo Editor ARnc is intended as a practical, local-first style editing workspace where many everyday image operations can be performed directly in the browser. Depending on the feature and browser environment, processing can use the device itself, including canvas-based image operations and the browser-loaded background-removal model. Users should keep a copy of important original photographs before performing major edits, especially when preparing images for professional or archival purposes. The editor provides a convenient working environment, but the final output should always be checked at its intended size and format before publishing, printing or submitting it to another service.</p>
+    <p>The interface is organized so that the main editor remains the focus. The compact footer continues to display zoom, status and dimensions, while the expanded feature-information area is placed within the footer and does not replace the existing editing tools. Each feature is placed in its own box to make the available functionality easier to understand. The boxes are independent, so opening one explanation does not require changing the behavior of another feature box. This keeps the information area organized even when several features are listed together. The longer descriptions are available on demand, which helps keep the default footer compact while still providing detailed information for users who want to learn what the website can do.</p>
+    <p>Overall, Photo Editor ARnc brings together image opening, canvas preview, adjustments, cropping, straightening, filters, creative effects, text, drawing, background removal, background replacement, resizing, transformations, project saving, project restoration, exporting, undo and redo, zoom and responsive editing in a single browser-based workspace. The feature information at the bottom of the website is intended to explain these capabilities in long-form language without changing the core editor workflow. Existing buttons, controls, canvas behavior and the visual structure of the editor remain the primary working interface, while the new footer information provides an additional reference for visitors who want a fuller understanding of the available features.</p>
+  </section>
+</footer>
 </div>
 
 <script>
@@ -579,6 +807,14 @@ window.addEventListener("pointerup",()=>{draggingText=null});
 
 // Clipboard paste
 window.addEventListener("paste",e=>{const items=e.clipboardData?.items||[];for(const it of items)if(it.type.startsWith("image/")){loadFile(it.getAsFile());msg("Image pasted from clipboard");break}});
+
+
+  // Expand/collapse each footer feature independently.
+  $$(".footerFeatureBox").forEach(box=>{
+    box.addEventListener("click",()=>{
+      box.classList.toggle("expanded");
+    });
+  });
 
 syncControls();updateHistoryButtons();
 })();
