@@ -412,16 +412,6 @@ html,body{
 .footerFeatureSummary{color:#f5f5f5}
 .footerFeatureDetailsLink{color:#9bdcff}
 
-
-.cameraModal{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;padding:18px}
-.cameraModal.hidden{display:none}
-.cameraCard{width:min(680px,96vw);background:#111;border:1px solid #555;border-radius:16px;box-shadow:0 20px 70px rgba(0,0,0,.55);padding:14px}
-.cameraHead{display:flex;align-items:center;justify-content:space-between;color:#fff;margin-bottom:10px;font-size:18px}
-.cameraClose{border:1px solid #555;background:#222;color:#fff;border-radius:9px;width:36px;height:36px;cursor:pointer}
-#cameraVideo{display:block;width:100%;max-height:65vh;object-fit:contain;background:#000;border-radius:12px}
-.cameraActions{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:12px}
-.cameraHint{text-align:center;color:#bbb;font-size:13px;margin-top:9px}
-@media(max-width:600px){.cameraModal{padding:10px}.cameraCard{padding:10px}.cameraActions .topbtn{flex:1;min-width:145px}}
 </style>
 <!-- Extended image-format support -->
 <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
@@ -431,8 +421,7 @@ html,body{
 <div class="app" id="app">
 <header class="top">
  <div class="brand">Photo Editor <i>ARnc</i></div>
- <label class="topbtn" title="Open image">📂 Open<input id="file" type="file" accept="image/*,.heic,.heif,.heics,.heifs,.hif,.tif,.tiff,.avif,.bmp,.gif,.svg,.ico" hidden></label>
- <button class="topbtn" id="camera" title="Use camera">📷 Camera</button>
+ <label class="topbtn" title="Open image">📂 Open<input id="file" type="file" accept="image/*" hidden></label>
  <button class="topbtn" id="new">＋ New</button>
  <button class="topbtn" id="undo" title="Undo">↶</button><button class="topbtn" id="redo" title="Redo">↷</button>
  <div class="sep"></div>
@@ -443,14 +432,6 @@ html,body{
  <button class="topbtn" id="saveProject">💾 Save</button><label class="topbtn">📁 Open Project<input id="projectFile" type="file" accept=".arnc,.json" hidden></label>
  <button class="topbtn primary" id="export">Export</button>
 </header>
-<div id="cameraModal" class="cameraModal hidden" aria-hidden="true">
- <div class="cameraCard">
-  <div class="cameraHead"><strong>📷 Camera</strong><button class="cameraClose" id="cameraClose" type="button">✕</button></div>
-  <video id="cameraVideo" autoplay playsinline muted></video>
-  <div class="cameraActions"><button class="topbtn primary" id="cameraCapture" type="button">📸 Capture Photo</button><button class="topbtn" id="cameraSwitch" type="button">🔄 Switch Camera</button></div>
-  <div class="cameraHint" id="cameraHint">Allow camera access when your browser asks.</div>
- </div>
-</div>
 <div class="main">
  <aside class="sidebar">
   <button class="sidebtn active" data-panel="adjust"><span class="ico">☀</span>Adjust</button>
@@ -464,7 +445,7 @@ html,body{
  </aside>
  <section class="stage" id="stage">
   <canvas id="view"></canvas>
-  <div id="empty" class="empty"><h2>Open a photo to start editing</h2><p>Drag & drop an image here or choose a file.</p><label class="filepick">Choose image<input id="file2" type="file" accept="image/*,.heic,.heif,.heics,.heifs,.hif,.tif,.tiff,.avif,.bmp,.gif,.svg,.ico"></label></div>
+  <div id="empty" class="empty"><h2>Open a photo to start editing</h2><p>Drag & drop an image here or choose a file.</p><label class="filepick">Choose image<input id="file2" type="file" accept="image/*"></label></div>
   <div id="cropBox" class="cropBox"></div><div id="bgProcessing" class="bgProcessing hidden"><div class="stars">✦ · ✧ · ✦ · ✧ · ✦ · ✧ · ✦ · ✧ · ✦</div><div>Removing background…</div></div>
  </section>
  <aside class="right" id="right">
@@ -537,7 +518,7 @@ html,body{
     </div>
     <div class="section"><div class="sectionTitle">Replace background</div>
      <input id="bgColor" class="color" type="color" value="#ffffff">
-     <label class="filepick" style="margin-top:7px;width:100%;text-align:center">Choose background image<input id="bgImage" type="file" accept="image/*,.heic,.heif,.heics,.heifs,.hif,.tif,.tiff,.avif,.bmp,.gif,.svg,.ico"></label>
+     <label class="filepick" style="margin-top:7px;width:100%;text-align:center">Choose background image<input id="bgImage" type="file" accept="image/*"></label>
      <button class="action" id="applyBg" style="width:100%;margin-top:7px">Apply background</button>
      <button class="action" id="clearBg" style="width:100%;margin-top:7px">Keep transparent</button>
     </div>
@@ -954,30 +935,6 @@ $("#applyResize").onclick=()=>{
 };
 updateResizeUnit();
 
-// Camera capture — uses the device camera without changing the existing editor workflow.
-const cameraModal=$("#cameraModal"),cameraVideo=$("#cameraVideo"),cameraHint=$("#cameraHint");
-let cameraStream=null,cameraFacing="environment";
-function stopCamera(){if(cameraStream){cameraStream.getTracks().forEach(t=>t.stop());cameraStream=null}cameraVideo.srcObject=null;cameraModal.classList.add("hidden");cameraModal.setAttribute("aria-hidden","true")}
-async function openCamera(){
- if(!navigator.mediaDevices?.getUserMedia){return msg("Camera is not supported in this browser or page.")}
- try{
-  stopCamera();cameraModal.classList.remove("hidden");cameraModal.setAttribute("aria-hidden","false");cameraHint.textContent="Starting camera…";
-  cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:cameraFacing},width:{ideal:1920},height:{ideal:1080}},audio:false});
-  cameraVideo.srcObject=cameraStream;await cameraVideo.play();cameraHint.textContent="Camera ready — click Capture Photo.";
- }catch(err){stopCamera();msg("Camera could not be opened. Please allow camera permission.");console.error("Camera:",err)}
-}
-$("#camera").onclick=openCamera;
-$("#cameraClose").onclick=stopCamera;
-$("#cameraSwitch").onclick=async()=>{cameraFacing=cameraFacing==="environment"?"user":"environment";await openCamera()};
-$("#cameraCapture").onclick=async()=>{
- if(!cameraStream||!cameraVideo.videoWidth)return msg("Camera is not ready yet.");
- const c=makeCanvas(cameraVideo.videoWidth,cameraVideo.videoHeight),x=c.getContext("2d");
- if(cameraFacing==="user"){x.translate(c.width,0);x.scale(-1,1)}
- x.drawImage(cameraVideo,0,0,c.width,c.height);
- stopCamera();
- c.toBlob(async blob=>{if(blob){const f=new File([blob],"Camera_Photo.jpg",{type:"image/jpeg"});await loadFile(f)}},"image/jpeg",.95);
-};
-window.addEventListener("beforeunload",stopCamera);
 $("#theme").onclick=()=>{$("#app").classList.toggle("lightTheme");msg("Theme changed")};
 function project(){
  return {version:2,width:baseCanvas?.width||0,height:baseCanvas?.height||0,image:baseCanvas?.toDataURL("image/png")||null,texts,rotation,flipX,flipY,filter,adj,bgColor:$("#bgColor").value}
