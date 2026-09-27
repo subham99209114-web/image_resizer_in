@@ -1659,7 +1659,7 @@ Resize, compress, crop and edit your photos directly in your browser.
 No image upload is required for local image processing.
   </b></p>
 <label class='upload' for='fileInput' id='singleUploadLabel' role='button' tabindex='0'>
-  📁 <b>Click here to select Single Image</b>
+  📁 <b>Click here to Choose/select Single Image</b>
 <br/><br/>
   <b>Any Image Format / Extension</b>
 </label>
@@ -1667,17 +1667,17 @@ No image upload is required for local image processing.
 <input accept='*/*' id='fileInput' type='file'/>
 
 <label class='upload multiUpload' for='multiFileInput' id='multiUploadLabel' role='button' tabindex='0'>
-  📚 <b>Select Multiple Images</b>
+  📚 <b>Choose/Select Multiple Images</b>
 <br/><br/>
   <b>Batch / Bulk Resize &amp; Compress</b>
 </label>
 
 <!-- PDF to Image: signed-in tool placed directly below Select Multiple Images. -->
-<div class='proFeatureBox signinProtectedTool' id='pdfToImageTool'>
+<div class='proFeatureBox signinProtectedTool' id='pdfToImageTool' style="background-color: blueviolet;">
   <b>📄 Convert PDF to Image</b>
   <div class='studioSub' style='margin-top:4px;'>Convert every PDF page into separate JPG, PNG or WEBP images directly in your browser.</div>
   <div class='pdfToolRow' style='margin-top:10px;'>
-    <button id='pdfToImageSelectBtn' type='button'>📄 Select PDF(s)</button>
+    <button id='pdfToImageSelectBtn' type='button' style="background-color: red;">📄 Choose/Select PDF(s) files</button>
     <select id='pdfImageFormat' aria-label='PDF image format'>
       <option value='image/jpeg'>JPG</option>
       <option value='image/png'>PNG</option>
@@ -1702,10 +1702,10 @@ No image upload is required for local image processing.
 
 <input accept='*/*' id='multiFileInput' multiple='multiple' type='file'/>
 <div id='postUploadTools' style='display:none;'>
-<div class='additionalToolsToggle' id='showAdditionalToggle' style='display:none;'>
+ <div class='additionalToolsToggle' id='showAdditionalToggle' style='display:none; background-color: yellow;'>
   <label class='additionalToolsLabel'>
     <input aria-controls='additionalToolsGroup' id='showAdditionalTools' type='checkbox'/>
-    <span>Show Additional/Professional</span>
+    <span style="color: black;">Show Additional/Professional</span>
   </label>
 </div>
 <div class='proFeatureBox signinProtectedQuickPreset'><b>🎯 Quick Presets</b><div class='presetRow'><select id='quickPreset'><option value=''>Select preset...</option><option value='mobile'>📱 Mobile &#8212; 1080px</option><option value='instagram'>📸 Instagram &#8212; 1080&#215;1080</option><option value='story'>📱 Instagram Story &#8212; 1080&#215;1920</option><option value='youtube'>&#9654;&#65039; YouTube Thumbnail &#8212; 1280&#215;720</option><option value='passport'>🪪 Passport Photo &#8212; 600&#215;600</option><option value='print'>🖨 Print &#8212; 300 DPI</option><option value='website'>🌐 Website &#8212; Web Optimized</option><option value='email'>📧 Email &#8212; Small Size</option><option value='max'>&#9889; Maximum Compression</option></select><select id='aspectPreset'><option value=''>Aspect Ratio...</option><option value='1:1'>1:1</option><option value='4:5'>4:5</option><option value='16:9'>16:9</option><option value='9:16'>9:16</option></select></div></div>
@@ -5910,7 +5910,7 @@ if(selectAreaAiRemoveBgBtn){
   selectAreaAiRemoveBgBtn.onclick=function(e){
     e.preventDefault();
     e.stopPropagation();
-    window.location.href='#';
+    window.location.href='select_area_background_remove_ARnc/';
   };
 }
 
@@ -6744,7 +6744,7 @@ html[data-theme='dark'] .utilityMenu button{color:#fff!important}
   
 <div class='bottomWebsiteAbout' aria-label='ResizeImage.ARnc website information'>
   <div class='bottomWebsiteAboutTitle'>ResizeImage.ARnc — About This Website</div>
-  <div class='bottomWebsiteAboutIntro'>This 16,000-word English overview explains the website, its image workflow, professional tools, project features, conversion options, and user controls without changing the existing editor design or functionality.</div>
+  <div class='bottomWebsiteAboutIntro'>This English overview explains the website, its image workflow, professional tools, project features, conversion options, and user controls without changing the existing editor design or functionality.</div>
   <div class='bottomWebsiteAboutGrid'>
     <section class='bottomAboutSection'><h3>Introduction to ResizeImage.ARnc</h3><p>A clear image workflow is easier to manage when dimensions, quality, format, and visual adjustments remain connected instead of being scattered across separate tools. This discussion focuses on image resizing, compression, editing, preview, and export and explains why careful settings can improve a practical image workflow. Section 1 keeps the explanation centered on practical image preparation. The preview gives the user a useful visual reference so changes can be inspected before the final file is saved or downloaded. When working with image resizing, compression, editing, preview, and export, users can make a change, inspect the preview, and decide whether another adjustment is needed. Users can choose settings according to the purpose of an image, because a web image, printed photograph, profile picture, document image, and archive copy can require different results. For image resizing, compression, editing, preview, and export, consistency is valuable when the same type of image work must be repeated across different files. Resizing is more than changing a number because the final result also depends on proportions, image content, compression behavior, output format, and the requirements of the destination. A dependable workflow for image resizing, compression, editing, preview, and export connects the source image, selected settings, processed preview, and final output. Compression can reduce storage and transfer requirements, but a sensible workflow also considers whether important edges, text, faces, textures, and other details remain visually useful. This discussion focuses on image resizing, compression, editing, preview, and export and explains why careful settings can improve a practical image workflow. Keeping the original aspect ratio is often helpful when distortion would make people, products, artwork, or other subjects look unnatural. When working with image resizing, compression, editing, preview, and export, users can make a change, inspect the preview, and decide whether another adjustment is needed. Cropping can remove unnecessary areas and place attention on the important subject before the final dimensions are produced. For image resizing, compression, editing, preview, and export, consistency is valuable when the same type of image work must be repeated across different files. Rotation can correct orientation or prepare an image for a different presentation while keeping the editing process available for additional work. A dependable workflow for image resizing, compression, editing, preview, and export connects the source image, selected settings, processed preview, and final output. Brightness and quality adjustments can change the appearance and size of an output, so the preview should be checked whenever these settings are changed. This discussion focuses on image resizing, compression, editing, preview, and export and explains why careful settings can improve a practical image workflow. DPI settings are useful when an image is prepared for workflows where print density or document requirements matter. When working with image resizing, compression, editing, preview, and export, users can make a change, inspect the preview, and decide whether another adjustment is needed. Section 1 keeps the explanation centered on practical image preparation. Output format selection should match the intended use because different formats provide different combinations of compatibility, transparency, compression, and file size. For image resizing, compression, editing, preview, and export, consistency is valuable when the same type of image work must be repeated across different files. A professional workflow benefits from predictable controls, clear labels, responsive previews, and a final step that makes the output easy to identify and use. A dependable workflow for image resizing, compression, editing, preview, and export connects the source image, selected settings, processed preview, and final output. Watermark and output options can support branded images, organized exports, and repeatable delivery rules without requiring a separate basic editing application. This discussion focuses on image resizing, compression, editing, preview, and export and explains why careful settings can improve a practical image workflow. Background tools can support creative compositions by changing, removing, or replacing visual areas behind the main subject when the workflow and source image allow it. When working with image resizing, compression, editing, preview, and export, users can make a change, inspect the preview, and decide whether another adjustment is needed. AI-assisted tools can reduce repetitive work by helping with image analysis, object awareness, segmentation, or other automated tasks when supported by the application. For image resizing, compression, editing, preview, and export, consistency is valuable when the same type of image work must be repeated across different files. Advanced editing becomes more useful when users can combine crop, text, drawing, rotation, effects, opacity, and other controls while reviewing the result. A dependable workflow for image resizing, compression, editing, preview, and export connects the source image, selected settings, processed preview, and final output. Layer-based editing can help keep different visual elements separate so that text, graphics, backgrounds, and effects can be adjusted without rebuilding the entire composition. This discussion focuses on image resizing, compression, editing, preview, and export and explains why careful settings can improve a practical image workflow. Project management can make longer editing sessions easier to continue because saved work can be organized, reopened, duplicated, renamed, or restored when supported. When working with image resizing, compression, editing, preview, and export, users can make a change, inspect the preview, and decide whether another adjustment is needed. Batch processing is useful when several images require similar treatment because a consistent workflow can reduce repetitive manual actions and make results easier to compare. For image resizing, compression, editing, preview, and export, consistency is valuable when the same type of image work must be repeated across different files. Section 1 keeps the explanation centered on practical image preparation. Conversion tools are helpful when a file needs to move between formats for compatibility with websites, software, design applications, documents, or other destinations. A dependable workflow for image resizing, compression, editing, preview, and export connects the source image, selected settings, processed preview, and final output. Before exporting, users should review the image dimensions, visual quality, orientation, background, format, and file size against the original goal. This discussion focuses on image resizing, compression, editing, preview, and export and explains why careful settings can improve a practical image workflow. professional workflow settings result file</p></section>
     <section class='bottomAboutSection'><h3>Image Resize Workflow</h3><p>Users can choose settings according to the purpose of an image, because a web image, printed photograph, profile picture, document image, and archive copy can require different results. This discussion focuses on width, height, units, dimensions, and controlled resizing and explains why careful settings can improve a practical image workflow. Section 2 keeps the explanation centered on practical image preparation. Resizing is more than changing a number because the final result also depends on proportions, image content, compression behavior, output format, and the requirements of the destination. When working with width, height, units, dimensions, and controlled resizing, users can make a change, inspect the preview, and decide whether another adjustment is needed. Compression can reduce storage and transfer requirements, but a sensible workflow also considers whether important edges, text, faces, textures, and other details remain visually useful. For width, height, units, dimensions, and controlled resizing, consistency is valuable when the same type of image work must be repeated across different files. Keeping the original aspect ratio is often helpful when distortion would make people, products, artwork, or other subjects look unnatural. A dependable workflow for width, height, units, dimensions, and controlled resizing connects the source image, selected settings, processed preview, and final output. Cropping can remove unnecessary areas and place attention on the important subject before the final dimensions are produced. This discussion focuses on width, height, units, dimensions, and controlled resizing and explains why careful settings can improve a practical image workflow. Rotation can correct orientation or prepare an image for a different presentation while keeping the editing process available for additional work. When working with width, height, units, dimensions, and controlled resizing, users can make a change, inspect the preview, and decide whether another adjustment is needed. Brightness and quality adjustments can change the appearance and size of an output, so the preview should be checked whenever these settings are changed. For width, height, units, dimensions, and controlled resizing, consistency is valuable when the same type of image work must be repeated across different files. DPI settings are useful when an image is prepared for workflows where print density or document requirements matter. A dependable workflow for width, height, units, dimensions, and controlled resizing connects the source image, selected settings, processed preview, and final output. Output format selection should match the intended use because different formats provide different combinations of compatibility, transparency, compression, and file size. This discussion focuses on width, height, units, dimensions, and controlled resizing and explains why careful settings can improve a practical image workflow. A professional workflow benefits from predictable controls, clear labels, responsive previews, and a final step that makes the output easy to identify and use. When working with width, height, units, dimensions, and controlled resizing, users can make a change, inspect the preview, and decide whether another adjustment is needed. Section 2 keeps the explanation centered on practical image preparation. Watermark and output options can support branded images, organized exports, and repeatable delivery rules without requiring a separate basic editing application. For width, height, units, dimensions, and controlled resizing, consistency is valuable when the same type of image work must be repeated across different files. Background tools can support creative compositions by changing, removing, or replacing visual areas behind the main subject when the workflow and source image allow it. A dependable workflow for width, height, units, dimensions, and controlled resizing connects the source image, selected settings, processed preview, and final output. AI-assisted tools can reduce repetitive work by helping with image analysis, object awareness, segmentation, or other automated tasks when supported by the application. This discussion focuses on width, height, units, dimensions, and controlled resizing and explains why careful settings can improve a practical image workflow. Advanced editing becomes more useful when users can combine crop, text, drawing, rotation, effects, opacity, and other controls while reviewing the result. When working with width, height, units, dimensions, and controlled resizing, users can make a change, inspect the preview, and decide whether another adjustment is needed. Layer-based editing can help keep different visual elements separate so that text, graphics, backgrounds, and effects can be adjusted without rebuilding the entire composition. For width, height, units, dimensions, and controlled resizing, consistency is valuable when the same type of image work must be repeated across different files. Project management can make longer editing sessions easier to continue because saved work can be organized, reopened, duplicated, renamed, or restored when supported. A dependable workflow for width, height, units, dimensions, and controlled resizing connects the source image, selected settings, processed preview, and final output. Batch processing is useful when several images require similar treatment because a consistent workflow can reduce repetitive manual actions and make results easier to compare. This discussion focuses on width, height, units, dimensions, and controlled resizing and explains why careful settings can improve a practical image workflow. Conversion tools are helpful when a file needs to move between formats for compatibility with websites, software, design applications, documents, or other destinations. When working with width, height, units, dimensions, and controlled resizing, users can make a change, inspect the preview, and decide whether another adjustment is needed. Before exporting, users should review the image dimensions, visual quality, orientation, background, format, and file size against the original goal. For width, height, units, dimensions, and controlled resizing, consistency is valuable when the same type of image work must be repeated across different files. Section 2 keeps the explanation centered on practical image preparation. Browser-based processing can be convenient because many supported operations can be performed directly in the page, keeping the workflow close to the user&#x27;s device and controls. A dependable workflow for width, height, units, dimensions, and controlled resizing connects the source image, selected settings, processed preview, and final output. Account, theme, and language controls can personalize the surrounding experience while leaving the core image workflow available for the tasks the user needs to complete. This discussion focuses on width, height, units, dimensions, and controlled resizing and explains why careful settings can improve a practical image workflow.</p></section>
@@ -6762,8 +6762,2080 @@ html[data-theme='dark'] .utilityMenu button{color:#fff!important}
     <section class='bottomAboutSection'><h3>Before and After Results</h3><p>A clear image workflow is easier to manage when dimensions, quality, format, and visual adjustments remain connected instead of being scattered across separate tools. This discussion focuses on preview comparison, quality inspection, dimensions, file size, and final review and explains why careful settings can improve a practical image workflow. Section 14 keeps the explanation centered on practical image preparation. The preview gives the user a useful visual reference so changes can be inspected before the final file is saved or downloaded. When working with preview comparison, quality inspection, dimensions, file size, and final review, users can make a change, inspect the preview, and decide whether another adjustment is needed. Users can choose settings according to the purpose of an image, because a web image, printed photograph, profile picture, document image, and archive copy can require different results. For preview comparison, quality inspection, dimensions, file size, and final review, consistency is valuable when the same type of image work must be repeated across different files. Resizing is more than changing a number because the final result also depends on proportions, image content, compression behavior, output format, and the requirements of the destination. A dependable workflow for preview comparison, quality inspection, dimensions, file size, and final review connects the source image, selected settings, processed preview, and final output. Compression can reduce storage and transfer requirements, but a sensible workflow also considers whether important edges, text, faces, textures, and other details remain visually useful. This discussion focuses on preview comparison, quality inspection, dimensions, file size, and final review and explains why careful settings can improve a practical image workflow. Keeping the original aspect ratio is often helpful when distortion would make people, products, artwork, or other subjects look unnatural. When working with preview comparison, quality inspection, dimensions, file size, and final review, users can make a change, inspect the preview, and decide whether another adjustment is needed. Cropping can remove unnecessary areas and place attention on the important subject before the final dimensions are produced. For preview comparison, quality inspection, dimensions, file size, and final review, consistency is valuable when the same type of image work must be repeated across different files. Rotation can correct orientation or prepare an image for a different presentation while keeping the editing process available for additional work. A dependable workflow for preview comparison, quality inspection, dimensions, file size, and final review connects the source image, selected settings, processed preview, and final output. Brightness and quality adjustments can change the appearance and size of an output, so the preview should be checked whenever these settings are changed. This discussion focuses on preview comparison, quality inspection, dimensions, file size, and final review and explains why careful settings can improve a practical image workflow. DPI settings are useful when an image is prepared for workflows where print density or document requirements matter. When working with preview comparison, quality inspection, dimensions, file size, and final review, users can make a change, inspect the preview, and decide whether another adjustment is needed. Section 14 keeps the explanation centered on practical image preparation. Output format selection should match the intended use because different formats provide different combinations of compatibility, transparency, compression, and file size. For preview comparison, quality inspection, dimensions, file size, and final review, consistency is valuable when the same type of image work must be repeated across different files. A professional workflow benefits from predictable controls, clear labels, responsive previews, and a final step that makes the output easy to identify and use. A dependable workflow for preview comparison, quality inspection, dimensions, file size, and final review connects the source image, selected settings, processed preview, and final output. Watermark and output options can support branded images, organized exports, and repeatable delivery rules without requiring a separate basic editing application. This discussion focuses on preview comparison, quality inspection, dimensions, file size, and final review and explains why careful settings can improve a practical image workflow. Background tools can support creative compositions by changing, removing, or replacing visual areas behind the main subject when the workflow and source image allow it. When working with preview comparison, quality inspection, dimensions, file size, and final review, users can make a change, inspect the preview, and decide whether another adjustment is needed. AI-assisted tools can reduce repetitive work by helping with image analysis, object awareness, segmentation, or other automated tasks when supported by the application. For preview comparison, quality inspection, dimensions, file size, and final review, consistency is valuable when the same type of image work must be repeated across different files. Advanced editing becomes more useful when users can combine crop, text, drawing, rotation, effects, opacity, and other controls while reviewing the result. A dependable workflow for preview comparison, quality inspection, dimensions, file size, and final review connects the source image, selected settings, processed preview, and final output. Layer-based editing can help keep different visual elements separate so that text, graphics, backgrounds, and effects can be adjusted without rebuilding the entire composition. This discussion focuses on preview comparison, quality inspection, dimensions, file size, and final review and explains why careful settings can improve a practical image workflow. Project management can make longer editing sessions easier to continue because saved work can be organized, reopened, duplicated, renamed, or restored when supported. When working with preview comparison, quality inspection, dimensions, file size, and final review, users can make a change, inspect the preview, and decide whether another adjustment is needed. Batch processing is useful when several images require similar treatment because a consistent workflow can reduce repetitive manual actions and make results easier to compare. For preview comparison, quality inspection, dimensions, file size, and final review, consistency is valuable when the same type of image work must be repeated across different files. Section 14 keeps the explanation centered on practical image preparation. review clear practical reliable flexible efficient image resize compression quality preview output format width height aspect ratio crop rotate brightness quality DPI editor project batch conversion browser local professional workflow settings result file design control</p></section>
     <section class='bottomAboutSection'><h3>Privacy and Local Processing</h3><p>Users can choose settings according to the purpose of an image, because a web image, printed photograph, profile picture, document image, and archive copy can require different results. This discussion focuses on browser processing, local workflows, temporary data, control, and privacy-aware use and explains why careful settings can improve a practical image workflow. Section 15 keeps the explanation centered on practical image preparation. Resizing is more than changing a number because the final result also depends on proportions, image content, compression behavior, output format, and the requirements of the destination. When working with browser processing, local workflows, temporary data, control, and privacy-aware use, users can make a change, inspect the preview, and decide whether another adjustment is needed. Compression can reduce storage and transfer requirements, but a sensible workflow also considers whether important edges, text, faces, textures, and other details remain visually useful. For browser processing, local workflows, temporary data, control, and privacy-aware use, consistency is valuable when the same type of image work must be repeated across different files. Keeping the original aspect ratio is often helpful when distortion would make people, products, artwork, or other subjects look unnatural. A dependable workflow for browser processing, local workflows, temporary data, control, and privacy-aware use connects the source image, selected settings, processed preview, and final output. Cropping can remove unnecessary areas and place attention on the important subject before the final dimensions are produced. This discussion focuses on browser processing, local workflows, temporary data, control, and privacy-aware use and explains why careful settings can improve a practical image workflow. Rotation can correct orientation or prepare an image for a different presentation while keeping the editing process available for additional work. When working with browser processing, local workflows, temporary data, control, and privacy-aware use, users can make a change, inspect the preview, and decide whether another adjustment is needed. Brightness and quality adjustments can change the appearance and size of an output, so the preview should be checked whenever these settings are changed. For browser processing, local workflows, temporary data, control, and privacy-aware use, consistency is valuable when the same type of image work must be repeated across different files. DPI settings are useful when an image is prepared for workflows where print density or document requirements matter. A dependable workflow for browser processing, local workflows, temporary data, control, and privacy-aware use connects the source image, selected settings, processed preview, and final output. Output format selection should match the intended use because different formats provide different combinations of compatibility, transparency, compression, and file size. This discussion focuses on browser processing, local workflows, temporary data, control, and privacy-aware use and explains why careful settings can improve a practical image workflow. A professional workflow benefits from predictable controls, clear labels, responsive previews, and a final step that makes the output easy to identify and use. When working with browser processing, local workflows, temporary data, control, and privacy-aware use, users can make a change, inspect the preview, and decide whether another adjustment is needed. Section 15 keeps the explanation centered on practical image preparation. Watermark and output options can support branded images, organized exports, and repeatable delivery rules without requiring a separate basic editing application. For browser processing, local workflows, temporary data, control, and privacy-aware use, consistency is valuable when the same type of image work must be repeated across different files. Background tools can support creative compositions by changing, removing, or replacing visual areas behind the main subject when the workflow and source image allow it. A dependable workflow for browser processing, local workflows, temporary data, control, and privacy-aware use connects the source image, selected settings, processed preview, and final output. AI-assisted tools can reduce repetitive work by helping with image analysis, object awareness, segmentation, or other automated tasks when supported by the application. This discussion focuses on browser processing, local workflows, temporary data, control, and privacy-aware use and explains why careful settings can improve a practical image workflow. Advanced editing becomes more useful when users can combine crop, text, drawing, rotation, effects, opacity, and other controls while reviewing the result. When working with browser processing, local workflows, temporary data, control, and privacy-aware use, users can make a change, inspect the preview, and decide whether another adjustment is needed. Layer-based editing can help keep different visual elements separate so that text, graphics, backgrounds, and effects can be adjusted without rebuilding the entire composition. For browser processing, local workflows, temporary data, control, and privacy-aware use, consistency is valuable when the same type of image work must be repeated across different files. Project management can make longer editing sessions easier to continue because saved work can be organized, reopened, duplicated, renamed, or restored when supported. A dependable workflow for browser processing, local workflows, temporary data, control, and privacy-aware use connects the source image, selected settings, processed preview, and final output. Batch processing is useful when several images require similar treatment because a consistent workflow can reduce repetitive manual actions and make results easier to compare. This discussion focuses on browser processing, local workflows, temporary data, control, and privacy-aware use and explains why careful settings can improve a practical image workflow. Conversion tools are helpful when a file needs to move between formats for compatibility with websites, software, design applications, documents, or other destinations. When working with browser processing, local workflows, temporary data, control, and privacy-aware use, users can make a change, inspect the preview, and decide whether another adjustment is needed. Before exporting, users should review the image dimensions, visual quality, orientation, background, format, and file size against the original goal. For browser processing, local workflows, temporary data, control, and privacy-aware use, consistency is valuable when the same type of image work must be repeated across different files. Section 15 keeps the explanation centered on practical image preparation. clear practical reliable flexible efficient image resize compression quality preview output format width height aspect ratio crop rotate brightness quality DPI editor project batch conversion browser local professional workflow settings result file design control processing download save open</p></section>
     <section class='bottomAboutSection'><h3>Account, Theme and Language</h3><p>Compression can reduce storage and transfer requirements, but a sensible workflow also considers whether important edges, text, faces, textures, and other details remain visually useful. This discussion focuses on account access, authentication, system theme, light theme, dark theme, and language controls and explains why careful settings can improve a practical image workflow. Section 16 keeps the explanation centered on practical image preparation. Keeping the original aspect ratio is often helpful when distortion would make people, products, artwork, or other subjects look unnatural. When working with account access, authentication, system theme, light theme, dark theme, and language controls, users can make a change, inspect the preview, and decide whether another adjustment is needed. Cropping can remove unnecessary areas and place attention on the important subject before the final dimensions are produced. For account access, authentication, system theme, light theme, dark theme, and language controls, consistency is valuable when the same type of image work must be repeated across different files. Rotation can correct orientation or prepare an image for a different presentation while keeping the editing process available for additional work. A dependable workflow for account access, authentication, system theme, light theme, dark theme, and language controls connects the source image, selected settings, processed preview, and final output. Brightness and quality adjustments can change the appearance and size of an output, so the preview should be checked whenever these settings are changed. This discussion focuses on account access, authentication, system theme, light theme, dark theme, and language controls and explains why careful settings can improve a practical image workflow. DPI settings are useful when an image is prepared for workflows where print density or document requirements matter. When working with account access, authentication, system theme, light theme, dark theme, and language controls, users can make a change, inspect the preview, and decide whether another adjustment is needed. Output format selection should match the intended use because different formats provide different combinations of compatibility, transparency, compression, and file size. For account access, authentication, system theme, light theme, dark theme, and language controls, consistency is valuable when the same type of image work must be repeated across different files. A professional workflow benefits from predictable controls, clear labels, responsive previews, and a final step that makes the output easy to identify and use. A dependable workflow for account access, authentication, system theme, light theme, dark theme, and language controls connects the source image, selected settings, processed preview, and final output. Watermark and output options can support branded images, organized exports, and repeatable delivery rules without requiring a separate basic editing application. This discussion focuses on account access, authentication, system theme, light theme, dark theme, and language controls and explains why careful settings can improve a practical image workflow. Background tools can support creative compositions by changing, removing, or replacing visual areas behind the main subject when the workflow and source image allow it. When working with account access, authentication, system theme, light theme, dark theme, and language controls, users can make a change, inspect the preview, and decide whether another adjustment is needed. Section 16 keeps the explanation centered on practical image preparation. AI-assisted tools can reduce repetitive work by helping with image analysis, object awareness, segmentation, or other automated tasks when supported by the application. For account access, authentication, system theme, light theme, dark theme, and language controls, consistency is valuable when the same type of image work must be repeated across different files. Advanced editing becomes more useful when users can combine crop, text, drawing, rotation, effects, opacity, and other controls while reviewing the result. A dependable workflow for account access, authentication, system theme, light theme, dark theme, and language controls connects the source image, selected settings, processed preview, and final output. Layer-based editing can help keep different visual elements separate so that text, graphics, backgrounds, and effects can be adjusted without rebuilding the entire composition. This discussion focuses on account access, authentication, system theme, light theme, dark theme, and language controls and explains why careful settings can improve a practical image workflow. Project management can make longer editing sessions easier to continue because saved work can be organized, reopened, duplicated, renamed, or restored when supported. When working with account access, authentication, system theme, light theme, dark theme, and language controls, users can make a change, inspect the preview, and decide whether another adjustment is needed. Batch processing is useful when several images require similar treatment because a consistent workflow can reduce repetitive manual actions and make results easier to compare. For account access, authentication, system theme, light theme, dark theme, and language controls, consistency is valuable when the same type of image work must be repeated across different files. Conversion tools are helpful when a file needs to move between formats for compatibility with websites, software, design applications, documents, or other destinations. A dependable workflow for account access, authentication, system theme, light theme, dark theme, and language controls connects the source image, selected settings, processed preview, and final output. Before exporting, users should review the image dimensions, visual quality, orientation, background, format, and file size against the original goal. This discussion focuses on account access, authentication, system theme, light theme, dark theme, and language controls and explains why careful settings can improve a practical image workflow. Browser-based processing can be convenient because many supported operations can be performed directly in the page, keeping the workflow close to the user&#x27;s device and controls. When working with account access, authentication, system theme, light theme, dark theme, and language controls, users can make a change, inspect the preview, and decide whether another adjustment is needed. Account, theme, and language controls can personalize the surrounding experience while leaving the core image workflow available for the tasks the user needs to complete. For account access, authentication, system theme, light theme, dark theme, and language controls, consistency is valuable when the same type of image work must be repeated across different files. Section 16 keeps the explanation centered on practical image preparation. practical reliable flexible efficient</p></section>
+<div style="width: 100%; height: 100%;">
+<section class='bottomAboutSection'> 
+  <h3> Privacy Policy for ResizeImage.ARnc </h3>
+   <p style="font-size: 12px; color: #F5F5F5;">Privacy Policy for ResizeImage.ARnc
+Welcome to ResizeImage.ARnc. Your privacy is important to us. This Privacy Policy explains how ResizeImage.ARnc (“we,” “us,” “our,” or “Website”) collects, uses, stores, protects, and handles information when you visit or use our website, tools, services, features, and related functionality.
+ResizeImage.ARnc provides online image-related tools and services that may include image resizing, image compression, image conversion, image editing, image format conversion, image optimization, PDF and image-related tools, background-related tools, and other features that may be introduced or modified from time to time.
+By accessing or using ResizeImage.ARnc, you acknowledge that you have read and understood this Privacy Policy. If you do not agree with any part of this Privacy Policy, please discontinue use of the Website.
+This Privacy Policy is intended to explain our privacy practices in clear language. Because the Website may be updated, new features may be introduced, or third-party services may change, this Privacy Policy may also be updated from time to time.
+
+───
+
+1. About ResizeImage.ARnc
+ResizeImage.ARnc is an online utility platform designed to help users work with digital images and related files through browser-based and/or server-assisted tools.
+Depending on the features available at the time you use the Website, you may be able to:
+• Resize images.
+• Compress images.
+• Change image dimensions.
+• Convert images between supported formats.
+• Convert images into modern formats.
+• Adjust image quality.
+• Adjust brightness and other image properties.
+• Crop images.
+• Rotate images.
+• Change DPI settings.
+• Edit images.
+• Add text, shapes, arrows, or other elements.
+• Use image enhancement tools.
+• Use background-related tools.
+• Remove or modify image backgrounds where supported.
+• Process multiple images.
+• Create or process image-based documents.
+• Merge or process PDF-related files where supported.
+• Download processed files.
+• Use professional or advanced image-processing features where available.
+• Create or use an account where account functionality is provided.
+• Access additional or professional tools after signing in where applicable.
+The exact features offered by ResizeImage.ARnc may change over time.
+
+───
+
+2. Scope of This Privacy Policy
+This Privacy Policy applies to information collected through:
+1. The ResizeImage.ARnc website.
+2. Pages hosted under ResizeImage.ARnc-related web properties.
+3. Image-processing and file-processing tools provided through the Website.
+4. Sign-in or account-related features, where available.
+5. Analytics and usage measurement systems used by the Website.
+6. Communication channels used to contact us regarding the Website.
+7. Other services or features that explicitly link to or reference this Privacy Policy.
+This Privacy Policy does not automatically apply to websites, applications, services, or platforms operated by third parties.
+When you click a link that takes you away from ResizeImage.ARnc, the third party may have its own privacy policy and data practices. We recommend reading the privacy policy of any third-party service before providing information to it.
+
+───
+
+3. Information We May Collect
+The information we collect depends on how you use ResizeImage.ARnc.
+Some tools may require little or no personal information. Other features, especially account-based or professional features, may require additional information.
+Information may generally fall into the following categories:
+• Information you provide directly.
+• Information collected automatically.
+• Information related to files or images you process.
+• Account and authentication information.
+• Technical information.
+• Usage and analytics information.
+• Information you voluntarily provide when contacting us.
+
+───
+
+4. Information You Provide Directly
+You may voluntarily provide information when using certain features of ResizeImage.ARnc.
+For example, you may provide:
+• Name.
+• Email address.
+• Account information.
+• Password or authentication credentials.
+• Information submitted through contact forms.
+• Feedback.
+• Support requests.
+• Information provided in messages.
+• Preferences associated with an account.
+• Other information you voluntarily submit.
+We only intend to use information provided by you for legitimate purposes related to operating, maintaining, securing, improving, or supporting the Website and its services.
+You should avoid submitting unnecessary sensitive personal information to the Website.
+
+───
+
+5. Images and Files You Upload
+ResizeImage.ARnc may allow you to upload images and other supported files for processing.
+Examples may include:
+• JPG files.
+• JPEG files.
+• PNG files.
+• WEBP files.
+• GIF files, where supported.
+• SVG files, where supported.
+• ICO files, where supported.
+• PDF files, where supported.
+• Other supported image or document formats.
+Files uploaded to ResizeImage.ARnc may contain personal information.
+For example, an uploaded photograph may contain:
+• A person's face.
+• A person's home.
+• A vehicle.
+• A document.
+• A screenshot.
+• Metadata.
+• Location information embedded in metadata.
+• Other private or identifying information.
+You are responsible for ensuring that you have the necessary rights and permissions to upload and process files through the Website.
+
+───
+
+6. Local Browser Processing
+Some ResizeImage.ARnc features may process files directly inside your web browser.
+When a tool operates entirely within the browser, the Website may not need to upload the actual image file to our server for that particular operation.
+Browser-based processing can help reduce unnecessary transmission of image data.
+However, not every feature necessarily operates entirely within the browser.
+Some features may require communication with a server, hosting provider, application programming interface (API), background-processing service, or other technical infrastructure.
+Therefore, users should not assume that every uploaded file is always processed locally unless the relevant feature explicitly states that processing occurs locally.
+
+───
+
+7. Server-Based Processing
+Certain advanced or specialized features may require server-side processing.
+Where server-based processing is used, an uploaded file may be transmitted to the relevant processing infrastructure for the purpose of providing the requested service.
+Depending on the feature, server-side processing may be necessary for:
+• Advanced image processing.
+• Background removal.
+• Complex image enhancement.
+• File conversion.
+• PDF processing.
+• Batch processing.
+• Professional image tools.
+• Other computationally intensive operations.
+Where technically possible, uploaded files should be processed only for the requested purpose and retained only for as long as reasonably necessary to provide the service.
+
+───
+
+8. Temporary File Processing
+Some services may temporarily create copies or intermediate versions of uploaded files.
+For example, processing an image may require temporary:
+• Input files.
+• Output files.
+• Preview files.
+• Converted files.
+• Cached data.
+• Processing buffers.
+• Temporary server files.
+Temporary files may exist for a limited period necessary to complete the requested operation.
+Where automatic deletion is implemented, temporary files should be removed after processing or after the applicable retention period.
+Because technical infrastructure may vary between services and features, users should avoid uploading highly confidential material unless they are comfortable with the processing method of the particular tool.
+
+───
+
+9. Downloaded Files
+When you download a processed image or document, the resulting file is generally transferred to your device.
+After a file has been successfully downloaded, the file may be stored on your device according to your device's operating-system and browser settings.
+ResizeImage.ARnc generally does not control files stored locally on your device.
+You are responsible for protecting downloaded files on your own device.
+
+───
+
+10. Image Metadata
+Digital images may contain metadata.
+Metadata can include information such as:
+• Camera model.
+• Image dimensions.
+• Date and time.
+• Software used to create the image.
+• Orientation.
+• GPS or location information.
+• Other EXIF information.
+Depending on the tool and output format, ResizeImage.ARnc may preserve, modify, remove, or recreate metadata.
+You should not assume that metadata will always be preserved or removed unless the relevant tool specifically states how metadata is handled.
+If an image contains sensitive metadata, you should review the output before sharing it publicly.
+
+───
+
+11. Account and Sign-In Information
+Some ResizeImage.ARnc features may be available only to signed-in users.
+If you create or use an account, we may process information required to:
+• Create your account.
+• Authenticate you.
+• Maintain your signed-in session.
+• Provide account-related functionality.
+• Protect the account.
+• Detect suspicious activity.
+• Provide professional features.
+• Maintain account preferences.
+• Provide password-related services.
+• Respond to account support requests.
+Depending on the authentication system used, authentication may be handled by ResizeImage.ARnc itself or by a third-party identity provider.
+
+───
+
+12. Passwords
+If ResizeImage.ARnc provides direct password-based accounts, passwords should be handled using appropriate security practices.
+We should not store passwords in plain text.
+Where applicable, passwords should be securely hashed or otherwise protected using appropriate authentication technology.
+Users should choose a unique password and should not reuse a password used for other websites.
+If you believe your account has been compromised, contact us or use the available account-security tools as soon as possible.
+
+───
+
+13. Password Recovery
+Where password-recovery functionality is provided, the recovery process may require an email address or other account identifier.
+Password-reset messages may be sent through an email provider or authentication service.
+We may process information necessary to:
+• Verify the account.
+• Generate a password-reset request.
+• Deliver the recovery message.
+• Prevent unauthorized account recovery.
+• Record security-related events.
+You should never share password-reset links, verification codes, or authentication credentials with another person.
+
+───
+
+14. Sign-In Sessions
+When you sign in, the Website may need to maintain your session.
+Session-related technologies may include:
+• Cookies.
+• Local storage.
+• Session storage.
+• Authentication tokens.
+• Similar browser technologies.
+These technologies may allow the Website to recognize that a user has authenticated without requiring the user to sign in again for every page or operation.
+The exact duration of a session may depend on the authentication system and browser settings.
+
+───
+
+15. Browser Storage
+ResizeImage.ARnc may use browser storage technologies such as:
+• Local Storage.
+• Session Storage.
+• Cookies.
+• IndexedDB.
+• Similar browser mechanisms.
+These technologies may be used for purposes such as:
+• Remembering temporary settings.
+• Maintaining application state.
+• Maintaining a user session.
+• Improving tool functionality.
+• Saving interface preferences.
+• Supporting offline or local processing.
+• Storing temporary application data.
+Browser storage is generally controlled by your browser and device.
+You can manage or clear browser storage through your browser settings.
+Clearing browser storage may cause some Website functions to stop remembering preferences or may require you to sign in again.
+
+───
+
+16. Cookies
+Cookies are small pieces of information stored by a website in your browser.
+ResizeImage.ARnc may use cookies or similar technologies for:
+• Essential Website functionality.
+• Authentication.
+• Security.
+• Session management.
+• Analytics.
+• Performance measurement.
+• Preference storage.
+• Improving the Website.
+Not every cookie is necessarily used for advertising.
+The type and purpose of cookies may vary depending on the services integrated with ResizeImage.ARnc.
+
+───
+
+17. Essential Cookies
+Some cookies or similar technologies may be necessary for the Website to operate.
+For example, they may support:
+• Authentication.
+• Security.
+• Session management.
+• Load balancing.
+• Fraud prevention.
+• Basic Website functionality.
+Disabling essential technologies may cause some features to stop functioning.
+
+───
+
+18. Analytics
+ResizeImage.ARnc may use analytics services to understand how visitors use the Website.
+Analytics can help us understand:
+• Number of visits.
+• Page views.
+• General traffic patterns.
+• Which tools are used.
+• General interaction with Website features.
+• Device and browser information.
+• Performance issues.
+• Errors.
+• User engagement.
+• Approximate geographic information where provided by an analytics service.
+Analytics information is generally used to improve the Website rather than to identify individual users personally.
+
+───
+
+19. Google Analytics
+ResizeImage.ARnc may use Google Analytics or similar analytics technology.
+Google Analytics may collect information about Website usage through cookies, device information, and similar technologies.
+Depending on the configuration, analytics information may include:
+• Page views.
+• Events.
+• Browser type.
+• Operating system.
+• Device category.
+• Referring website.
+• General location information.
+• Interaction with Website features.
+• Approximate session information.
+Analytics configuration may change over time.
+Google's own privacy practices apply to information processed by Google.
+Users should review Google's privacy documentation for current details regarding its collection and processing of analytics information.
+
+───
+
+20. Event and Click Tracking
+ResizeImage.ARnc may use event tracking to understand how users interact with features.
+For example, events may be recorded when users:
+• Click a tool.
+• Start image processing.
+• Complete an image operation.
+• Download an output.
+• Open an editor.
+• Use a conversion tool.
+• Sign in.
+• Navigate between Website sections.
+Such event information may be aggregated or associated with analytics identifiers depending on the analytics configuration.
+Event tracking should be used to understand Website functionality, identify problems, measure feature usage, and improve user experience.
+
+───
+
+21. Sign-In Tracking
+Where analytics or application logs are configured to record sign-in events, ResizeImage.ARnc may record an event indicating that a sign-in action occurred.
+This does not necessarily mean that your password or authentication secret is sent to the analytics system.
+Analytics implementations should avoid sending passwords, authentication tokens, or unnecessary personal information to analytics services.
+
+───
+
+22. Technical Information
+When you access the Website, certain technical information may be automatically processed.
+This may include:
+• IP address.
+• Browser type.
+• Browser version.
+• Operating system.
+• Device type.
+• Screen resolution.
+• Language settings.
+• Time zone.
+• Referring page.
+• Requested page.
+• Date and time of access.
+• Error information.
+• Network information.
+• General performance information.
+Some of this information may be collected automatically by hosting providers, security systems, analytics providers, content delivery networks, or other technical services.
+
+───
+
+23. IP Addresses
+An IP address is a technical network identifier associated with an internet connection.
+IP addresses may be processed for purposes including:
+• Security.
+• Abuse prevention.
+• Fraud detection.
+• Troubleshooting.
+• Website operation.
+• Rate limiting.
+• Analytics.
+• Legal compliance.
+An IP address may sometimes provide approximate geographic information, but it should not automatically be treated as a precise physical address.
+
+───
+
+24. Log Files
+Hosting and infrastructure providers may automatically create log files.
+These logs may contain:
+• IP addresses.
+• Requests.
+• URLs.
+• HTTP status codes.
+• Browser information.
+• Timestamps.
+• Error messages.
+• Referrer information.
+• Technical diagnostic information.
+Log files may be used to:
+• Keep the Website operational.
+• Investigate technical errors.
+• Detect abuse.
+• Protect the Website.
+• Diagnose outages.
+• Improve performance.
+
+───
+
+25. How We Use Information
+Information may be used for legitimate Website-related purposes, including:
+Providing services
+We may use information to provide the tools and features you request.
+Processing files
+Where necessary, uploaded files may be processed to generate requested outputs.
+Maintaining accounts
+Account information may be used to provide sign-in and account functionality.
+Improving the Website
+Usage information can help us understand which features work well and which features require improvement.
+Security
+Technical information may be used to detect suspicious activity, abuse, malicious traffic, and unauthorized access.
+Troubleshooting
+Technical logs may help diagnose errors.
+Communication
+Information you submit may be used to respond to support requests.
+Legal compliance
+Information may be processed where required by applicable law or valid legal process.
+
+───
+
+26. We Do Not Need Your Images for Advertising
+Uploaded images should not be used for advertising merely because they are uploaded to ResizeImage.ARnc.
+Where an image is uploaded for processing, the primary purpose is to provide the requested image-processing service.
+We do not intend to sell users' uploaded images as advertising material.
+If a particular service has a different processing arrangement, the relevant feature should provide appropriate information before or during use.
+
+───
+
+27. No Sale of Personal Information
+ResizeImage.ARnc does not intend to sell personal information merely because a visitor uses the Website.
+Personal information may, however, be processed by service providers necessary to operate the Website.
+Examples may include:
+• Hosting providers.
+• Analytics providers.
+• Authentication providers.
+• Email providers.
+• Security providers.
+• Cloud infrastructure providers.
+• Image-processing providers.
+• Other technical service providers.
+These providers may process information on our behalf or independently according to their own terms and privacy policies.
+
+───
+
+28. Third-Party Service Providers
+ResizeImage.ARnc may rely on third-party services to operate certain functions.
+These may include services for:
+• Hosting.
+• Website deployment.
+• Content delivery.
+• Analytics.
+• Authentication.
+• Email.
+• Security.
+• Background removal.
+• Image processing.
+• File processing.
+• Error monitoring.
+• Infrastructure.
+Third-party providers may receive information that is technically necessary for the service they provide.
+We aim to use third-party services in a manner consistent with applicable privacy and security requirements.
+
+───
+
+29. Background Removal Services
+Some background-removal features may use a dedicated processing server or external image-processing API.
+If you use such a feature, your uploaded image may be transmitted to the relevant processing infrastructure.
+The image may be processed to:
+1. Receive the uploaded image.
+2. Analyze the image.
+3. Remove or modify the background.
+4. Generate the requested output.
+5. Return the output to you.
+Users should review the applicable service information before uploading confidential images.
+
+───
+
+30. Third-Party APIs
+An API is a technical interface that allows one service to communicate with another service.
+ResizeImage.ARnc may use APIs for specific functions.
+Depending on the API, the service may receive:
+• Uploaded files.
+• Processing parameters.
+• Technical identifiers.
+• Requests.
+• Error information.
+We aim to transmit only information necessary for the requested operation.
+
+───
+
+31. Payment Information
+If ResizeImage.ARnc introduces paid services, payment processing may be handled by a third-party payment processor.
+Where third-party payment processing is used, ResizeImage.ARnc may not directly receive or store complete payment-card information.
+The payment provider may process information such as:
+• Name.
+• Billing information.
+• Payment details.
+• Transaction amount.
+• Transaction identifier.
+• Payment status.
+The payment provider's own privacy policy and terms may apply.
+
+───
+
+32. Advertising
+ResizeImage.ARnc may or may not display advertising.
+If advertising is introduced, advertising providers may use technologies such as cookies or advertising identifiers.
+Advertising providers may collect information according to their own privacy policies.
+ResizeImage.ARnc should not intentionally provide uploaded private images to advertisers for the purpose of advertising.
+
+───
+
+33. Children's Privacy
+ResizeImage.ARnc is not intended to encourage children to provide unnecessary personal information.
+If a child uses the Website, parents or guardians should supervise their use of online services.
+We do not knowingly seek unnecessary personal information from children.
+If you believe a child has provided personal information to us inappropriately, contact us so that the situation can be reviewed.
+
+───
+
+34. Sensitive Personal Information
+Users should avoid uploading or submitting sensitive personal information unless it is necessary for the requested operation.
+Sensitive information may include:
+• Government identification documents.
+• Financial information.
+• Passwords.
+• Private medical documents.
+• Confidential business documents.
+• Highly personal photographs.
+• Private communications.
+If a tool specifically requires processing such material, review the tool's processing method before using it.
+
+───
+
+35. Privacy of Uploaded Photographs
+Photographs can be highly personal.
+For this reason, users should consider the sensitivity of a photograph before uploading it.
+For example, photographs may contain:
+• Family members.
+• Children.
+• Personal locations.
+• Homes.
+• Workplace information.
+• Identification documents.
+• Personal possessions.
+Users should upload only files they have the right to process.
+
+───
+
+36. Data Retention
+We aim to retain information only for as long as reasonably necessary for the purpose for which it was collected.
+Retention periods may depend on:
+• The type of information.
+• The purpose of processing.
+• Technical requirements.
+• Security requirements.
+• Legal requirements.
+• Account status.
+• Whether a support request remains open.
+Temporary image files should be deleted when they are no longer required, where the relevant technical system supports automatic deletion.
+However, backups, logs, caches, or infrastructure copies may have different retention periods.
+
+───
+
+37. Deletion of Uploaded Files
+Where uploaded files are stored temporarily on a server, deletion may occur automatically after processing or after a defined period.
+Where a tool processes images entirely in the browser, the file may remain in browser memory or local browser storage until the page, application state, or stored data is cleared.
+Users can also remove local files from their own device.
+The exact behavior depends on the feature being used.
+
+───
+
+38. Account Deletion
+If ResizeImage.ARnc provides account registration and account deletion functionality, users may request deletion of their account.
+Account deletion may result in removal or anonymization of information associated with the account, subject to:
+• Legal obligations.
+• Security records.
+• Fraud-prevention requirements.
+• Necessary technical backups.
+• Dispute resolution.
+• Other legitimate purposes.
+Some information may therefore remain for a limited period after an account is deleted.
+
+───
+
+39. Data Security
+We take reasonable measures intended to protect information against unauthorized access, alteration, disclosure, or destruction.
+Security measures may include:
+• HTTPS encryption.
+• Access controls.
+• Authentication controls.
+• Server security.
+• Software updates.
+• Monitoring.
+• Rate limiting.
+• Abuse detection.
+• Secure configuration.
+• Restricted administrative access.
+However, no internet-based system can be guaranteed to be completely secure.
+Therefore, users should understand that transmission of information over the internet carries some level of risk.
+
+───
+
+40. HTTPS Encryption
+ResizeImage.ARnc may use HTTPS/TLS encryption when information is transmitted between the user's browser and the Website.
+HTTPS helps protect data during transmission from ordinary interception.
+Users should check that their browser indicates a secure connection when using sensitive features.
+
+───
+
+41. Security Incidents
+If we become aware of a security incident affecting personal information, we may take reasonable steps to:
+• Investigate the incident.
+• Contain the incident.
+• Protect affected systems.
+• Determine what information was affected.
+• Take corrective action.
+• Provide notifications where required by applicable law.
+
+───
+
+42. Data Breaches
+A data breach may occur when information is accessed, disclosed, altered, lost, or destroyed without authorization.
+No organization can guarantee that a security breach will never occur.
+If a breach occurs, our response will depend on:
+• The nature of the incident.
+• The information involved.
+• Applicable law.
+• The potential risk to users.
+• The technical circumstances.
+
+───
+
+43. Data Minimization
+We aim to collect and process information that is reasonably necessary for operating the Website and providing requested services.
+Users do not generally need to provide personal information simply to explore publicly available pages.
+Certain advanced features may require additional information.
+
+───
+
+44. User Responsibility
+Users are responsible for:
+• Uploading files they have permission to use.
+• Protecting their account credentials.
+• Protecting downloaded files.
+• Reviewing processed outputs.
+• Avoiding unnecessary submission of sensitive information.
+• Maintaining security of their own devices.
+• Using the Website legally.
+ResizeImage.ARnc should not be used to process material that you are not legally authorized to possess, modify, or process.
+
+───
+
+45. Copyright and Uploaded Content
+Uploading a file to ResizeImage.ARnc does not automatically transfer ownership of that file to us.
+To the extent permitted by law, you retain your rights in content you own.
+You are responsible for ensuring that you have the necessary rights to upload, edit, convert, process, and download the content.
+
+───
+
+46. No Ownership Claim Over User Images
+Unless a separate agreement states otherwise, using an image-processing tool does not by itself give ResizeImage.ARnc ownership of your uploaded image.
+The purpose of processing is to provide the requested service.
+
+───
+
+47. Aggregated Information
+We may use aggregated or statistical information to understand Website performance.
+Aggregated information may include:
+• Number of tool uses.
+• General traffic levels.
+• General device categories.
+• General feature usage.
+• Error rates.
+• Performance statistics.
+Aggregated information should be designed so that it does not unnecessarily identify an individual user.
+
+───
+
+48. Anonymized Information
+Where information has been properly anonymized so that it can no longer reasonably identify a person, it may be used for legitimate purposes such as:
+• Research.
+• Performance analysis.
+• Product improvement.
+• Statistical reporting.
+• Website development.
+
+───
+
+49. Fraud Prevention
+Technical information may be used to detect and prevent abuse.
+This can include detecting:
+• Automated attacks.
+• Excessive requests.
+• Malicious uploads.
+• Suspicious account activity.
+• Attempts to bypass security.
+• Unauthorized access.
+• Service abuse.
+Security-related processing may involve IP addresses, device information, browser information, request patterns, and other technical signals.
+
+───
+
+50. Rate Limiting
+To protect the Website and maintain service availability, ResizeImage.ARnc may limit the number of requests or processing operations a user or device can make within a particular period.
+Technical identifiers may be used to enforce such limits.
+
+───
+
+51. Malware and Malicious Files
+Uploaded files may be subject to technical validation or security checks where required.
+This may be necessary to prevent malicious files from harming the Website or other users.
+Files that violate technical or security requirements may be rejected.
+
+───
+
+52. File Format Validation
+ResizeImage.ARnc may inspect technical characteristics of an uploaded file, such as:
+• File type.
+• File extension.
+• MIME type.
+• File size.
+• Image dimensions.
+• File structure.
+This may be necessary to determine whether the file can safely and correctly be processed.
+
+───
+
+53. Maximum File Size
+Some tools may impose file-size limitations.
+The Website may process file-size information to determine whether an upload is permitted.
+Large files may require additional server resources or may not be supported by a particular tool.
+
+───
+
+54. Batch Processing
+ResizeImage.ARnc may provide batch-processing functionality.
+When multiple files are uploaded together:
+• Each file may be processed individually.
+• The Website may temporarily maintain information necessary to associate each file with the relevant processing request.
+• Temporary previews may be created.
+• Output files may be generated.
+• Batch processing may require additional browser or server resources.
+If batch processing uses server-side infrastructure, uploaded files may be transmitted to that infrastructure.
+
+───
+
+55. Professional and Advanced Features
+ResizeImage.ARnc may offer professional or advanced features to signed-in users.
+Such features may include:
+• Advanced adjustments.
+• Watermark and output tools.
+• Background tools.
+• AI-assisted tools.
+• Advanced enhancement.
+• Noise reduction.
+• Face retouching.
+• Gradient backgrounds.
+• Object removal.
+• Blur or pixelation.
+• Target file-size export.
+• Passport or ID sheet creation.
+• Web performance analysis.
+• Modern format conversion.
+• Edit history.
+• Privacy controls.
+• Settings backup and restore.
+• Processing reports.
+The availability and exact operation of these features may change.
+Some advanced features may require additional processing or third-party services.
+
+───
+
+56. AI-Based Features
+If ResizeImage.ARnc provides AI-assisted tools, those features may process images or other input using artificial intelligence or machine-learning systems.
+AI-assisted features may include:
+• Background removal.
+• Image enhancement.
+• Noise reduction.
+• Face retouching.
+• Object removal.
+• Smart editing.
+• Other automated image operations.
+Where an AI feature uses an external service, the relevant input may be transmitted to that service.
+Users should avoid submitting highly confidential information to AI-powered features unless they have reviewed the relevant processing terms.
+
+───
+
+57. AI Processing and Privacy
+AI processing may involve sending an image or other input to a processing server.
+The purpose may be to:
+• Analyze the image.
+• Detect objects.
+• Identify image regions.
+• Generate a mask.
+• Enhance the image.
+• Create an output.
+AI processing should be used only for the requested functionality.
+The exact retention and processing practices of an external AI provider may be governed by that provider's own policies.
+
+───
+
+58. Processing Reports
+Where ResizeImage.ARnc provides processing reports, such reports may contain technical information about a completed operation.
+A processing report may include:
+• File type.
+• File size.
+• Dimensions.
+• Processing settings.
+• Output information.
+• Processing duration.
+• Technical status.
+Users should review reports before sharing them if they contain information they consider private.
+
+───
+
+59. Edit History
+If an edit-history feature is provided, information about previous operations may be stored temporarily or associated with an account.
+This may include:
+• Tool used.
+• Processing time.
+• File information.
+• Edit settings.
+• Output information.
+The actual image content may or may not be retained depending on the implementation of the feature.
+
+───
+
+60. Settings Backup and Restore
+If ResizeImage.ARnc provides settings backup or restore, selected preferences may be stored so they can be restored later.
+Settings may include:
+• Image-processing preferences.
+• Editor preferences.
+• Output preferences.
+• Interface preferences.
+• Professional-tool settings.
+Users should understand that restoring settings may overwrite current preferences.
+
+───
+
+61. Privacy Center
+If a Privacy Center is provided, it may allow users to review or control certain privacy-related settings.
+Available controls may include:
+• Privacy preferences.
+• Data-related controls.
+• Account controls.
+• Analytics preferences.
+• Security settings.
+• Other privacy options.
+The available controls may change over time.
+
+───
+
+62. Third-Party Links
+ResizeImage.ARnc may contain links to external websites.
+Examples may include:
+• Documentation.
+• Social-media pages.
+• Developer resources.
+• Payment services.
+• External tools.
+• Hosting services.
+• Partner services.
+We do not control the privacy practices of third-party websites.
+Before submitting personal information to another website, review that website's privacy policy.
+
+───
+
+63. External Websites
+When you leave ResizeImage.ARnc, information may be processed according to the external website's policies.
+We are not responsible for:
+• Third-party privacy policies.
+• Third-party security.
+• Third-party content.
+• Third-party data retention.
+• Third-party cookies.
+
+───
+
+64. Browser Permissions
+Some Website features may request browser permissions.
+Depending on the feature, permissions may include access related to:
+• Files.
+• Camera.
+• Downloads.
+• Clipboard.
+• Notifications.
+Permissions are controlled by the browser and operating system.
+You can normally review or revoke permissions through your browser or device settings.
+
+───
+
+65. Camera and Image Capture
+If ResizeImage.ARnc provides a camera-based upload or capture function, the browser may request camera access.
+Camera data should be accessed only when the relevant feature is being used.
+Users can deny camera permission through their browser or device settings.
+
+───
+
+66. Clipboard Access
+Some features may allow users to paste images or content directly into the Website.
+If clipboard access is requested, the browser may display a permission prompt.
+Clipboard access should be used only for the requested functionality.
+Users should avoid copying sensitive information before using a clipboard-based feature.
+
+───
+
+67. Download Information
+When you download a file, your browser may record download-related information locally.
+ResizeImage.ARnc does not control the browser's local history or download records.
+
+───
+
+68. Do Not Track
+Some browsers provide a “Do Not Track” setting.
+Because there is no universal standard for how all websites and third-party services must respond to this signal, ResizeImage.ARnc may not respond to every Do Not Track mechanism in the same way.
+69. International Users
+ResizeImage.ARnc may be accessible from countries around the world.
+Depending on hosting and service providers, information may be processed in countries other than the country where the user is located.
+Different countries may have different data-protection laws.
+By using the Website, you acknowledge that technical processing may occur across different jurisdictions where necessary to provide the service.
+
+───
+
+70. Users in India
+For users in India, privacy and personal-data processing may be subject to applicable Indian laws and regulations, including applicable provisions of the Digital Personal Data Protection framework and other laws that may apply from time to time.
+The exact rights and obligations may depend on:
+• The type of information.
+• The service being used.
+• Whether the information qualifies as personal data.
+• Applicable law.
+• The user's circumstances.
+Nothing in this Privacy Policy is intended to remove rights that cannot lawfully be removed.
+
+───
+
+71. Privacy Rights
+Depending on applicable law and your location, you may have certain privacy rights.
+These may include rights to:
+• Request information about personal data.
+• Request correction of inaccurate information.
+• Request deletion where legally applicable.
+• Withdraw consent where processing is based on consent.
+• Object to certain processing.
+• Request restriction of certain processing.
+• Request information about how data is processed.
+• Lodge a complaint with a relevant authority.
+Not every right is available in every jurisdiction.
+Some requests may be subject to legal limitations.
+
+───
+
+72. Requesting Data Access
+If applicable law gives you a right to access personal information, you may contact us to request relevant information.
+We may need to verify your identity before responding.
+This is intended to protect users from unauthorized disclosure of their information.
+
+───
+
+73. Requesting Correction
+If you believe personal information associated with your account is inaccurate, you may request correction where applicable.
+We may ask for information necessary to verify the requested correction.
+
+───
+
+74. Requesting Deletion
+Where legally applicable, you may request deletion of personal information.
+Deletion may not be absolute where information must be retained for:
+• Legal compliance.
+• Security.
+• Fraud prevention.
+• Financial records.
+• Dispute resolution.
+• Legal claims.
+• Technical backups.
+
+───
+
+75. Withdrawal of Consent
+Where processing is based on consent, you may have the right to withdraw that consent.
+Withdrawing consent does not necessarily affect processing that occurred before the withdrawal.
+It also may not apply where another lawful basis permits continued processing.
+
+───
+
+76. Data Portability
+Where applicable law provides a data-portability right, you may request certain information in a commonly used format.
+The availability of this right depends on applicable law and the type of processing.
+
+───
+
+77. Identity Verification
+To protect user privacy, we may require reasonable verification before fulfilling certain data requests.
+This may include verifying:
+• Account ownership.
+• Email address.
+• Relevant account information.
+We should avoid collecting more verification information than reasonably necessary.
+
+───
+
+78. Response to Privacy Requests
+Privacy requests will be reviewed according to applicable law.
+Response times may vary depending on:
+• Request complexity.
+• Legal requirements.
+• Verification requirements.
+• Number of requests.
+• Technical requirements.
+
+───
+
+79. Legal Disclosure
+We may disclose information when reasonably necessary to:
+• Comply with applicable law.
+• Respond to valid legal process.
+• Protect users.
+• Protect the Website.
+• Investigate security incidents.
+• Prevent fraud or abuse.
+• Establish or defend legal claims.
+• Protect rights and property.
+Where legally permitted, we may seek to limit disclosures to information reasonably necessary for the relevant purpose.
+
+───
+
+80. Government Requests
+If a valid government or law-enforcement request requires disclosure of information, we may comply where legally required.
+Where legally permitted and appropriate, we may review the validity and scope of the request.
+
+───
+
+81. Business Transfers
+If ResizeImage.ARnc or substantially related assets are involved in:
+• A merger.
+• Acquisition.
+• Reorganization.
+• Sale.
+• Transfer.
+• Corporate restructuring.
+information may be transferred as part of the relevant transaction, subject to applicable law.
+Where required, appropriate notice may be provided.
+
+───
+
+82. Data of Deleted Accounts
+After account deletion, some information may remain temporarily in:
+• Backups.
+• Security logs.
+• Fraud-prevention records.
+• Legal records.
+Such information should be removed or anonymized when it is no longer necessary, subject to applicable legal and technical requirements.
+
+───
+
+83. Data Retention and Backups
+Backups are created to protect the Website from:
+• Hardware failures.
+• Software failures.
+• Data corruption.
+• Cybersecurity incidents.
+• Accidental deletion.
+• Service outages.
+Backup copies may not be immediately deleted when a user deletes information from an active system.
+Backup data should be subject to appropriate security controls and deleted or overwritten according to applicable retention procedures.
+
+───
+
+84. Privacy by Design
+Where practical, ResizeImage.ARnc aims to consider privacy during the design and development of Website features.
+This may include:
+• Minimizing unnecessary data collection.
+• Processing files locally where feasible.
+• Limiting server-side retention.
+• Protecting authentication information.
+• Using secure connections.
+• Limiting third-party data sharing.
+• Providing privacy-related controls.
+
+───
+
+85. Local-First Processing
+Some ResizeImage.ARnc tools may be designed to operate locally in the browser.
+Local-first processing can reduce the need to transmit image files to a server.
+However, local-first does not necessarily mean every component of the Website operates offline or without network communication.
+Analytics, authentication, fonts, APIs, hosting, or other Website components may still communicate with remote servers.
+
+───
+
+86. Privacy of Professional Tools
+Professional tools may process more information than simple resizing or compression tools.
+For example, an advanced enhancement feature may need to analyze multiple parts of an image.
+Users should review the description of a professional feature before uploading confidential content.
+
+───
+
+87. Background and Object Tools
+Background-removal and object-removal tools may analyze image content to determine:
+• Foreground objects.
+• Background areas.
+• Faces.
+• Edges.
+• Color regions.
+• Other visual characteristics.
+This processing is performed to provide the requested editing function.
+
+───
+
+88. Face-Related Processing
+If a feature performs face retouching or similar operations, the image may be analyzed for facial regions.
+Users should understand that a photograph containing a face can constitute personal information depending on the circumstances and applicable law.
+Use such tools responsibly and only when you have appropriate rights to process the image.
+
+───
+
+89. Passport and ID Sheet Tools
+If ResizeImage.ARnc provides passport or identification-photo tools, users may upload photographs intended for identification documents.
+Such photographs may be highly sensitive.
+Users should ensure:
+• They have the right to process the image.
+• The correct person is represented.
+• The resulting file meets the relevant authority's requirements.
+• They do not upload unnecessary identification documents.
+ResizeImage.ARnc does not guarantee that an output will meet the requirements of every government authority.
+
+───
+
+90. Privacy and PDF Tools
+If PDF-processing features are provided, uploaded PDFs may contain personal, financial, educational, legal, or business information.
+Users should treat uploaded PDFs as potentially sensitive.
+Where server-side PDF processing is used, the file may be transmitted to the relevant processing system.
+
+───
+
+91. Privacy and File Conversion
+File conversion may require reading the contents of an input file and creating a new output file.
+For example:
+JPG → PNG
+PNG → WEBP
+Image → ICO
+Image → PDF
+PDF → Image
+During conversion, technical file information may be temporarily processed.
+
+───
+
+92. File Quality and Privacy
+Image-quality controls, compression settings, target file size, and other output controls may affect the resulting file.
+These settings generally relate to output quality rather than privacy.
+However, some conversions may change or remove metadata.
+Users should inspect outputs when metadata privacy is important.
+
+───
+
+93. Website Performance Monitoring
+ResizeImage.ARnc may collect technical performance information such as:
+• Page-load time.
+• Processing time.
+• JavaScript errors.
+• API response time.
+• Failed requests.
+• Browser compatibility information.
+This information can help improve Website reliability.
+
+───
+
+94. Error Reporting
+When a tool fails, technical information may be recorded to diagnose the problem.
+Error information may include:
+• Browser type.
+• Device information.
+• Error code.
+• Feature being used.
+• Time of error.
+• Technical request information.
+We should avoid including unnecessary personal information in error reports.
+
+───
+
+95. Automated Decision-Making
+ResizeImage.ARnc may use automated technical processing to perform requested image operations.
+Examples include:
+• Automatic image compression.
+• Automatic resizing.
+• Automatic background detection.
+• Automatic enhancement.
+• Automatic format conversion.
+These automated operations are generally intended to produce the output requested by the user.
+
+───
+
+96. Accuracy of Automated Tools
+Automated image-processing tools may make mistakes.
+For example:
+• Background removal may incorrectly remove part of an object.
+• Enhancement may change image details.
+• Face retouching may alter facial features.
+• Compression may reduce quality.
+• Conversion may affect metadata.
+Users should review important outputs before relying on them.
+
+───
+
+97. Privacy and Website Updates
+ResizeImage.ARnc may add new features in the future.
+New features may involve new forms of data processing.
+Where necessary, this Privacy Policy may be updated to describe those changes.
+
+───
+
+98. Changes to This Privacy Policy
+We may update this Privacy Policy from time to time.
+Changes may be made because of:
+• New Website features.
+• Changes in technology.
+• Changes in third-party services.
+• Changes in applicable law.
+• Security improvements.
+• Changes in data-processing practices.
+The “Last Updated” date at the beginning of this Privacy Policy indicates when the policy was most recently updated.
+
+───
+
+99. Continued Use After Changes
+If the Privacy Policy is updated, continued use of the Website after the updated policy becomes effective may indicate acknowledgment of the updated policy, to the extent permitted by applicable law.
+If a change requires consent under applicable law, appropriate consent mechanisms may be provided.
+
+───
+
+100. Contact Us
+If you have questions, concerns, or requests relating to this Privacy Policy or the privacy practices of ResizeImage.ARnc, please contact us through the contact method provided on the Website.
+For privacy-related requests, please include enough information to help us understand:
+• The nature of your request.
+• The relevant account, if applicable.
+• The relevant feature.
+• The information involved.
+Please do not send passwords or other confidential authentication information through ordinary contact forms.
+Privacy Contact:
+ [Add your official privacy/contact email address here]
+Website:
+ ResizeImage.ARnc
+
+───
+
+101. Complaints and Concerns
+If you believe your privacy has been violated, you may contact us with details of your concern.
+We will review the issue and, where appropriate, investigate the relevant circumstances.
+Depending on your jurisdiction, you may also have the right to contact the relevant data-protection or privacy authority.
+
+───
+
+102. Third-Party Privacy Policies
+Third-party services integrated into ResizeImage.ARnc may have separate privacy policies.
+Examples may include services related to:
+• Analytics.
+• Hosting.
+• Authentication.
+• Email.
+• Payments.
+• AI processing.
+• Background removal.
+• Cloud infrastructure.
+• Security.
+Users should review those policies where relevant.
+
+───
+
+103. Google Services
+Where Google services are used, Google's own policies may apply to information processed through those services.
+This may include analytics, authentication, advertising, or other Google services depending on the Website's configuration.
+ResizeImage.ARnc does not control Google's independent privacy practices.
+
+───
+
+104. Hosting Providers
+ResizeImage.ARnc may be hosted using a third-party hosting platform.
+Hosting infrastructure may automatically process technical information required to deliver Website content.
+This may include:
+• IP address.
+• Request information.
+• Browser information.
+• Server logs.
+• Error logs.
+The hosting provider may retain logs according to its own policies and applicable contractual or legal requirements.
+
+───
+
+105. Content Delivery Networks
+If a content delivery network (CDN) is used, requests may be routed through CDN infrastructure.
+The CDN may process technical information such as:
+• IP address.
+• Requested resources.
+• Browser information.
+• Request timestamp.
+• Security information.
+The CDN may use this information to deliver content and protect against attacks.
+
+───
+
+106. Security Services
+ResizeImage.ARnc may use security services to protect against:
+• Bots.
+• Spam.
+• Abuse.
+• Distributed attacks.
+• Malicious requests.
+• Automated exploitation.
+These systems may process technical information about requests.
+
+───
+
+107. Authentication Services
+If a third-party authentication provider is used, account information may be processed by that provider.
+Users should review the authentication provider's privacy policy before using third-party sign-in.
+
+───
+
+108. Email Services
+If ResizeImage.ARnc sends account, password-reset, support, or other emails, an email provider may process the relevant information.
+Email providers may receive:
+• Email address.
+• Message content.
+• Delivery information.
+• Technical headers.
+• Bounce information.
+
+───
+
+109. Support Communications
+If you contact ResizeImage.ARnc, we may retain communications for the time reasonably necessary to:
+• Respond to your request.
+• Resolve technical issues.
+• Maintain support records.
+• Improve the Website.
+• Address complaints.
+Do not include passwords or highly sensitive information unless specifically requested through an appropriate secure channel.
+
+───
+
+110. User Feedback
+If you submit feedback about ResizeImage.ARnc, we may use it to improve the Website.
+Feedback may be stored together with relevant technical information where necessary to understand the issue.
+If feedback contains personal information, it may be handled according to this Privacy Policy.
+
+───
+
+111. Public Information
+If you voluntarily publish information through a public area of the Website, that information may become visible to other users.
+ResizeImage.ARnc cannot guarantee privacy for information that you intentionally make public.
+Do not publish information you want to keep confidential.
+
+───
+
+112. Social Media
+ResizeImage.ARnc may maintain or link to social-media accounts.
+Interactions with social-media platforms are governed by the relevant platform's terms and privacy policy.
+When you interact with a social-media service, that service may collect information according to its own policies.
+
+───
+
+113. Third-Party Embedded Content
+Pages may sometimes include third-party content or embedded services.
+Such content may cause your browser to communicate directly with the third-party provider.
+The provider may process technical information according to its own privacy policy.
+
+───
+
+114. Browser and Device Security
+Users should keep their:
+• Browser.
+• Operating system.
+• Antivirus/security software.
+• Extensions.
+updated where practical.
+ResizeImage.ARnc cannot control security vulnerabilities on a user's device.
+
+───
+
+115. Malicious Browser Extensions
+Browser extensions may have access to Website content depending on the permissions granted by the user.
+ResizeImage.ARnc is not responsible for data collected by malicious or unauthorized browser extensions.
+Users should install extensions only from trusted sources.
+
+───
+
+116. Public and Shared Devices
+If you use ResizeImage.ARnc on a shared or public device, other people may be able to access:
+• Browser history.
+• Downloaded files.
+• Local storage.
+• Cached information.
+• Account sessions.
+Always sign out and clear sensitive local information when appropriate.
+
+───
+
+117. Account Security
+Users should:
+• Use strong passwords.
+• Avoid sharing passwords.
+• Avoid reusing passwords.
+• Sign out from shared devices.
+• Keep recovery information secure.
+• Avoid suspicious links.
+• Report suspicious activity.
+ResizeImage.ARnc will not ask users to disclose their password through ordinary communication.
+
+───
+
+118. Phishing
+Users should be cautious of fraudulent messages pretending to be ResizeImage.ARnc.
+We recommend checking the domain and sender before entering:
+• Passwords.
+• Account information.
+• Payment information.
+• Verification codes.
+If you receive a suspicious message claiming to represent ResizeImage.ARnc, contact us through the official Website.
+
+───
+
+119. Data Accuracy
+We aim to keep information accurate where practical.
+However, information supplied by users may sometimes be incomplete or inaccurate.
+Users may request correction of their account information where applicable.
+
+───
+
+120. Data Processing Purposes
+The main purposes of processing information through ResizeImage.ARnc include:
+1. Providing requested services.
+2. Processing uploaded files.
+3. Returning requested outputs.
+4. Managing accounts.
+5. Maintaining Website security.
+6. Preventing abuse.
+7. Improving performance.
+8. Understanding feature usage.
+9. Troubleshooting technical issues.
+10. Providing customer support.
+11. Complying with applicable laws.
+12. Protecting rights and property.
+
+───
+
+121. Lawful Bases for Processing
+Where applicable law requires a lawful basis for processing personal information, the basis may include:
+• Performance of a contract or requested service.
+• Consent.
+• Legitimate interests.
+• Compliance with a legal obligation.
+• Protection of vital interests where legally applicable.
+The appropriate legal basis depends on the specific processing activity and applicable law.
+
+───
+
+122. Consent
+Where consent is required, ResizeImage.ARnc may request consent before collecting or processing information for that particular purpose.
+You may withdraw consent where applicable.
+Withdrawal does not necessarily invalidate processing that occurred before withdrawal.
+
+───
+
+123. Legitimate Interests
+Where permitted by applicable law, we may process limited information for legitimate interests such as:
+• Website security.
+• Fraud prevention.
+• Service reliability.
+• Technical troubleshooting.
+• Improving Website performance.
+• Protecting users.
+Such processing should take into account applicable privacy rights and reasonable expectations.
+
+───
+
+124. Contractual Processing
+When you request an image-processing service, certain information may need to be processed to fulfill that request.
+For example, if you upload an image to resize it, the image and technical processing parameters may need to be processed to generate the requested output.
+
+───
+
+125. Legal Obligations
+Information may be processed where necessary to comply with legal obligations.
+This can include maintaining records required by law or responding to legally valid requests.
+
+───
+
+126. Data Protection Principles
+ResizeImage.ARnc aims to follow generally recognized privacy principles, including:
+• Transparency.
+• Purpose limitation.
+• Data minimization.
+• Accuracy.
+• Security.
+• Appropriate retention.
+• Respect for applicable user rights.
+
+───
+
+127. Privacy and Security Are Shared Responsibilities
+Privacy and security depend on both the Website and the user.
+ResizeImage.ARnc can implement reasonable technical protections, but users should also:
+• Protect their devices.
+• Protect their accounts.
+• Avoid uploading unnecessary sensitive data.
+• Review downloaded files.
+• Use secure networks where appropriate.
+
+───
+
+128. No Absolute Security Guarantee
+Although reasonable safeguards may be used, no website, server, database, or internet transmission can be guaranteed to be completely secure.
+Accordingly, ResizeImage.ARnc cannot guarantee absolute security of information.
+
+───
+
+129. Changes in Technology
+Technology changes rapidly.
+ResizeImage.ARnc may change:
+• Processing engines.
+• Hosting infrastructure.
+• Analytics providers.
+• Security services.
+• Authentication systems.
+• APIs.
+• Image-processing systems.
+These changes may require updates to this Privacy Policy.
+
+───
+
+130. Changes in Features
+A feature described in this Privacy Policy may be:
+• Added.
+• Removed.
+• Modified.
+• Replaced.
+• Temporarily unavailable.
+The Website's current interface and feature-specific notices may provide more current information.
+
+───
+
+131. Feature-Specific Notices
+Where a particular tool has privacy implications that are materially different from the general Website, ResizeImage.ARnc may provide additional information near that tool.
+Users should read such notices before using the feature.
+
+───
+
+132. Temporary Processing Versus Permanent Storage
+Processing an image does not necessarily mean that ResizeImage.ARnc permanently stores the image.
+Some tools may require temporary storage while processing.
+Other tools may operate entirely in the browser.
+The storage behavior depends on the specific feature and technical implementation.
+
+───
+
+133. User-Controlled Processing
+Where a feature provides privacy-related options, users may be able to choose how processing occurs.
+For example, where technically supported, users may choose a local/browser-based processing option instead of a server-based option.
+The availability of such choices depends on the feature.
+
+───
+
+134. Privacy and Performance
+Local processing may provide privacy benefits but may require more processing power from the user's device.
+Server processing may provide access to more computationally intensive features.
+ResizeImage.ARnc may use different approaches depending on the feature.
+
+───
+
+135. Information We Do Not Intentionally Request
+ResizeImage.ARnc does not generally need users to provide unnecessary information such as:
+• Bank passwords.
+• ATM PINs.
+• Private authentication codes.
+• Unrelated medical information.
+• Unrelated government identifiers.
+Users should not submit such information through ordinary Website forms.
+
+───
+
+136. Account Information and Professional Access
+If certain features are available only to signed-in users, authentication information may be used to determine whether a user is authorized to access those features.
+This may involve:
+• Account identifiers.
+• Session information.
+• Authentication status.
+• Subscription or access status, if applicable.
+
+───
+
+137. Access Control
+Access controls may be used to restrict administrative and professional systems.
+Not every employee, developer, or service provider should necessarily have access to user information.
+Access should be limited according to technical and operational requirements.
+
+───
+
+138. Internal Access
+Where personnel or contractors need access to information to operate or support the Website, access should be limited to information reasonably necessary for their responsibilities.
+Confidentiality and security requirements may apply.
+
+───
+
+139. Data Processing by Contractors
+Technical contractors may assist with:
+• Development.
+• Hosting.
+• Maintenance.
+• Security.
+• Support.
+• Infrastructure.
+Where they process personal information on behalf of ResizeImage.ARnc, appropriate contractual and technical safeguards should be used where required.
+
+───
+
+140. Analytics Data Retention
+Analytics providers may maintain information according to their own configured retention settings.
+ResizeImage.ARnc may adjust analytics retention settings where available and appropriate.
+Users should review the analytics provider's current documentation for detailed information.
+
+───
+
+141. Cookie Management
+Most browsers allow you to:
+• View cookies.
+• Delete cookies.
+• Block cookies.
+• Block third-party cookies.
+• Clear website data.
+However, disabling cookies may interfere with certain Website functions.
+
+───
+
+142. Clearing Local Data
+Users can generally clear Website data through browser settings.
+This may remove:
+• Local storage.
+• Cookies.
+• Cached data.
+• Session information.
+Clearing Website data may also remove locally stored image-processing state or preferences.
+
+───
+
+143. Incognito or Private Browsing
+Private browsing may reduce local browser history storage, but it does not make a user completely anonymous.
+Internet service providers, network administrators, websites, hosting systems, and security services may still process technical information.
+
+───
+
+144. VPN Use
+Users may use VPN services according to their own preferences and applicable law.
+A VPN may change the IP address visible to websites, but it does not necessarily prevent all forms of tracking or technical processing.
+
+───
+
+145. Privacy of Downloads
+Downloaded outputs may contain the image information you supplied.
+If you share the output with another person or upload it to another service, that third party may process it according to its own privacy policy.
+
+───
+
+146. Sharing Processed Images
+Once an output has been downloaded, ResizeImage.ARnc generally cannot control where you subsequently share it.
+You are responsible for checking the content before sharing it.
+
+───
+
+147. Personal and Commercial Use
+Whether you use ResizeImage.ARnc personally, commercially, educationally, or professionally, the privacy considerations in this Policy generally apply.
+Commercial users should ensure that they have appropriate authorization to process files containing personal information.
+
+───
+
+148. Business Confidentiality
+ResizeImage.ARnc should not be treated as a substitute for a dedicated confidential enterprise file-processing environment unless the relevant service explicitly provides such guarantees.
+Users should carefully consider whether highly confidential corporate documents should be uploaded.
+
+───
+
+149. Educational Use
+Students and teachers may use image-processing tools for educational purposes.
+Users should avoid uploading confidential student records or other protected information unless the relevant permissions and safeguards are in place.
+
+───
+
+150. Legal Documents
+If you use ResizeImage.ARnc to edit legal documents, identification documents, contracts, or other confidential records, remember that uploading the document may involve technical processing depending on the feature.
+
+───
+
+151. Medical Images
+Medical or health-related images can contain highly sensitive information.
+Users should avoid uploading medical images unless necessary and unless they understand how the relevant feature processes files.
+
+───
+
+152. Financial Documents
+Bank statements, tax documents, invoices, and financial records may contain sensitive information.
+Users should consider whether online processing is appropriate before uploading such documents.
+
+───
+
+153. Government Identification
+Government-issued identification documents may contain sensitive personal information.
+Do not upload such documents unless necessary for the specific tool and you are authorized to process them.
+
+───
+
+154. Data From Minors
+If a user uploads a photograph containing a child, the user is responsible for having appropriate permission to process and use the photograph.
+
+───
+
+155. Biometric Information
+Certain photographs may be capable of being used for biometric identification depending on how they are processed.
+ResizeImage.ARnc should not intentionally use uploaded photographs for unrelated biometric identification purposes.
+Where an external AI or image-processing service is involved, its applicable terms and privacy practices may also apply.
+
+───
+
+156. Facial Recognition
+Image editing or enhancement does not necessarily mean facial recognition is performed.
+If a specific feature uses facial detection or recognition technology, appropriate information should be provided for that feature where required.
+
+───
+
+157. Location Information in Images
+Some images contain GPS coordinates in EXIF metadata.
+If you intend to share an image publicly, consider whether location metadata should be removed.
+ResizeImage.ARnc may not always remove location metadata unless the particular tool is designed to do so.
+
+───
+
+158. Metadata Removal
+Where a metadata-removal feature is offered, it may remove selected metadata from an output file.
+Users should verify the resulting file if metadata privacy is important.
+
+───
+
+159. Transparency
+We aim to provide information about significant data-processing practices through this Privacy Policy and, where appropriate, through feature-specific notices.
+
+───
+
+160. Privacy Questions
+If you have a question such as:
+• “Is my image uploaded?”
+• “How long is my image stored?”
+• “Does this feature use an external API?”
+• “Is my image used for AI training?”
+• “How can I delete my account?”
+please contact us through the official contact method listed on the Website.
+The answer may depend on the particular tool and its current technical implementation.
+
+───
+
+161. AI Training
+Unless expressly stated otherwise for a particular service, uploading an image to ResizeImage.ARnc should not by itself be interpreted as permission for unrelated AI model training.
+If an external AI service has its own data-use terms, those terms may apply to information transmitted to that service.
+
+───
+
+162. Third-Party AI Providers
+When an external AI provider is used, ResizeImage.ARnc may transmit only the information needed to obtain the requested result, subject to the provider's technical requirements.
+Users should review the provider's current privacy terms when using AI-powered functionality.
+
+───
+
+163. Data Sharing for Service Operation
+Information may be shared with a third party when such sharing is necessary to provide the service requested by the user.
+For example, an image may need to be sent to an image-processing API to perform an operation that cannot be completed locally.
+
+───
+
+164. Data Sharing for Security
+Technical information may be shared with security providers to detect:
+• Malicious requests.
+• Bots.
+• Attacks.
+• Fraud.
+• Abuse.
+Such sharing should be limited to information necessary for the security purpose.
+
+───
+
+165. Data Sharing for Analytics
+Analytics information may be shared with analytics providers to understand Website usage.
+Analytics configuration should avoid sending unnecessary personal information.
+
+───
+
+166. Data Sharing for Legal Reasons
+Information may be disclosed when required by applicable law or valid legal process.
+We may also disclose information where reasonably necessary to protect users, systems, rights, or property.
+
+───
+
+167. No Unnecessary Disclosure
+ResizeImage.ARnc aims not to disclose personal information to unrelated third parties for purposes unrelated to providing, securing, or improving the Website unless permitted or required by applicable law.
+
+───
+
+168. Data Controller and Processor Roles
+Depending on the service and applicable law, ResizeImage.ARnc may act as a controller, business, processor, or similar role regarding different categories of information.
+The appropriate role depends on the circumstances and applicable legal framework.
+
+───
+
+169. Third-Party Processor Responsibilities
+Where a third party processes personal information on behalf of ResizeImage.ARnc, the provider may be required to follow appropriate instructions and security obligations where applicable.
+
+───
+
+170. International Data Transfers
+Technical service providers may operate infrastructure in multiple countries.
+Where information is transferred internationally, applicable legal requirements and appropriate safeguards should be considered.
+
+───
+
+171. Data Protection Complaints
+If you are dissatisfied with how your information is handled, you may contact ResizeImage.ARnc first.
+Depending on your jurisdiction, you may also have the right to complain to a relevant privacy regulator.
+
+───
+
+172. Privacy Contact
+For privacy-related questions, use:
+Email: [Insert official privacy email]
+Website: ResizeImage.ARnc
+Please replace the placeholder with your actual official contact information before publishing.
+
+───
+
+173. Accuracy of This Policy
+This Privacy Policy is intended to describe general privacy practices.
+It should be kept consistent with the Website's actual technical implementation.
+If the Website's implementation changes, the Privacy Policy should be reviewed and updated accordingly.
+
+───
+
+174. Important Technical Disclaimer
+Because web technologies, third-party services, hosting systems, APIs, analytics tools, and browser behavior may change, ResizeImage.ARnc cannot guarantee that every technical detail described here will remain identical forever.
+The Website operator should periodically review this Privacy Policy and update it whenever material changes occur.
+
+───
+
+175. Your Privacy Choices
+Depending on the available Website controls and applicable law, you may have choices regarding:
+• Cookies.
+• Analytics.
+• Account information.
+• Uploaded files.
+• Browser storage.
+• Communications.
+• Certain processing activities.
+Some choices may affect Website functionality.
+
+───
+
+176. Disabling Analytics
+Where an appropriate analytics opt-out mechanism is available, users may be able to limit analytics collection.
+Users may also use browser settings, privacy extensions, or applicable provider controls.
+However, disabling analytics may not prevent essential server logs or security-related processing.
+
+───
+
+177. Disabling Cookies
+You can configure your browser to block or delete cookies.
+Some essential Website functions may stop working if cookies are disabled.
+
+───
+
+178. Removing Uploaded Files
+If a Website feature provides a delete button for uploaded files, users should use that control when they no longer need the file.
+If a feature does not provide server-side file deletion controls, temporary files may instead be deleted according to the service's automatic retention process.
+
+───
+
+179. Closing Your Account
+If account deletion is supported, users may use the available account-deletion process or contact support.
+Deleting an account may not immediately remove information that must remain in backups or legal/security records.
+
+───
+
+180. Privacy of Anonymous Users
+Users may be able to use many ResizeImage.ARnc tools without creating an account.
+Anonymous use may still involve technical information such as IP addresses, browser information, server logs, or analytics identifiers.
+The exact information collected depends on the tool and Website configuration.
+
+───
+
+181. Privacy of Signed-In Users
+Signed-in users may provide additional account information.
+Authentication may also allow the Website to associate certain actions with an account.
+Users should sign out from shared devices.
+
+───
+
+182. Professional Feature Access
+If professional tools require authentication, account information may be used to determine whether the user has access.
+The Website may record technical information related to professional feature usage for security, support, analytics, or service operation.
+
+───
+
+183. Processing Preferences
+Image-processing preferences may be stored temporarily or associated with an account where the relevant feature supports preference saving.
+Examples include:
+• Quality.
+• Format.
+• Dimensions.
+• DPI.
+• Compression.
+• Crop settings.
+• Editor preferences.
+
+───
+
+184. Privacy and Image Quality
+Privacy controls should not necessarily be affected by image quality.
+However, different image formats may store metadata differently.
+Users should inspect output files if metadata or file structure is important.
+
+───
+
+185. Data Security During Processing
+Where server-side processing occurs, reasonable measures should be used to protect uploaded files during transmission and processing.
+HTTPS/TLS should be used where supported.
+Access to processing systems should be restricted.
+
+───
+
+186. Temporary Processing Servers
+Some advanced features may use dedicated temporary processing servers.
+Such servers may receive a file, process it, return an output, and delete the temporary file after processing according to the relevant system's configuration.
+
+───
+
+187. Server Availability
+Temporary processing may fail because of:
+• Network problems.
+• Server outages.
+• API limits.
+• File incompatibility.
+• Processing errors.
+• Security restrictions.
+A failed processing request does not necessarily mean that a file has been permanently stored.
+
+───
+
+188. User Consent to Processing
+By uploading a file to a tool that requires processing, you authorize the technical processing necessary to perform the requested operation, subject to applicable law and this Privacy Policy.
+
+───
+
+189. No Unrelated Use
+Information collected for providing a requested service should not be treated as automatic permission for unrelated purposes.
+Additional processing may require another lawful basis where applicable.
+
+───
+
+190. Privacy Policy Interpretation
+If a provision of this Privacy Policy conflicts with mandatory privacy law, the mandatory legal requirement will generally prevail to the extent of the conflict.
+The remaining provisions should continue to apply where legally possible.
+
+───
+
+191. Severability
+If any part of this Privacy Policy is determined to be invalid or unenforceable, the remaining provisions may continue to apply to the extent permitted by law.
+
+───
+
+192. No Waiver
+Failure to enforce a provision of this Privacy Policy does not necessarily mean that the provision has been permanently waived.
+
+───
+
+193. Effective Date
+This Privacy Policy becomes effective on the date displayed at the top of this document, unless another effective date is specifically stated.
+
+───
+
+194. Review of Privacy Policy
+ResizeImage.ARnc should periodically review this Privacy Policy.
+A review should occur when:
+• A new data-processing feature is added.
+• A new third-party provider is integrated.
+• Analytics configuration changes.
+• Account systems change.
+• File-storage practices change.
+• Applicable law changes.
+• Security practices materially change.
+
+───
+
+195. User Acknowledgment
+By using ResizeImage.ARnc, you acknowledge that you have had an opportunity to review this Privacy Policy.
+If you do not understand how a particular tool handles your files, you should contact us before uploading sensitive information.
+
+───
+
+196. Privacy-Friendly Use
+For maximum privacy, users may consider:
+1. Using local/browser-based processing when available.
+2. Avoiding unnecessary account creation.
+3. Avoiding unnecessary uploads of sensitive documents.
+4. Removing sensitive metadata before sharing images.
+5. Signing out on shared devices.
+6. Clearing browser data when appropriate.
+7. Reviewing downloaded files before sharing.
+8. Keeping devices and browsers updated.
+9. Using strong account credentials.
+10. Reviewing third-party privacy policies when an external service is used.
+
+───
+
+197. Our General Privacy Commitment
+ResizeImage.ARnc aims to provide useful image-processing tools while respecting user privacy.
+Our general privacy principles are:
+• Collect only information reasonably necessary for Website operation.
+• Use uploaded files for requested processing.
+• Avoid unnecessary sharing.
+• Protect account information.
+• Use reasonable security measures.
+• Provide transparency about important processing practices.
+• Respect applicable privacy rights.
+• Improve privacy controls as the Website develops.
+
+───
+
+198. Important Notice About Actual Data Practices
+This Privacy Policy should accurately reflect the Website's real technical implementation.
+Before publishing this document, the Website operator should verify:
+• Whether images are processed locally.
+• Which images are sent to a server.
+• Which APIs receive uploaded files.
+• Whether files are temporarily stored.
+• Automatic deletion periods.
+• Analytics configuration.
+• Cookies.
+• Authentication provider.
+• Email provider.
+• Hosting provider.
+• Background-removal provider.
+• AI provider, if any.
+• Payment provider, if any.
+• Contact email.
+• Applicable legal requirements.
+No privacy policy should claim that data is deleted, never uploaded, never shared, or never stored unless the underlying system actually follows that practice.
+
+───
+
+199. Contact Information
+For questions about this Privacy Policy or ResizeImage.ARnc's privacy practices:
+Website: ResizeImage.ARnc
+Privacy Email: subham99209114@gmail.com
+General Contact: 7544095688
+
+───
+
+200. Final Privacy Statement
+ResizeImage.ARnc respects the importance of your personal information, images, documents, and digital content.
+Our objective is to provide useful image-processing and file-processing services while applying reasonable privacy and security practices.
+The way information is processed depends on the particular feature you use. Some tools may operate primarily within your browser, while others may require server-side processing or third-party services.
+For that reason, users should review any feature-specific privacy information and avoid uploading highly confidential information unless they understand the relevant processing method.
+We encourage every user to use strong security practices, protect account credentials, review downloaded files, and carefully consider the sensitivity of files before uploading them to any online service.
+If you have questions about how ResizeImage.ARnc handles your information, please contact us using the official contact information provided on the Website.
+Thank you for using ResizeImage.ARnc.
+____
+
+Contact us:
+Website: ResizeImage.ARnc
+Privacy / Support Email: subham99209114@gmail.com
+Contact no: 7544095688
+ </p></section></div>
+    </div>
   </div>
-</div>
 
   <div class='bottomCopyright'>&#169; <span id='bottomYear'>2026</span> ResizeImage.ARnc — Additional & Professional</div>
   <div class='bottomUtilityActions'>
@@ -6788,8 +8860,6 @@ html[data-theme='dark'] .utilityMenu button{color:#fff!important}
     </div>
   </div>
 </div>
-
-
 
 
 <script type='text/javascript'>
