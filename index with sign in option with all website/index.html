@@ -1631,6 +1631,30 @@ gtag('config', 'G-MT3BX5SKR5', {
 body.cropVideoSessionOpen{overflow:hidden!important;}
 </style>
 
+
+<style id="signin-protected-download-dashboard-fix">
+/*
+  SIGN-IN VISIBILITY FIX ONLY
+  Existing design, IDs, JavaScript and processing functions are unchanged.
+  These three result controls are hidden until Firebase authentication
+  adds the existing "auth-signed-in" class to <body>.
+*/
+
+/* Signed out: keep the three requested result controls completely hidden. */
+body:not(.auth-signed-in) #beforeAfter,
+body:not(.auth-signed-in) #pdfDownloadBtn,
+body:not(.auth-signed-in) #batchPdfDownloadBtn {
+  display: none !important;
+}
+
+/*
+  Signed in: do not force these elements to display.
+  Their existing JavaScript controls when they appear after processing remain
+  untouched, so the dashboard/download buttons still appear only at the
+  normal point in the existing workflow.
+*/
+</style>
+
 </head>
 
 <body class='uploadOnlyMode'>
