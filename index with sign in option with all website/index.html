@@ -10733,5 +10733,251 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
+
+
+<!-- ResizeImage.ARnc: colorful professional gradient refresh (CSS-only; existing IDs and JavaScript preserved) -->
+<style id="professional-gradient-refresh">
+:root{--ri-ink:#172554;--ri-muted:#475569;--ri-line:#dbeafe;--ri-surface:#ffffff;--ri-surface-soft:#f4f7ff;--ri-blue:#2563eb;--ri-violet:#7c3aed;--ri-pink:#db2777;--ri-teal:#0891b2;--ri-shadow:0 12px 32px rgba(30,41,110,.10)}
+html,body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{background:linear-gradient(125deg,#eef2ff 0%,#fdf2f8 48%,#ecfeff 100%)!important;color:var(--ri-ink)}
+.container{background:rgba(255,255,255,.92)!important;color:var(--ri-ink)!important;box-shadow:0 24px 70px rgba(49,46,129,.14)!important;backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.85)}
+.container>h1:first-of-type{color:#312e81!important;text-shadow:0 2px 14px rgba(99,102,241,.12)}
+.subtitle{color:#475569!important}
+.upload{background:linear-gradient(135deg,rgba(219,234,254,.82),rgba(243,232,255,.86))!important;border:2px dashed #818cf8!important;color:#1e3a8a!important;transition:transform .2s,box-shadow .2s,border-color .2s}
+.upload:hover{background:linear-gradient(135deg,#dbeafe,#f3e8ff)!important;box-shadow:0 10px 25px rgba(99,102,241,.14);transform:translateY(-1px)}
+.controls>.box,.proFeatureBox,.superStudio,.batchList,.beforeAfter,.info,.progressWrap,.platformExport{background:linear-gradient(145deg,#fff 0%,#f5f7ff 100%)!important;color:#172554!important;border:1px solid #dbeafe;box-shadow:var(--ri-shadow)}
+.box label,.proFeatureBox label,.superStudio label,.controls label{color:#1e293b!important}
+input:not([type=range]):not([type=checkbox]):not([type=radio]):not([type=color]),select,textarea{background:#fff!important;color:#111827!important;border:1px solid #cbd5e1!important;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+input:focus,select:focus,textarea:focus{outline:3px solid rgba(99,102,241,.22)!important;border-color:#6366f1!important}
+button{background:linear-gradient(115deg,#2563eb 0%,#7c3aed 55%,#db2777 100%);color:#fff;border:1px solid rgba(255,255,255,.28);box-shadow:0 5px 14px rgba(79,70,229,.18);transition:transform .18s,filter .18s,box-shadow .18s}
+button:hover{filter:brightness(1.06);box-shadow:0 8px 20px rgba(79,70,229,.24);transform:translateY(-1px)}
+button:disabled{background:#94a3b8!important;box-shadow:none;transform:none}
+.studioTab,.toolState,.batchItem,.batchResultItem,.compareCard,.stat,.inspectorCard,.layerItem,.scopeCard{background:#eef2ff!important;color:#1e293b!important;border:1px solid #dbeafe}
+.studioTab.active{background:linear-gradient(115deg,#2563eb,#7c3aed)!important;color:#fff!important}
+.studioSub,.studioStatus,.aiStatus,.qualityLabels,.qualityDescription,.batchBgToolsNote,.cropInfo{color:#475569!important}
+.qualityValue,.batchBadge,.studioBadge{background:linear-gradient(115deg,#059669,#0891b2)!important;color:#fff!important}
+#qualitySlider,#brightnessSlider,.proFeatureBox input[type=range]{accent-color:#6366f1!important}
+.progressTrack{background:#dbeafe!important}.progressBar{background:linear-gradient(90deg,#06b6d4,#6366f1,#d946ef)!important}
+.cropArea{background:#e2e8f0!important}.siteFooter{background:linear-gradient(115deg,#312e81,#6d28d9 48%,#0e7490)!important}
+.photoMergeNav a{background:linear-gradient(115deg,#2563eb,#7c3aed,#db2777)!important}
+.download{background:linear-gradient(115deg,#d97706,#ea580c)!important}.pdfDownload,.batchPdfDownload{background:linear-gradient(115deg,#dc2626,#be185d)!important}.batchDownload{background:linear-gradient(115deg,#7c3aed,#2563eb)!important}
+/* Light theme: keep all tool labels and controls legible on pale gradient surfaces. */
+html[data-theme='light'] body,html[data-theme='light'] .container{color:#172554!important}
+html[data-theme='light'] body{background:linear-gradient(125deg,#eef2ff,#fdf2f8 48%,#ecfeff)!important}
+html[data-theme='light'] .container{background:rgba(255,255,255,.94)!important}
+html[data-theme='light'] .proFeatureBox,html[data-theme='light'] .box,html[data-theme='light'] .superStudio,html[data-theme='light'] .batchList,html[data-theme='light'] .batchResultItem,html[data-theme='light'] .beforeAfter,html[data-theme='light'] .info{color:#172554!important}
+html[data-theme='light'] .subtitle,html[data-theme='light'] .qualityLabels,html[data-theme='light'] .qualityDescription,html[data-theme='light'] .studioSub,html[data-theme='light'] .studioStatus,html[data-theme='light'] .aiStatus,html[data-theme='light'] .batchBgToolsNote,html[data-theme='light'] .cropInfo{color:#475569!important}
+/* Dark theme remains deliberately dark, with readable high-contrast panels. */
+html[data-theme='dark'] body{background:linear-gradient(130deg,#0b1020,#21133f 55%,#082f49)!important;color:#f8fafc!important}
+html[data-theme='dark'] .container{background:rgba(15,23,42,.94)!important;color:#f8fafc!important;border-color:rgba(148,163,184,.22)!important}
+html[data-theme='dark'] .container>h1:first-of-type{color:#e0e7ff!important}
+html[data-theme='dark'] .subtitle,html[data-theme='dark'] .qualityLabels,html[data-theme='dark'] .qualityDescription,html[data-theme='dark'] .studioSub,html[data-theme='dark'] .studioStatus,html[data-theme='dark'] .aiStatus,html[data-theme='dark'] .batchBgToolsNote,html[data-theme='dark'] .cropInfo{color:#cbd5e1!important}
+html[data-theme='dark'] .controls>.box,html[data-theme='dark'] .proFeatureBox,html[data-theme='dark'] .superStudio,html[data-theme='dark'] .batchList,html[data-theme='dark'] .beforeAfter,html[data-theme='dark'] .info,html[data-theme='dark'] .progressWrap,html[data-theme='dark'] .platformExport{background:linear-gradient(145deg,#1e293b,#172554)!important;color:#f8fafc!important;border-color:#334155!important}
+html[data-theme='dark'] .box label,html[data-theme='dark'] .proFeatureBox label,html[data-theme='dark'] .superStudio label,html[data-theme='dark'] .controls label{color:#f1f5f9!important}
+html[data-theme='dark'] input:not([type=range]):not([type=checkbox]):not([type=radio]):not([type=color]),html[data-theme='dark'] select,html[data-theme='dark'] textarea{background:#0f172a!important;color:#f8fafc!important;border-color:#475569!important}
+html[data-theme='dark'] .studioTab,html[data-theme='dark'] .toolState,html[data-theme='dark'] .batchItem,html[data-theme='dark'] .batchResultItem,html[data-theme='dark'] .compareCard,html[data-theme='dark'] .stat,html[data-theme='dark'] .inspectorCard,html[data-theme='dark'] .layerItem,html[data-theme='dark'] .scopeCard{background:#1e293b!important;color:#f8fafc!important;border-color:#475569!important}
+html[data-theme='dark'] .studioCanvasWrap{background:#020617!important;color:#f8fafc!important}
+@media(prefers-color-scheme:light){html:not([data-theme='dark']):not([data-theme='light']) body{background:linear-gradient(125deg,#eef2ff,#fdf2f8 48%,#ecfeff)!important;color:#172554!important}html:not([data-theme='dark']):not([data-theme='light']) .container{background:rgba(255,255,255,.94)!important;color:#172554!important}html:not([data-theme='dark']):not([data-theme='light']) .proFeatureBox,html:not([data-theme='dark']):not([data-theme='light']) .box,html:not([data-theme='dark']):not([data-theme='light']) .superStudio,html:not([data-theme='dark']):not([data-theme='light']) .batchList,html:not([data-theme='dark']):not([data-theme='light']) .batchResultItem{color:#172554!important}}
+@media(prefers-reduced-motion:reduce){button,.upload{transition:none!important}}
+</style>
+
+
+<!-- White surfaces removed: use colorful gradient surfaces throughout the website. -->
+<style id="no-white-surfaces">
+:root{--ri-surface:#172554;--ri-surface-soft:#312e81}
+html,body{background:linear-gradient(125deg,#101b4d 0%,#42206f 42%,#075985 72%,#064e3b 100%)!important;color:#f8fafc!important}
+.container{background:linear-gradient(145deg,rgba(30,41,99,.97),rgba(88,28,135,.96) 52%,rgba(8,89,118,.97))!important;color:#f8fafc!important;border:1px solid rgba(129,140,248,.55)!important}
+.container>h1:first-of-type{color:#f5d0fe!important}.subtitle{color:#dbeafe!important}
+.upload{background:linear-gradient(135deg,#172554,#4c1d95,#164e63)!important;color:#f0f9ff!important;border-color:#a78bfa!important}
+.upload:hover{background:linear-gradient(135deg,#1d4ed8,#7e22ce,#0e7490)!important}
+.controls>.box,.proFeatureBox,.superStudio,.batchList,.beforeAfter,.info,.progressWrap,.platformExport{background:linear-gradient(145deg,#172554 0%,#312e81 48%,#164e63 100%)!important;color:#f8fafc!important;border:1px solid rgba(129,140,248,.48)!important}
+.box label,.proFeatureBox label,.superStudio label,.controls label{color:#f1f5f9!important}
+input:not([type=range]):not([type=checkbox]):not([type=radio]):not([type=color]),select,textarea{background:linear-gradient(135deg,#172554,#1e3a8a)!important;color:#f8fafc!important;border:1px solid #818cf8!important}
+input::placeholder,textarea::placeholder{color:#cbd5e1!important;opacity:1}
+.studioTab,.toolState,.batchItem,.batchResultItem,.compareCard,.stat,.inspectorCard,.layerItem,.scopeCard{background:linear-gradient(135deg,#1e3a8a,#4c1d95)!important;color:#f8fafc!important;border-color:#818cf8!important}
+.studioTab.active{background:linear-gradient(115deg,#0891b2,#7c3aed,#db2777)!important;color:#fff!important}
+.studioSub,.studioStatus,.aiStatus,.qualityLabels,.qualityDescription,.batchBgToolsNote,.cropInfo{color:#dbeafe!important}
+.progressTrack{background:#312e81!important}.cropArea{background:linear-gradient(135deg,#1e3a8a,#581c87)!important}
+.siteFooter{background:linear-gradient(115deg,#172554,#6d28d9 48%,#0e7490)!important;color:#f8fafc!important}
+html[data-theme='light'] body,html[data-theme='light'] .container{color:#f8fafc!important}
+html[data-theme='light'] body{background:linear-gradient(125deg,#101b4d,#42206f 42%,#075985 72%,#064e3b)!important}
+html[data-theme='light'] .container{background:linear-gradient(145deg,rgba(30,41,99,.97),rgba(88,28,135,.96) 52%,rgba(8,89,118,.97))!important}
+html[data-theme='light'] .proFeatureBox,html[data-theme='light'] .box,html[data-theme='light'] .superStudio,html[data-theme='light'] .batchList,html[data-theme='light'] .batchResultItem,html[data-theme='light'] .beforeAfter,html[data-theme='light'] .info{background:linear-gradient(145deg,#172554,#312e81 48%,#164e63)!important;color:#f8fafc!important}
+html[data-theme='light'] .subtitle,html[data-theme='light'] .qualityLabels,html[data-theme='light'] .qualityDescription,html[data-theme='light'] .studioSub,html[data-theme='light'] .studioStatus,html[data-theme='light'] .aiStatus,html[data-theme='light'] .batchBgToolsNote,html[data-theme='light'] .cropInfo{color:#dbeafe!important}
+@media(prefers-color-scheme:light){html:not([data-theme='dark']):not([data-theme='light']) body{background:linear-gradient(125deg,#101b4d,#42206f 42%,#075985 72%,#064e3b)!important;color:#f8fafc!important}html:not([data-theme='dark']):not([data-theme='light']) .container{background:linear-gradient(145deg,rgba(30,41,99,.97),rgba(88,28,135,.96) 52%,rgba(8,89,118,.97))!important;color:#f8fafc!important}}
+</style>
+
+
+<style id="all-inner-options-gradient-theme">
+/* Visual-only theme for nested controls and panels. No HTML IDs, JS, or handlers changed. */
+:root {
+  --ar-g1:#006400;
+  --ar-g2:#800080;
+  --ar-g3:#0f766e;
+  --ar-pink:#db2777;
+  --ar-text:#ffffff;
+}
+.container,
+#postUploadTools,
+.additionalToolsGroup,
+.proFeatureBox,
+.superStudio,
+.studioPanel,
+.collapsibleSection,
+.featureGrid > *,
+.featureActions > *,
+.batchTools > *,
+.controls > .box,
+.qualityBox,
+.batchList,
+.batchResult,
+.beforeAfter,
+.progressWrap,
+.platformExport,
+.layerList,
+.layerProperties,
+.scopeCard,
+.compareCard,
+.inspectorCard,
+.qualityAdvisor,
+.privacyBar,
+#pdfToImageTool,
+#batchBackgroundTools,
+.moreToolsPanel {
+  background:linear-gradient(135deg,rgba(0,100,0,.30),rgba(128,0,128,.32) 55%,rgba(15,118,110,.24)) !important;
+  border-color:rgba(255,255,255,.22) !important;
+  color:#fff !important;
+}
+.container .box,
+.container .stat,
+.container .batchItem,
+.container .batchResultItem,
+.container .layerItem,
+.container .toolState,
+.container .studioCanvasWrap,
+.container .cropArea,
+.container .info,
+.container .progressWrap,
+.container .compareInfo {
+  background:linear-gradient(135deg,rgba(0,100,0,.24),rgba(128,0,128,.28),rgba(15,118,110,.20)) !important;
+  color:#fff !important;
+  border-color:rgba(255,255,255,.18) !important;
+}
+.container button,
+.container .photoMergeNav a,
+.container .download,
+.container .pdfDownload,
+.container .batchDownload,
+.container .batchPdfDownload,
+.container .cropBtn,
+.container .studioTab,
+.container .platformGrid button,
+.container .featureActions button,
+.container .batchTools button,
+.container .studioToolBar button,
+.container .zoomBar button,
+.container .layerToolbar button,
+.container .privacyBar button,
+.container .smallButton,
+#postUploadTools button {
+  background:linear-gradient(120deg,#006400 0%,#0f766e 42%,#800080 100%) !important;
+  color:#fff !important;
+  border:1px solid rgba(255,255,255,.22) !important;
+  box-shadow:0 4px 12px rgba(0,0,0,.16);
+}
+.container button:hover,
+.container .photoMergeNav a:hover,
+#postUploadTools button:hover {
+  background:linear-gradient(120deg,#15803d 0%,#0d9488 42%,#a21caf 100%) !important;
+  filter:brightness(1.08);
+}
+.container .studioTab.active,
+.container .layerItem.active,
+.container button.active,
+.container .authTab.active {
+  background:linear-gradient(120deg,#16a34a,#0f766e,#9333ea) !important;
+  color:#fff !important;
+}
+.container input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+.container select,
+.container textarea,
+#postUploadTools input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+#postUploadTools select,
+#postUploadTools textarea,
+#pdfToImageTool input,
+#pdfToImageTool select,
+#pdfToImageTool textarea {
+  background:linear-gradient(135deg,rgba(0,100,0,.18),rgba(128,0,128,.16)) !important;
+  color:#fff !important;
+  border:1px solid rgba(255,255,255,.38) !important;
+  border-radius:8px;
+}
+.container input::placeholder,
+.container textarea::placeholder,
+#postUploadTools input::placeholder,
+#postUploadTools textarea::placeholder {
+  color:rgba(255,255,255,.72) !important;
+}
+.container select option,
+#postUploadTools select option,
+#pdfToImageTool select option {
+  background:#28143d !important;
+  color:#fff !important;
+}
+.container input[type="range"],
+#postUploadTools input[type="range"] {
+  accent-color:#a855f7 !important;
+}
+.container input[type="checkbox"],
+.container input[type="radio"],
+#postUploadTools input[type="checkbox"],
+#postUploadTools input[type="radio"] {
+  accent-color:#0f766e !important;
+}
+.container .upload,
+#singleUploadLabel,
+#multiUploadLabel {
+  background:linear-gradient(135deg,rgba(0,100,0,.30),rgba(128,0,128,.34),rgba(15,118,110,.28)) !important;
+  border-color:rgba(255,255,255,.55) !important;
+  color:#fff !important;
+}
+.container .qualityValue,
+.container .batchBadge,
+.container .studioBadge,
+.container .aiBadge {
+  background:linear-gradient(120deg,#006400,#0f766e,#800080) !important;
+  color:#fff !important;
+}
+.container .authUserMenu,
+.container .authCard,
+.container .authNote,
+.container .authTabs,
+.container .authField input {
+  background:linear-gradient(135deg,#1b4332,#3b155e 65%,#134e4a) !important;
+  color:#fff !important;
+  border-color:rgba(255,255,255,.25) !important;
+}
+.container .authField label,
+.container .authSub,
+.container .authStatus,
+.container .authNote,
+.container .authUserEmail {
+  color:#f3e8ff !important;
+}
+.container .authTab,
+.container .authUserMenu button {
+  background:linear-gradient(120deg,rgba(0,100,0,.65),rgba(128,0,128,.7)) !important;
+  color:#fff !important;
+}
+.container .authGoogleBtn {
+  background:linear-gradient(120deg,#0f766e,#006400) !important;
+}
+.container .authClose,
+.container .authResetBtn {
+  color:#f0abfc !important;
+}
+/* Image previews, canvases and checkerboard backgrounds are intentionally not recolored. */
+</style>
+
 </body>
 </html>
